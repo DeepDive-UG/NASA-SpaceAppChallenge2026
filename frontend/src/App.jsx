@@ -5,6 +5,7 @@ import MyField from './pages/myField/myField';
 import MyGear from './pages/myGear/myGear';
 import Settings from './pages/Settings/Settings';
 import MyArea from './pages/myArea/myArea';
+import TipKnowledge from './pages/TipKnowledge/TipKnowledge';
 import { useState } from 'react';
 import Login from './pages/login/login';
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/myField" element={<MyField waterStationId={waterStationId} onWaterStationSave={saveWaterStation} />} />
           <Route path="/myGear" element={<MyGear />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/knowledge" element={<TipKnowledge />} />
           <Route path="/login" element={<Login />} />
           <Route path="/myArea" element={<MyArea />} />
         </Routes>

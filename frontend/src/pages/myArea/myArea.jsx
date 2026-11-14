@@ -1,3 +1,8 @@
+// TODO: change map to california
+// replace images with render
+// plug PRISM data in, use a placeholder location for grid
+// add dates for data (!!)
+
 import { useState } from "react";
 import Navigation from "../../components/Navigation/Navigation";
 import overlayBase from "../../assets/myArea/1x/base.png";

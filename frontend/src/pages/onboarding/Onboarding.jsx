@@ -9,6 +9,7 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import { SOIL_CLASSES, getSoilClass } from '../../constants/soilClasses';
+import DecisionDisclaimer from '../../components/DecisionDisclaimer';
 import './Onboarding.css';
 
 const DRAFT_KEY = 'onboardingDraft';
@@ -1792,6 +1793,12 @@ export default function Onboarding() {
             </p>
           </section>
         </div>
+
+        <DecisionDisclaimer
+          variant="compact"
+          className="onboarding-summary-disclaimer"
+          context="Your farm profile is used to generate decision-support recommendations. Automated outputs do not replace laboratory soil testing, certified agronomists, or local agricultural specialists."
+        />
       </>
     );
   };
@@ -1864,6 +1871,13 @@ export default function Onboarding() {
             )}
           </div>
         </section>
+        {step !== 1 && (
+          <DecisionDisclaimer
+            variant="compact"
+            className="onboarding-footer-disclaimer"
+            context="This setup feeds a decision-support tool and does not replace human agronomic or soil-science expertise."
+          />
+        )}
       </div>
     </main>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import DecisionDisclaimer from './DecisionDisclaimer'
 import './MascotChat.css'
 
 export default function MascotChat({ open, onClose }) {
@@ -51,6 +52,11 @@ function ChatDialog({ onClose }) {
   return <dialog ref={dialog} className="mascot-chat" aria-labelledby="mascot-chat-title" onCancel={event => { event.preventDefault(); onClose() }}>
     <header><h2 id="mascot-chat-title">Ask CropTips</h2><button type="button" onClick={onClose} aria-label="Close chat">Close ×</button></header>
     <p>Ask a question about crops, growing conditions or rotation. Each question is answered independently.</p>
+    <DecisionDisclaimer
+      variant="compact"
+      className="mascot-disclaimer"
+      context="AI-generated answers support decision-making from reference material and do not replace a qualified agronomist or certified crop advisor."
+    />
     <form onSubmit={send}>
       <label htmlFor="mascot-question">Your question</label>
       <textarea id="mascot-question" value={question} onChange={event => setQuestion(event.target.value)} maxLength={2000} rows={3} required disabled={busy} placeholder="What temperatures does okra prefer?" />

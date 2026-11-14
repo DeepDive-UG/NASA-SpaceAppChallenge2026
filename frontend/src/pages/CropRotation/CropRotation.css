@@ -128,4 +128,5 @@
 .cr-timing small { display: none; }
 .cr-panel h2 { font-size: 1.125rem; }
 .cr-result h3 { font-size: 1.375rem; }
+.cr-inline-disclaimer { margin: 14px 0 18px; }
 .cr-disclaimer p:empty { display: none; }

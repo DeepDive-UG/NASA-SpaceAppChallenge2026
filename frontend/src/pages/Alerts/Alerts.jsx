@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import DecisionDisclaimer from '../../components/DecisionDisclaimer'
 import './Alerts.css'
 
 export default function Alerts({ onClose }) {
@@ -54,6 +55,11 @@ export default function Alerts({ onClose }) {
   return <dialog ref={dialog} className="environment-dialog" aria-labelledby="alerts-title" onCancel={event => { event.preventDefault(); onClose() }}>
     <button className="close-alerts" onClick={onClose} aria-label="Close alerts">Close ×</button>
     <h2 id="alerts-title">Water & fire alerts</h2>
+    <DecisionDisclaimer
+      variant="compact"
+      className="alerts-disclaimer"
+      context="This overview aggregates public NWS and NIFC feeds to support situational awareness. It does not replace human expertise, official emergency alerts, or instructions from local civil-protection authorities."
+    />
     <p>California · Official NWS warnings and NIFC wildfire reports. Refreshes every 5 minutes while this page is open.</p>
     <p>Statewide overview. Check the affected area for each warning. Fire weather warnings describe conditions that favour fires.</p>
     {error && <p role="alert">{error} Previously loaded information may be outdated.</p>}

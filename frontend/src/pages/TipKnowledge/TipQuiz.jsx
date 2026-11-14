@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "../../components/Navigation/Navigation";
+import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 
 const QUESTIONS = [
     {
@@ -220,6 +221,12 @@ export default function TipQuiz() {
                         </div>
                     )}
                 </form>
+
+                <DecisionDisclaimer
+                    variant="footer"
+                    className="tk-disclaimer"
+                    context="This quiz reinforces general soil and water concepts to support decision-making; always consult local agronomic experts for field-specific management."
+                />
             </main>
         </div>
     );

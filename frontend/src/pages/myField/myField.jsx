@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Navigation from '../../components/Navigation/Navigation'
+import DecisionDisclaimer from '../../components/DecisionDisclaimer'
 import WaterStation from '../../components/WaterStation'
 import WaterStationPicker from '../../components/WaterStationPicker'
 import { GOALS, SOILS, fieldApi, useField } from '../../lib/field'
@@ -87,5 +88,9 @@ export default function MyField() {
     </form>
     {record.revision>0 && <section className="field-paper"><WaterStation key={record.field.water_station_id || 'none'} stationId={record.field.water_station_id} /><details className="field-details"><summary>{record.field.water_station_id ? 'Change water monitoring station' : 'Assign a water monitoring station'}</summary><WaterStationPicker stationId={record.field.water_station_id} onSave={async id => {await save({...value,water_station_id:id});setDraft(null);setDirty(false)}} /></details></section>}
     </>}
+    <DecisionDisclaimer
+      variant="footer"
+      context="Field records, soil classifications, and water station data power automated decision-support tools and do not replace accredited soil testing, irrigation engineering, or human agronomic expertise."
+    />
   </main></div>
 }

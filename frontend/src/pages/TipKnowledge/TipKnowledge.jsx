@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Navigation from "../../components/Navigation/Navigation";
+import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 import CompostingArticle from "./articles/composting/CompostingArticle";
 import WateringArticle from "./articles/watering/WateringArticle";
 import NitrogenFixingArticle from "./articles/nitrogen-fixing/NitrogenFixingArticle";
@@ -144,6 +145,12 @@ export default function TipKnowledge() {
                         )}
                     </section>
                 </div>
+
+                <DecisionDisclaimer
+                    variant="footer"
+                    className="tk-disclaimer"
+                    context="Articles in TipKnowledge offer general educational guidance to support farm decisions and do not replace site-specific advice from a certified agronomist or extension specialist."
+                />
             </main>
         </div>
     );

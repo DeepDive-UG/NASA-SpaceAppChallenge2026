@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import Navigation from "../../components/Navigation/Navigation";
+import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 import overlayBase from "../../assets/myArea/1x/base.png";
 import overlayPPT from "../../assets/myArea/1x/ppt.png";
 import overlaytmax from "../../assets/myArea/1x/tmax.png";
@@ -100,6 +101,11 @@ const MyArea = () => {
                         </aside>
                         </aside>
                     </section>
+
+                    <DecisionDisclaimer
+                        variant="footer"
+                        context="Regional climate and precipitation overlays support macro-level field planning and do not replace on-site weather monitoring, soil moisture sensors, or human agronomic expertise."
+                    />
                 </div>
             </main>
         </div>

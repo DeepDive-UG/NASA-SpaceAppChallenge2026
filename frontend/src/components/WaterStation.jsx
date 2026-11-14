@@ -81,7 +81,7 @@ export default function WaterStation({ stationId }) {
       </> : <p>{current.data.history_status === 'unavailable' ? 'Recent flow history could not be loaded.' : 'No recent daily flow records are available.'}</p>}
       <div className="water-note"><strong>What does this mean for irrigation?</strong>
         <p>These readings show conditions at your selected station. Water available for your field also depends on its connection to this source, pumping access and local restrictions.</p>
-        <p>Irrigation availability: not assessed.</p>
+        <p>Irrigation availability: not assessed. Station metrics are for decision support only and do not replace hydrological or agronomic expertise.</p>
       </div>
     </>}
     {station && <a href={`https://waterdata.usgs.gov/monitoring-location/${station}/`} target="_blank" rel="noreferrer">USGS station source</a>}

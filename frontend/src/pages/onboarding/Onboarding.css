@@ -741,6 +741,14 @@ button:disabled {
   background: var(--primary);
 }
 
+.onboarding-summary-disclaimer {
+  margin-top: 18px;
+}
+
+.onboarding-footer-disclaimer {
+  margin-top: 18px;
+}
+
 @media (max-width: 760px) {
   .onboarding-page {
     padding: 18px 10px 40px;

@@ -18,9 +18,7 @@ const MASKS = [
 const Legend = ({ legend }) => {
     const { colors, edges, unit } = legend;
     const n = colors.length;
-    const stops = colors
-        .map((c, i) => `${c} ${(i / n) * 100}% ${((i + 1) / n) * 100}%`)
-        .join(", ");
+    const stops = colors.join(", ");
     const step = Math.ceil(edges.length / 6); // label roughly every 6th edge
     return (
         <div className="ma-legend">

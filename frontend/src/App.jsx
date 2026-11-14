@@ -6,6 +6,7 @@ import MyGear from './pages/myGear/myGear';
 import Settings from './pages/Settings/Settings';
 import MyArea from './pages/myArea/myArea';
 import { useState } from 'react';
+import Login from './pages/login/login';
 
 function App() {
   const [waterStationId, setWaterStationId] = useState(() => {

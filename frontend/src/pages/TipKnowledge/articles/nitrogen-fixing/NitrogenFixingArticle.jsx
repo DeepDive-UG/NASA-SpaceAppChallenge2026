@@ -6,10 +6,11 @@ export default function NitrogenFixingArticle() {
             <figure className="tk-article-figure">
                 <img
                     src={nitrogenFixationImage}
-                    alt="Diagram of a pulse crop root system showing microbes fixing nitrogen in root nodules. Source: https://www.orchardofflavours.com/nitrogen-fixers"
+                    alt="Diagram of a pulse crop root system showing microbes fixing nitrogen in root nodules."
                 />
                 <figcaption>
-                    Nitrogen fixation: microbes in root nodules fix nitrogen for the crop.
+                    Nitrogen fixation: microbes in root nodules fix nitrogen for the crop. 
+                    Source: https://www.orchardofflavours.com/nitrogen-fixers
                 </figcaption>
             </figure>
 

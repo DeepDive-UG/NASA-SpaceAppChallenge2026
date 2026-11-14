@@ -1,17 +1,15 @@
+import coverCropsImage from "./images/cover-crops-corn-stubble-radishes-Vance0227F3-3545_0.jpg";
+
 export default function CoverCropsArticle() {
     return (
         <div className="tk-article-copy">
-            <figure className="tk-picture-placeholder">
-                <div
-                    className="tk-picture-placeholder-art"
-                    role="img"
-                    aria-label="Picture placeholder for a field protected by a cover crop"
-                >
-                    <span aria-hidden="true">＋</span>
-                    <span>Picture placeholder</span>
-                </div>
+            <figure className="tk-article-figure">
+                <img
+                    src={coverCropsImage}
+                    alt="Green cover crops growing between rows of harvested corn stubble."
+                />
                 <figcaption>
-                    Suggested picture: a living cover crop between cash-crop seasons.
+                    A cover crop protects the soil between cash-crop seasons. https://www.farmprogress.com/cover-crops/10-reasons-to-use-cover-crops
                 </figcaption>
             </figure>
 

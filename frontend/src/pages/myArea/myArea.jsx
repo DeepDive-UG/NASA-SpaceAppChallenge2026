@@ -43,13 +43,9 @@ const Legend = ({ legend }) => {
 };
 
 const MyArea = () => {
-    const [enabledMasks, setEnabledMasks] = useState([]);
+    const [enabledMasks, setEnabledMasks] = useState([MASKS[0].id]);
     const activeMask = MASKS.find((mask) => enabledMasks.includes(mask.id));
-    const toggleMask = (maskId) => {
-        setEnabledMasks((currentMasks) =>
-            currentMasks.includes(maskId) ? [] : [maskId]
-        );
-    };
+    const toggleMask = (maskId) => setEnabledMasks([maskId]);
     
     /*TODO for ma-image-legend: add a legend that updates to show the relevant overlays, show said legends as gradients for readability
     PLAN: also show information in numbers when hovering over with mouse?*/

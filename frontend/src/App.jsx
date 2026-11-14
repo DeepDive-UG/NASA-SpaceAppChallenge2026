@@ -15,6 +15,7 @@ function App() {
           <Route path="/myField" element={<MyField />} />
           <Route path="/myGear" element={<MyGear />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>

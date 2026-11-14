@@ -108,13 +108,7 @@ export default function Navigation({ items = NAV_ITEMS }) {
     return (
         <aside className="sb" aria-label="Main navigation">
             <div className="sb-brand">
-                <span className="sb-logo" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 21v-9" />
-                        <path d="M12 12C12 8 9 5.5 5 5.5 5 9.5 7.5 12 12 12Z" />
-                        <path d="M12 14c0-3.5 2.5-6 7-6 0 4-2.5 6-7 6Z" />
-                    </svg>
-                </span>
+                <img className="sb-logo-img" src="/logo.png" alt="Farmly" />
                 <span className="sb-brand-name">CropTips</span>
             </div>
 

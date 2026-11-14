@@ -1,3 +1,8 @@
+// TODO: change map to california
+// replace images with render
+// plug PRISM data in, use a placeholder location for grid
+// add dates for data (!!)
+
 import { useState } from "react";
 import Navigation from "../../components/Navigation/Navigation";
 import overlayBase from "../../assets/myArea/1x/base.png";
@@ -6,24 +11,44 @@ import overlaytmax from "../../assets/myArea/1x/tmax.png";
 import overlaytmean_anom from "../../assets/myArea/1x/tmean_anom.png";
 import overlaytmin from "../../assets/myArea/1x/tmin.png";
 import "./myArea.css";
+import { LEGENDS } from "./LEGENDS";
 
 const MASKS = [
-    { id: 1, title: "Total Precipitation", image: overlayPPT },
-    { id: 2, title: "Temperature Max", image: overlaytmax },
-    { id: 3, title: "Temperature Anomaly", image: overlaytmean_anom },
-    { id: 4, title: "Temperature Minimum", image: overlaytmin },
+    { id: 1, title: "Total Precipitation", image: overlayPPT, legend: LEGENDS.ppt },
+    { id: 2, title: "Temperature Max", image: overlaytmax, legend: LEGENDS.tmax },
+    { id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
+    { id: 4, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
 ];
 
-const MyArea = () => {
-    const [enabledMasks, setEnabledMasks] = useState([]);
+const Legend = ({ legend }) => {
+    const { colors, edges, unit } = legend;
+    const n = colors.length;
+    const stops = colors.join(", ");
+    const step = Math.ceil(edges.length / 6); // label roughly every 6th edge
+    return (
+        <div className="ma-legend">
+            <div className="ma-legend-unit">{unit}</div>
+            <div
+                className="ma-legend-bar"
+                style={{ background: `linear-gradient(to right, ${stops})` }}
+            />
+            <div className="ma-legend-ticks">
+                {edges.map((edge, i) =>
+                    i % step === 0 ? (
+                        <span key={edge} style={{ left: `${((i + 1) / n) * 100}%` }}>
+                            {edge}
+                        </span>
+                    ) : null
+                )}
+            </div>
+        </div>
+    );
+};
 
-    const toggleMask = (maskId) => {
-        setEnabledMasks((currentMasks) =>
-            currentMasks.includes(maskId)
-                ? currentMasks.filter((id) => id !== maskId)
-                : [...currentMasks, maskId]
-        );
-    };
+const MyArea = () => {
+    const [enabledMasks, setEnabledMasks] = useState([MASKS[0].id]);
+    const activeMask = MASKS.find((mask) => enabledMasks.includes(mask.id));
+    const toggleMask = (maskId) => setEnabledMasks([maskId]);
     
     /*TODO for ma-image-legend: add a legend that updates to show the relevant overlays, show said legends as gradients for readability
     PLAN: also show information in numbers when hovering over with mouse?*/
@@ -36,6 +61,9 @@ const MyArea = () => {
 
                     <section className="ma-viewer" aria-label="Map gallery">
                         <div className="ma-image-frame">
+                            <div className="ma-image-copyright">
+                                Copyright &copy; 2026 PRISM/NACSE, Oregon State University
+                            </div>
                             <img
                                 src={overlayBase}
                                 alt="Base map"
@@ -56,15 +84,20 @@ const MyArea = () => {
                         <aside className="ma-controls" aria-label="Map overlays">
                             <h2 className="ma-controls-title">Overlays</h2>
                             {MASKS.map((mask) => (
-                                <label className="ma-toggle" key={mask.id}>
-                                    <input
-                                        type="checkbox"
-                                        checked={enabledMasks.includes(mask.id)}
-                                        onChange={() => toggleMask(mask.id)}
-                                    />
-                                    <span>{mask.title}</span>
-                                </label>
+                                <button
+                                    key={mask.id}
+                                    type="button"
+                                    className={`ma-toggle${enabledMasks.includes(mask.id) ? " is-active" : ""}`}
+                                    aria-pressed={enabledMasks.includes(mask.id)}
+                                    onClick={() => toggleMask(mask.id)}
+                                >
+                                    {mask.title}
+                                </button>
                             ))}
+                        <aside className="ma-legend" aria-label="Map Legend">
+                            <h2 className="ma-controls-title">Legend</h2>
+                            {activeMask && <Legend legend={activeMask.legend} />}
+                        </aside>
                         </aside>
                     </section>
                 </div>

@@ -40,6 +40,15 @@
     border-radius: 10px;
     background: var(--color-surface-beige);
 }
+.ma-image-copyright {
+    border: 1px solid var(--color-bg);
+    border-top-right-radius: 6px;
+    background: var(--color-bg);
+    z-index: 3;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
 
 .ma-image {
     display: block;
@@ -50,13 +59,13 @@
 
 .ma-base-layer {
     position: relative;
+    z-index: 2;
 }
 
 .ma-mask-layer {
     position: absolute;
     inset: 0;
     height: 100%;
-    opacity: 0.35;
     pointer-events: none;
 }
 
@@ -64,23 +73,30 @@
     width: 220px;
     flex-shrink: 0;
     padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .ma-controls-title {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     color: var(--color-heading);
     font-size: 1rem;
     font-weight: 600;
 }
 
 .ma-toggle {
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 0;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
     color: var(--color-text);
     font-size: 0.875rem;
     cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
 .ma-toggle input {
@@ -88,6 +104,50 @@
     height: 18px;
     accent-color: var(--color-primary);
     cursor: pointer;
+}
+
+.ma-toggle:hover {
+    background: var(--color-surface-beige);
+    color: var(--color-heading);
+}
+
+.ma-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.ma-toggle.is-active {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.ma-legend {
+    margin-top: 20px;
+}
+
+.ma-legend-unit {
+    margin-bottom: 6px;
+    color: var(--color-muted);
+    font-size: 12px;
+}
+
+.ma-legend-bar {
+    height: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+}
+
+.ma-legend-ticks {
+    position: relative;
+    height: 18px;
+    margin-top: 4px;
+}
+
+.ma-legend-ticks span {
+    position: absolute;
+    transform: translateX(-50%);
+    color: var(--color-text);
+    font-size: 11px;
 }
 
 @media (max-width: 720px) {

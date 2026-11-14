@@ -70,7 +70,7 @@ export const NAV_ITEMS = [
     },
     {
         id: "my-area",
-        path: "/my-area",
+        path: "/myArea",
         label: "My area",
         icon: (
             <Icon>

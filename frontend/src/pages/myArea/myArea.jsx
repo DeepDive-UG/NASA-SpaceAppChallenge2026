@@ -54,14 +54,15 @@ const MyArea = () => {
                         <aside className="ma-controls" aria-label="Map overlays">
                             <h2 className="ma-controls-title">Overlays</h2>
                             {MASKS.map((mask) => (
-                                <label className="ma-toggle" key={mask.id}>
-                                    <input
-                                        type="button"
-                                        className={enabledMasks.includes(mask.id) ? "is-active" : ""}
-                                        onClick={() => toggleMask(mask.id)}
-                                    />
-                                    <span>{mask.title}</span>
-                                </label>
+                                <button
+                                    key={mask.id}
+                                    type="button"
+                                    className={`ma-toggle${enabledMasks.includes(mask.id) ? " is-active" : ""}`}
+                                    aria-pressed={enabledMasks.includes(mask.id)}
+                                    onClick={() => toggleMask(mask.id)}
+                                >
+                                    {mask.title}
+                                </button>
                             ))}
                         </aside>
                     </section>

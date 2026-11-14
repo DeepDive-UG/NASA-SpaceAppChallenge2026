@@ -1,0 +1,782 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "california-100d-v1",
+  "python_version": "3.10.12",
+  "dependencies": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.7.2",
+    "scipy": "1.15.3",
+    "joblib": "1.6.0",
+    "threadpoolctl": "3.8.0"
+  },
+  "features": [
+    "latitude",
+    "longitude",
+    "issue_sin",
+    "issue_cos",
+    "target_sin",
+    "target_cos",
+    "lead_start",
+    "lead_end",
+    "window_days",
+    "temperature_mean_c_current",
+    "temperature_mean_c_lag1",
+    "temperature_mean_c_lag7",
+    "temperature_mean_c_lag14",
+    "temperature_mean_c_lag29",
+    "temperature_mean_c_mean7",
+    "temperature_mean_c_mean14",
+    "temperature_mean_c_mean30",
+    "temperature_mean_c_change7",
+    "temperature_min_c_current",
+    "temperature_min_c_lag1",
+    "temperature_min_c_lag7",
+    "temperature_min_c_lag14",
+    "temperature_min_c_lag29",
+    "temperature_min_c_mean7",
+    "temperature_min_c_mean14",
+    "temperature_min_c_mean30",
+    "temperature_min_c_change7",
+    "temperature_max_c_current",
+    "temperature_max_c_lag1",
+    "temperature_max_c_lag7",
+    "temperature_max_c_lag14",
+    "temperature_max_c_lag29",
+    "temperature_max_c_mean7",
+    "temperature_max_c_mean14",
+    "temperature_max_c_mean30",
+    "temperature_max_c_change7",
+    "precipitation_mm_current",
+    "precipitation_mm_lag1",
+    "precipitation_mm_lag7",
+    "precipitation_mm_lag14",
+    "precipitation_mm_lag29",
+    "precipitation_mm_mean7",
+    "precipitation_mm_mean14",
+    "precipitation_mm_mean30",
+    "precipitation_mm_change7",
+    "rootzone_moisture_current",
+    "rootzone_moisture_lag1",
+    "rootzone_moisture_lag7",
+    "rootzone_moisture_lag14",
+    "rootzone_moisture_lag29",
+    "rootzone_moisture_mean7",
+    "rootzone_moisture_mean14",
+    "rootzone_moisture_mean30",
+    "rootzone_moisture_change7",
+    "surface_moisture_current",
+    "surface_moisture_lag1",
+    "surface_moisture_lag7",
+    "surface_moisture_lag14",
+    "surface_moisture_lag29",
+    "surface_moisture_mean7",
+    "surface_moisture_mean14",
+    "surface_moisture_mean30",
+    "surface_moisture_change7",
+    "soil_temperature_k_current",
+    "soil_temperature_k_lag1",
+    "soil_temperature_k_lag7",
+    "soil_temperature_k_lag14",
+    "soil_temperature_k_lag29",
+    "soil_temperature_k_mean7",
+    "soil_temperature_k_mean14",
+    "soil_temperature_k_mean30",
+    "soil_temperature_k_change7",
+    "wind_speed_m_s_current",
+    "wind_speed_m_s_lag1",
+    "wind_speed_m_s_lag7",
+    "wind_speed_m_s_lag14",
+    "wind_speed_m_s_lag29",
+    "wind_speed_m_s_mean7",
+    "wind_speed_m_s_mean14",
+    "wind_speed_m_s_mean30",
+    "wind_speed_m_s_change7"
+  ],
+  "windows": [
+    [
+      1,
+      10
+    ],
+    [
+      11,
+      20
+    ],
+    [
+      21,
+      30
+    ],
+    [
+      31,
+      40
+    ],
+    [
+      41,
+      50
+    ],
+    [
+      51,
+      60
+    ],
+    [
+      61,
+      70
+    ],
+    [
+      71,
+      80
+    ],
+    [
+      81,
+      90
+    ],
+    [
+      91,
+      100
+    ],
+    [
+      1,
+      100
+    ]
+  ],
+  "targets": {
+    "temperature_mean": {
+      "column": "temperature_mean_c",
+      "aggregation": "mean",
+      "units": "degC"
+    },
+    "temperature_min": {
+      "column": "temperature_min_c",
+      "aggregation": "min",
+      "units": "degC"
+    },
+    "temperature_max": {
+      "column": "temperature_max_c",
+      "aggregation": "max",
+      "units": "degC"
+    },
+    "precipitation": {
+      "column": "precipitation_mm",
+      "aggregation": "sum",
+      "units": "mm"
+    },
+    "soil_moisture": {
+      "column": "rootzone_moisture",
+      "aggregation": "mean",
+      "units": "m3 m-3"
+    }
+  },
+  "data_start": "20211114",
+  "data_end": "20261001",
+  "source_versions": {
+    "SMAP_SPL4SMGP": "008",
+    "MERRA2_M2T1NXSLV": "5.12.4",
+    "IMERG_Final_GPM_3IMERGDF": "07",
+    "IMERG_Late_GPM_3IMERGDL": "07"
+  },
+  "publication_latency_reconstructed": false,
+  "forecast_inputs_used": false,
+  "landfire_used": false,
+  "source_manifest_sha256": "73d9e507053056a5ae7a018d9469fa90830105ff39661eb886382f864e69d37c",
+  "artifacts": {
+    "temperature_mean": {
+      "file": "temperature_mean.joblib",
+      "sha256": "d18ed0307f9d9255250d73bfdaa165e845b35d7c6bf60c293694dc75b42d1f9b"
+    },
+    "temperature_min": {
+      "file": "temperature_min.joblib",
+      "sha256": "cf82f697772e17ace32d16c5280289cfd72984b64b1317b0dda80c400b1dcf45"
+    },
+    "temperature_max": {
+      "file": "temperature_max.joblib",
+      "sha256": "6c5cf9f4dd815cdd4811ddb9e2b31f6edc79db19d74fd06ec083fdeb129f84ee"
+    },
+    "precipitation": {
+      "file": "precipitation.joblib",
+      "sha256": "1975afb53d053313aed5d5c0b8012a75119927f09fc8ab204ec2da5a60d07ad1"
+    },
+    "soil_moisture": {
+      "file": "soil_moisture.joblib",
+      "sha256": "9b4642a694456168f5dc04ff01365f2c92887a1447c31e0fb0efef3cddfbaedf"
+    }
+  },
+  "quality": {
+    "temperature_mean": {
+      "1-10": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7470760233918129,
+        "unseen_test_coverage": 0.6787280701754386,
+        "known_test_mae": 2.4063194821278935,
+        "unseen_test_mae": 2.6782652939634235,
+        "known_test_reference_mae": 2.4164476489371367,
+        "unseen_test_reference_mae": 3.282710329521676
+      },
+      "11-20": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7690058479532164,
+        "unseen_test_coverage": 0.7149122807017544,
+        "known_test_mae": 2.4732720133529273,
+        "unseen_test_mae": 2.783757758884136,
+        "known_test_reference_mae": 2.359089102082613,
+        "unseen_test_reference_mae": 3.3023523081566926
+      },
+      "21-30": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7554824561403509,
+        "unseen_test_coverage": 0.6831140350877193,
+        "known_test_mae": 2.4854333006594365,
+        "unseen_test_mae": 2.8332610982325157,
+        "known_test_reference_mae": 2.4288084893090462,
+        "unseen_test_reference_mae": 3.3021978982878184
+      },
+      "31-40": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7627923976608187,
+        "unseen_test_coverage": 0.6052631578947368,
+        "known_test_mae": 2.288491445729531,
+        "unseen_test_mae": 3.274755141258164,
+        "known_test_reference_mae": 2.288491445729531,
+        "unseen_test_reference_mae": 3.274755141258164
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7214912280701754,
+        "unseen_test_coverage": 0.5723684210526315,
+        "known_test_mae": 2.4306150650421854,
+        "unseen_test_mae": 3.3333847531790313,
+        "known_test_reference_mae": 2.4306150650421854,
+        "unseen_test_reference_mae": 3.3333847531790313
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7741228070175439,
+        "unseen_test_coverage": 0.7116228070175439,
+        "known_test_mae": 2.5418564065870695,
+        "unseen_test_mae": 2.89806695316057,
+        "known_test_reference_mae": 2.2326216827853917,
+        "unseen_test_reference_mae": 3.227209192738651
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7792397660818714,
+        "unseen_test_coverage": 0.7105263157894737,
+        "known_test_mae": 2.5656153365002075,
+        "unseen_test_mae": 2.9349159859537615,
+        "known_test_reference_mae": 2.2683160602374435,
+        "unseen_test_reference_mae": 3.269896801052565
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7668128654970761,
+        "unseen_test_coverage": 0.6030701754385965,
+        "known_test_mae": 2.3110614312226274,
+        "unseen_test_mae": 3.2645752747147956,
+        "known_test_reference_mae": 2.3110614312226274,
+        "unseen_test_reference_mae": 3.2645752747147956
+      },
+      "81-90": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8081140350877193,
+        "unseen_test_coverage": 0.7401315789473685,
+        "known_test_mae": 2.5365412940236514,
+        "unseen_test_mae": 2.9434898305461954,
+        "known_test_reference_mae": 2.3624930073797055,
+        "unseen_test_reference_mae": 3.370702281905547
+      },
+      "91-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7825292397660819,
+        "unseen_test_coverage": 0.6282894736842105,
+        "known_test_mae": 2.3590798468472993,
+        "unseen_test_mae": 3.3180667173818192,
+        "known_test_reference_mae": 2.3590798468472993,
+        "unseen_test_reference_mae": 3.3180667173818192
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.6370614035087719,
+        "unseen_test_coverage": 0.4934210526315789,
+        "known_test_mae": 1.8413311737627498,
+        "unseen_test_mae": 2.7728523032547683,
+        "known_test_reference_mae": 1.8413311737627498,
+        "unseen_test_reference_mae": 2.7728523032547683
+      }
+    },
+    "temperature_min": {
+      "1-10": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7529239766081871,
+        "unseen_test_coverage": 0.7346491228070176,
+        "known_test_mae": 2.6322740658471573,
+        "unseen_test_mae": 2.704496022057598,
+        "known_test_reference_mae": 2.5213826469288154,
+        "unseen_test_reference_mae": 3.302089794665231
+      },
+      "11-20": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7660818713450293,
+        "unseen_test_coverage": 0.7521929824561403,
+        "known_test_mae": 2.6335719748208635,
+        "unseen_test_mae": 2.7714708901242138,
+        "known_test_reference_mae": 2.480948089536621,
+        "unseen_test_reference_mae": 3.2618221889747847
+      },
+      "21-30": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7335526315789473,
+        "unseen_test_coverage": 0.6995614035087719,
+        "known_test_mae": 2.6664518414437146,
+        "unseen_test_mae": 2.8395528954454123,
+        "known_test_reference_mae": 2.5346949383089368,
+        "unseen_test_reference_mae": 3.3007827528376725
+      },
+      "31-40": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8081140350877193,
+        "unseen_test_coverage": 0.7116228070175439,
+        "known_test_mae": 2.359388230325757,
+        "unseen_test_mae": 3.1454926226308753,
+        "known_test_reference_mae": 2.359388230325757,
+        "unseen_test_reference_mae": 3.1454926226308753
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7573099415204678,
+        "unseen_test_coverage": 0.6677631578947368,
+        "known_test_mae": 2.46693818605726,
+        "unseen_test_mae": 3.2106536071623233,
+        "known_test_reference_mae": 2.46693818605726,
+        "unseen_test_reference_mae": 3.2106536071623233
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7624269005847953,
+        "unseen_test_coverage": 0.6293859649122807,
+        "known_test_mae": 2.2666659508925964,
+        "unseen_test_mae": 3.079810680926082,
+        "known_test_reference_mae": 2.2666659508925964,
+        "unseen_test_reference_mae": 3.079810680926082
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7803362573099415,
+        "unseen_test_coverage": 0.6699561403508771,
+        "known_test_mae": 2.3186204233857937,
+        "unseen_test_mae": 3.1215155132627124,
+        "known_test_reference_mae": 2.3186204233857937,
+        "unseen_test_reference_mae": 3.1215155132627124
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7050438596491229,
+        "unseen_test_coverage": 0.5877192982456141,
+        "known_test_mae": 2.4340185944329766,
+        "unseen_test_mae": 3.21830619696135,
+        "known_test_reference_mae": 2.4340185944329766,
+        "unseen_test_reference_mae": 3.21830619696135
+      },
+      "81-90": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.751827485380117,
+        "unseen_test_coverage": 0.6469298245614035,
+        "known_test_mae": 2.408146740259504,
+        "unseen_test_mae": 3.168111647720109,
+        "known_test_reference_mae": 2.408146740259504,
+        "unseen_test_reference_mae": 3.168111647720109
+      },
+      "91-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.756578947368421,
+        "unseen_test_coverage": 0.6973684210526315,
+        "known_test_mae": 2.7161211777784304,
+        "unseen_test_mae": 2.983459139157825,
+        "known_test_reference_mae": 2.4904523363494464,
+        "unseen_test_reference_mae": 3.2354466827286403
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7236842105263158,
+        "unseen_test_coverage": 0.7258771929824561,
+        "known_test_mae": 2.0933085354043817,
+        "unseen_test_mae": 2.5297158898297063,
+        "known_test_reference_mae": 2.2615616041947146,
+        "unseen_test_reference_mae": 3.2279159329872558
+      }
+    },
+    "temperature_max": {
+      "1-10": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7814327485380117,
+        "unseen_test_coverage": 0.7346491228070176,
+        "known_test_mae": 2.958650795250755,
+        "unseen_test_mae": 3.3003862412392424,
+        "known_test_reference_mae": 3.1069127850176113,
+        "unseen_test_reference_mae": 4.236229998804692
+      },
+      "11-20": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7993421052631579,
+        "unseen_test_coverage": 0.7719298245614035,
+        "known_test_mae": 3.0064910604512503,
+        "unseen_test_mae": 3.361603093845302,
+        "known_test_reference_mae": 3.00452009235106,
+        "unseen_test_reference_mae": 4.221208054813746
+      },
+      "21-30": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7887426900584795,
+        "unseen_test_coverage": 0.7510964912280702,
+        "known_test_mae": 3.0262042296485894,
+        "unseen_test_mae": 3.4174615402680906,
+        "known_test_reference_mae": 3.0140193678014744,
+        "unseen_test_reference_mae": 4.196667951690821
+      },
+      "31-40": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7375730994152047,
+        "unseen_test_coverage": 0.555921052631579,
+        "known_test_mae": 2.862779840966208,
+        "unseen_test_mae": 4.1517598118110834,
+        "known_test_reference_mae": 2.862779840966208,
+        "unseen_test_reference_mae": 4.1517598118110834
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7013888888888888,
+        "unseen_test_coverage": 0.5449561403508771,
+        "known_test_mae": 3.037361812405536,
+        "unseen_test_mae": 4.231938024169343,
+        "known_test_reference_mae": 3.037361812405536,
+        "unseen_test_reference_mae": 4.231938024169343
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8099415204678363,
+        "unseen_test_coverage": 0.7817982456140351,
+        "known_test_mae": 3.0031033739977615,
+        "unseen_test_mae": 3.3360028744519425,
+        "known_test_reference_mae": 2.8277577114369525,
+        "unseen_test_reference_mae": 4.1294564591851195
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7521929824561403,
+        "unseen_test_coverage": 0.5603070175438597,
+        "known_test_mae": 2.8427188332098403,
+        "unseen_test_mae": 4.146518524759705,
+        "known_test_reference_mae": 2.8427188332098403,
+        "unseen_test_reference_mae": 4.145554636532057
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.756578947368421,
+        "unseen_test_coverage": 0.5800438596491229,
+        "known_test_mae": 2.881186392944606,
+        "unseen_test_mae": 4.137837058917563,
+        "known_test_reference_mae": 2.881186392944606,
+        "unseen_test_reference_mae": 4.137837058917563
+      },
+      "81-90": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8548976608187134,
+        "unseen_test_coverage": 0.8267543859649122,
+        "known_test_mae": 2.9523715233237304,
+        "unseen_test_mae": 3.3782726134446746,
+        "known_test_reference_mae": 2.836848567051057,
+        "unseen_test_reference_mae": 4.154976616666784
+      },
+      "91-100": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8611111111111112,
+        "unseen_test_coverage": 0.8388157894736842,
+        "known_test_mae": 2.886908147974458,
+        "unseen_test_mae": 3.2571492715526236,
+        "known_test_reference_mae": 2.812472664073759,
+        "unseen_test_reference_mae": 4.061766981545176
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7730263157894737,
+        "unseen_test_coverage": 0.48135964912280704,
+        "known_test_mae": 2.08539553145755,
+        "unseen_test_mae": 3.9089738421914157,
+        "known_test_reference_mae": 2.08539553145755,
+        "unseen_test_reference_mae": 3.9089738421914157
+      }
+    },
+    "precipitation": {
+      "1-10": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.6827485380116959,
+        "unseen_test_coverage": 0.6853070175438597,
+        "known_test_mae": 13.953230251037953,
+        "unseen_test_mae": 15.476723836763156,
+        "known_test_reference_mae": 13.953230251037953,
+        "unseen_test_reference_mae": 15.476723836763156
+      },
+      "11-20": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7342836257309941,
+        "unseen_test_coverage": 0.7335526315789473,
+        "known_test_mae": 13.556720251634124,
+        "unseen_test_mae": 14.809480833189433,
+        "known_test_reference_mae": 13.556720251634124,
+        "unseen_test_reference_mae": 14.809480833189433
+      },
+      "21-30": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7123538011695907,
+        "unseen_test_coverage": 0.7028508771929824,
+        "known_test_mae": 12.839635903451466,
+        "unseen_test_mae": 14.197584162580839,
+        "known_test_reference_mae": 12.839635903451466,
+        "unseen_test_reference_mae": 14.197584162580839
+      },
+      "31-40": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7196637426900585,
+        "unseen_test_coverage": 0.7160087719298246,
+        "known_test_mae": 12.060628721124024,
+        "unseen_test_mae": 13.424994895001221,
+        "known_test_reference_mae": 12.060628721124024,
+        "unseen_test_reference_mae": 13.424994895001221
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7394005847953217,
+        "unseen_test_coverage": 0.7390350877192983,
+        "known_test_mae": 11.848108575438259,
+        "unseen_test_mae": 12.935798963469644,
+        "known_test_reference_mae": 11.848108575438259,
+        "unseen_test_reference_mae": 12.935798963469644
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7116228070175439,
+        "unseen_test_coverage": 0.7072368421052632,
+        "known_test_mae": 11.4683972265917,
+        "unseen_test_mae": 12.739208684578653,
+        "known_test_reference_mae": 11.4683972265917,
+        "unseen_test_reference_mae": 12.739208684578653
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7624269005847953,
+        "unseen_test_coverage": 0.7456140350877193,
+        "known_test_mae": 11.40011438881645,
+        "unseen_test_mae": 12.406810687273827,
+        "known_test_reference_mae": 11.40011438881645,
+        "unseen_test_reference_mae": 12.406810687273827
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.716374269005848,
+        "unseen_test_coverage": 0.7105263157894737,
+        "known_test_mae": 10.93850935595436,
+        "unseen_test_mae": 11.788601092023814,
+        "known_test_reference_mae": 11.099458172937066,
+        "unseen_test_reference_mae": 12.300509435412849
+      },
+      "81-90": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7551169590643275,
+        "unseen_test_coverage": 0.7489035087719298,
+        "known_test_mae": 11.285724704383238,
+        "unseen_test_mae": 12.409459832793246,
+        "known_test_reference_mae": 11.285724704383238,
+        "unseen_test_reference_mae": 12.409459832793246
+      },
+      "91-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.743421052631579,
+        "unseen_test_coverage": 0.7412280701754386,
+        "known_test_mae": 11.150159677286025,
+        "unseen_test_mae": 12.232612045095946,
+        "known_test_reference_mae": 11.150159677286025,
+        "unseen_test_reference_mae": 12.232612045095946
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7825292397660819,
+        "unseen_test_coverage": 0.7697368421052632,
+        "known_test_mae": 53.28352622807825,
+        "unseen_test_mae": 57.36902009625406,
+        "known_test_reference_mae": 53.28352622807825,
+        "unseen_test_reference_mae": 57.36902009625406
+      }
+    },
+    "soil_moisture": {
+      "1-10": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8874269005847953,
+        "unseen_test_coverage": 0.9078947368421053,
+        "known_test_mae": 0.010681452058045637,
+        "unseen_test_mae": 0.01173569671868835,
+        "known_test_reference_mae": 0.025629996620144205,
+        "unseen_test_reference_mae": 0.033043568552275034
+      },
+      "11-20": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8304093567251462,
+        "unseen_test_coverage": 0.8530701754385965,
+        "known_test_mae": 0.014650217801201454,
+        "unseen_test_mae": 0.015467309222510033,
+        "known_test_reference_mae": 0.024583649616554376,
+        "unseen_test_reference_mae": 0.032179462696026895
+      },
+      "21-30": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8026315789473685,
+        "unseen_test_coverage": 0.831140350877193,
+        "known_test_mae": 0.01803118204825257,
+        "unseen_test_mae": 0.019289842936979787,
+        "known_test_reference_mae": 0.023161232604841448,
+        "unseen_test_reference_mae": 0.03116159179216417
+      },
+      "31-40": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8234649122807017,
+        "unseen_test_coverage": 0.805921052631579,
+        "known_test_mae": 0.020037883392039164,
+        "unseen_test_mae": 0.02135604536160974,
+        "known_test_reference_mae": 0.022636425731824995,
+        "unseen_test_reference_mae": 0.030722855483249534
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7763157894736842,
+        "unseen_test_coverage": 0.5548245614035088,
+        "known_test_mae": 0.02194901087498872,
+        "unseen_test_mae": 0.03030595394123162,
+        "known_test_reference_mae": 0.02194901087498872,
+        "unseen_test_reference_mae": 0.03030595394123162
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7828947368421053,
+        "unseen_test_coverage": 0.5482456140350878,
+        "known_test_mae": 0.021411566197014693,
+        "unseen_test_mae": 0.029945992432189414,
+        "known_test_reference_mae": 0.021411566197014693,
+        "unseen_test_reference_mae": 0.029945992432189414
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8037280701754386,
+        "unseen_test_coverage": 0.5570175438596491,
+        "known_test_mae": 0.021058218583421044,
+        "unseen_test_mae": 0.029725451143058888,
+        "known_test_reference_mae": 0.021058218583421044,
+        "unseen_test_reference_mae": 0.029725451143058888
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7986111111111112,
+        "unseen_test_coverage": 0.5460526315789473,
+        "known_test_mae": 0.02098066144159384,
+        "unseen_test_mae": 0.029674681504416687,
+        "known_test_reference_mae": 0.02098066144159384,
+        "unseen_test_reference_mae": 0.029674681504416687
+      },
+      "81-90": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8135964912280702,
+        "unseen_test_coverage": 0.5537280701754386,
+        "known_test_mae": 0.020846999191299627,
+        "unseen_test_mae": 0.029329966869750933,
+        "known_test_reference_mae": 0.020846999191299627,
+        "unseen_test_reference_mae": 0.029329966869750933
+      },
+      "91-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8267543859649122,
+        "unseen_test_coverage": 0.5668859649122807,
+        "known_test_mae": 0.020136110929643493,
+        "unseen_test_mae": 0.028692629082217983,
+        "known_test_reference_mae": 0.020136110929643493,
+        "unseen_test_reference_mae": 0.028692629082217983
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7766812865497076,
+        "unseen_test_coverage": 0.5844298245614035,
+        "known_test_mae": 0.01796643209252596,
+        "unseen_test_mae": 0.025898915207349604,
+        "known_test_reference_mae": 0.01796643209252596,
+        "unseen_test_reference_mae": 0.025898915207349604
+      }
+    }
+  },
+  "operational_ready": false,
+  "packaged_code_sha256": {
+    "backend/analytics/__init__.py": "bf99d599d7997cb3ea4c0799d1dcb448604f75666378c2c11f39d05fcd4d9db7",
+    "backend/analytics/baseline.py": "601cd699398b3e0d06861329a91dc16b6e64487b4873272b11d33192bbbf2319",
+    "backend/analytics/features.py": "7585864be1c229d69f7917e3df8791d54540687e3d9d87089568761610a9fd02",
+    "backend/analytics/predict.py": "6d71f3451959e89b0506742564d9b06a29bbf07e794fe50774d9e0f265aa8e69",
+    "backend/analytics/quality.py": "db9693d9a31521949ca116b37ab76b9eedb340eb3d6f11693b4dd33d88dda3bf",
+    "backend/analytics/schema.py": "5978e7f5623770cb6c8b8c6f9a6e73b027b9e10d64c320dcc6d66d7325884f96",
+    "backend/analytics/service.py": "5d4e934c57da3452ffaf410246d750b236a2b07d6ec4c91321302eee25090abd",
+    "ml/finalize.py": "c0449c2d1f07f173aa7f7473222144303fccffb38aeb65214715ac386ae613b0",
+    "ml/prepare_data.py": "849576d8de141f697e028847250ce0dec9f9acc83a5f075db345106fb6d680c3",
+    "ml/report.py": "8a98b5dd076449b9a630786ccbe68e4a56900f2beb6d40495ad97c2a912b7d34",
+    "ml/run_pipeline.py": "16d7d41ff4f4547874c78417c9146d81812bc9838b8406f8f27003aad9994ce4",
+    "ml/train.py": "b49589d0f7014624af99f54de86b0f089acd6bfc3b290b606deaf5cce305d8ad",
+    "ml/validate_artifacts.py": "22789c82fdd6022653c73ed1ebd46821798b7d64e6eb49141d97ed6ab0222dd8"
+  },
+  "evaluation_sha256": "2034d45815d4265fa14aedb7ebfab995a4c9930e9277701de30f9bf47057f3a6"
+}

@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "issue_sampling": "One UTC issue date per seven days",
+  "horizon_days": 100,
+  "history_days": 30,
+  "model_parameters": {
+    "max_iter": 120,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 40,
+    "learning_rate": 0.05,
+    "l2_regularization": 1,
+    "early_stopping": false,
+    "random_state": 42
+  },
+  "selection": "Validation MAE per target and forecast window; no test-driven selection",
+  "intervals": "Quantiles 0.1, 0.5, 0.9 with nonnegative validation residual expansion; correlated windows and distribution shift preclude a finite-sample coverage guarantee",
+  "spatial_holdout": "25% of sampled MERRA-2 cells never enter training or validation",
+  "temperature_postprocessing": "Minimum <= mean <= maximum, applied to point estimates and corresponding quantiles",
+  "inputs": "Observed daily environmental conditions and calendar only; no future weather forecasts or LANDFIRE layers"
+}

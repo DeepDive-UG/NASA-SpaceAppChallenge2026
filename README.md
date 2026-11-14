@@ -66,3 +66,7 @@ Podmień `192.168.1.100` na swój adres. W Expo Go zeskanuj kod QR; użyj wersji
 ### Stan weryfikacji szkieletu
 
 Sprawdzono konfigurację i migracje Django, endpoint zdrowia przez proxy Next.js, build Next.js oraz eksport bundli Expo dla Androida/iOS. Nie wykonano uruchomienia na fizycznym urządzeniu ani natywnego buildu sklepowego. Audyt zależności Expo SDK 54 nadal zgłasza podatności (w tym wysokie); przed wdrożeniem potrzebna jest aktualizacja SDK i ponowna kontrola. Override `expo` utrzymuje jedną zgodną wersję SDK w zależnościach.
+
+## Moduł analityczny
+
+Kod predykcji i modele znajdują się w `backend/analytics/`, a trening, opis danych i raporty w `ml/`. Moduł wymaga instalacji `backend/requirements-analytics.txt`. Instrukcje odtwarzania treningu i wczytywania modeli: [ml/README.md](ml/README.md). Surowe dane NASA i LANDFIRE pozostają poza repozytorium.

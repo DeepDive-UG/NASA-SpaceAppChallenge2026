@@ -12,3 +12,8 @@ out/
 .env*
 !.env.example
 .DS_Store
+# External-data training workspaces
+/ml/work/
+/ml/runs/
+/ml/downloads/
+/ml/reports/*_predictions.csv*

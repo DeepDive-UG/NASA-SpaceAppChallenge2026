@@ -1,0 +1,23 @@
+{
+  "train": {
+    "rows": 36432,
+    "issue_start": "2021-12-16",
+    "issue_end": "2023-09-16",
+    "last_label_date": "2023-12-25",
+    "locations": 36
+  },
+  "validation": {
+    "rows": 15048,
+    "issue_start": "2024-01-07",
+    "issue_end": "2024-09-22",
+    "last_label_date": "2024-12-31",
+    "locations": 36
+  },
+  "test": {
+    "rows": 40128,
+    "issue_start": "2025-01-07",
+    "issue_end": "2026-06-17",
+    "last_label_date": "2026-09-25",
+    "locations": 48
+  }
+}

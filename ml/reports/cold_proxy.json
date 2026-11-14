@@ -1,0 +1,671 @@
+{
+  "threshold_degC": 0,
+  "definition": "Minimum hourly mean regional 2 m air temperature <= 0 degC; not field ground frost",
+  "threshold_selection": "Fixed before this audit; no test-driven tuning",
+  "groups": {
+    "known": {
+      "1-10": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 425,
+          "false_positive": 217,
+          "false_negative": 133,
+          "true_negative": 1961,
+          "recall": 0.7616487455197133,
+          "precision": 0.661993769470405,
+          "false_positive_rate": 0.09963269054178145
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 514,
+          "false_positive": 326,
+          "false_negative": 44,
+          "true_negative": 1852,
+          "recall": 0.921146953405018,
+          "precision": 0.611904761904762,
+          "false_positive_rate": 0.14967860422405876
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 535,
+          "false_positive": 783,
+          "false_negative": 23,
+          "true_negative": 1395,
+          "recall": 0.9587813620071685,
+          "precision": 0.40591805766312594,
+          "false_positive_rate": 0.359504132231405
+        }
+      },
+      "11-20": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 424,
+          "false_positive": 240,
+          "false_negative": 107,
+          "true_negative": 1965,
+          "recall": 0.7984934086629002,
+          "precision": 0.6385542168674698,
+          "false_positive_rate": 0.10884353741496598
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 491,
+          "false_positive": 311,
+          "false_negative": 40,
+          "true_negative": 1894,
+          "recall": 0.9246704331450094,
+          "precision": 0.6122194513715711,
+          "false_positive_rate": 0.14104308390022677
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 520,
+          "false_positive": 802,
+          "false_negative": 11,
+          "true_negative": 1403,
+          "recall": 0.9792843691148776,
+          "precision": 0.39334341906202724,
+          "false_positive_rate": 0.363718820861678
+        }
+      },
+      "21-30": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 383,
+          "false_positive": 218,
+          "false_negative": 107,
+          "true_negative": 2028,
+          "recall": 0.7816326530612245,
+          "precision": 0.6372712146422629,
+          "false_positive_rate": 0.09706144256455922
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 454,
+          "false_positive": 318,
+          "false_negative": 36,
+          "true_negative": 1928,
+          "recall": 0.926530612244898,
+          "precision": 0.5880829015544041,
+          "false_positive_rate": 0.14158504007123776
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 472,
+          "false_positive": 730,
+          "false_negative": 18,
+          "true_negative": 1516,
+          "recall": 0.963265306122449,
+          "precision": 0.39267886855241263,
+          "false_positive_rate": 0.3250222617987533
+        }
+      },
+      "31-40": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 439,
+          "false_positive": 303,
+          "false_negative": 44,
+          "true_negative": 1950,
+          "recall": 0.9089026915113871,
+          "precision": 0.5916442048517521,
+          "false_positive_rate": 0.13448735019973368
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 439,
+          "false_positive": 303,
+          "false_negative": 44,
+          "true_negative": 1950,
+          "recall": 0.9089026915113871,
+          "precision": 0.5916442048517521,
+          "false_positive_rate": 0.13448735019973368
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 483,
+          "false_positive": 812,
+          "false_negative": 0,
+          "true_negative": 1441,
+          "recall": 1.0,
+          "precision": 0.372972972972973,
+          "false_positive_rate": 0.36040834442964936
+        }
+      },
+      "41-50": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 396,
+          "false_positive": 305,
+          "false_negative": 34,
+          "true_negative": 2001,
+          "recall": 0.9209302325581395,
+          "precision": 0.5649072753209701,
+          "false_positive_rate": 0.13226366001734605
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 396,
+          "false_positive": 305,
+          "false_negative": 34,
+          "true_negative": 2001,
+          "recall": 0.9209302325581395,
+          "precision": 0.5649072753209701,
+          "false_positive_rate": 0.13226366001734605
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 430,
+          "false_positive": 766,
+          "false_negative": 0,
+          "true_negative": 1540,
+          "recall": 1.0,
+          "precision": 0.3595317725752508,
+          "false_positive_rate": 0.33217692974848223
+        }
+      },
+      "51-60": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 398,
+          "false_positive": 260,
+          "false_negative": 40,
+          "true_negative": 2038,
+          "recall": 0.908675799086758,
+          "precision": 0.6048632218844985,
+          "false_positive_rate": 0.11314186248912098
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 398,
+          "false_positive": 260,
+          "false_negative": 40,
+          "true_negative": 2038,
+          "recall": 0.908675799086758,
+          "precision": 0.6048632218844985,
+          "false_positive_rate": 0.11314186248912098
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 438,
+          "false_positive": 667,
+          "false_negative": 0,
+          "true_negative": 1631,
+          "recall": 1.0,
+          "precision": 0.39638009049773754,
+          "false_positive_rate": 0.29025239338555264
+        }
+      },
+      "61-70": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 364,
+          "false_positive": 262,
+          "false_negative": 33,
+          "true_negative": 2077,
+          "recall": 0.9168765743073047,
+          "precision": 0.5814696485623003,
+          "false_positive_rate": 0.11201368106028217
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 364,
+          "false_positive": 262,
+          "false_negative": 33,
+          "true_negative": 2077,
+          "recall": 0.9168765743073047,
+          "precision": 0.5814696485623003,
+          "false_positive_rate": 0.11201368106028217
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 397,
+          "false_positive": 674,
+          "false_negative": 0,
+          "true_negative": 1665,
+          "recall": 1.0,
+          "precision": 0.37068160597572364,
+          "false_positive_rate": 0.28815733219324496
+        }
+      },
+      "71-80": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 353,
+          "false_positive": 263,
+          "false_negative": 31,
+          "true_negative": 2089,
+          "recall": 0.9192708333333334,
+          "precision": 0.573051948051948,
+          "false_positive_rate": 0.11181972789115646
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 353,
+          "false_positive": 263,
+          "false_negative": 31,
+          "true_negative": 2089,
+          "recall": 0.9192708333333334,
+          "precision": 0.573051948051948,
+          "false_positive_rate": 0.11181972789115646
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 383,
+          "false_positive": 619,
+          "false_negative": 1,
+          "true_negative": 1733,
+          "recall": 0.9973958333333334,
+          "precision": 0.38223552894211577,
+          "false_positive_rate": 0.26318027210884354
+        }
+      },
+      "81-90": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 345,
+          "false_positive": 254,
+          "false_negative": 28,
+          "true_negative": 2109,
+          "recall": 0.9249329758713136,
+          "precision": 0.5759599332220368,
+          "false_positive_rate": 0.10749047820567076
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 345,
+          "false_positive": 254,
+          "false_negative": 28,
+          "true_negative": 2109,
+          "recall": 0.9249329758713136,
+          "precision": 0.5759599332220368,
+          "false_positive_rate": 0.10749047820567076
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 373,
+          "false_positive": 633,
+          "false_negative": 0,
+          "true_negative": 1730,
+          "recall": 1.0,
+          "precision": 0.37077534791252487,
+          "false_positive_rate": 0.267879813796022
+        }
+      },
+      "91-100": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 275,
+          "false_positive": 197,
+          "false_negative": 63,
+          "true_negative": 2201,
+          "recall": 0.8136094674556213,
+          "precision": 0.5826271186440678,
+          "false_positive_rate": 0.08215179316096748
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 315,
+          "false_positive": 260,
+          "false_negative": 23,
+          "true_negative": 2138,
+          "recall": 0.9319526627218935,
+          "precision": 0.5478260869565217,
+          "false_positive_rate": 0.10842368640533778
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 329,
+          "false_positive": 548,
+          "false_negative": 9,
+          "true_negative": 1850,
+          "recall": 0.9733727810650887,
+          "precision": 0.3751425313568985,
+          "false_positive_rate": 0.2285237698081735
+        }
+      },
+      "1-100": {
+        "count": 2736,
+        "point_estimate_below_zero": {
+          "true_positive": 1029,
+          "false_positive": 326,
+          "false_negative": 74,
+          "true_negative": 1307,
+          "recall": 0.9329102447869447,
+          "precision": 0.759409594095941,
+          "false_positive_rate": 0.1996325780771586
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 1080,
+          "false_positive": 419,
+          "false_negative": 23,
+          "true_negative": 1214,
+          "recall": 0.9791477787851315,
+          "precision": 0.7204803202134756,
+          "false_positive_rate": 0.256582976117575
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 1076,
+          "false_positive": 517,
+          "false_negative": 27,
+          "true_negative": 1116,
+          "recall": 0.9755213055303718,
+          "precision": 0.6754551161330823,
+          "false_positive_rate": 0.3165952235150031
+        }
+      }
+    },
+    "unseen": {
+      "1-10": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 123,
+          "false_positive": 57,
+          "false_negative": 43,
+          "true_negative": 689,
+          "recall": 0.7409638554216867,
+          "precision": 0.6833333333333333,
+          "false_positive_rate": 0.07640750670241286
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 135,
+          "false_positive": 124,
+          "false_negative": 31,
+          "true_negative": 622,
+          "recall": 0.8132530120481928,
+          "precision": 0.5212355212355212,
+          "false_positive_rate": 0.16621983914209115
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 164,
+          "false_positive": 275,
+          "false_negative": 2,
+          "true_negative": 471,
+          "recall": 0.9879518072289156,
+          "precision": 0.3735763097949886,
+          "false_positive_rate": 0.36863270777479895
+        }
+      },
+      "11-20": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 115,
+          "false_positive": 76,
+          "false_negative": 42,
+          "true_negative": 679,
+          "recall": 0.732484076433121,
+          "precision": 0.6020942408376964,
+          "false_positive_rate": 0.10066225165562914
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 121,
+          "false_positive": 127,
+          "false_negative": 36,
+          "true_negative": 628,
+          "recall": 0.7707006369426752,
+          "precision": 0.4879032258064516,
+          "false_positive_rate": 0.16821192052980133
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 153,
+          "false_positive": 293,
+          "false_negative": 4,
+          "true_negative": 462,
+          "recall": 0.9745222929936306,
+          "precision": 0.3430493273542601,
+          "false_positive_rate": 0.3880794701986755
+        }
+      },
+      "21-30": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 97,
+          "false_positive": 71,
+          "false_negative": 52,
+          "true_negative": 692,
+          "recall": 0.6510067114093959,
+          "precision": 0.5773809523809523,
+          "false_positive_rate": 0.09305373525557012
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 121,
+          "false_positive": 119,
+          "false_negative": 28,
+          "true_negative": 644,
+          "recall": 0.8120805369127517,
+          "precision": 0.5041666666666667,
+          "false_positive_rate": 0.1559633027522936
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 144,
+          "false_positive": 261,
+          "false_negative": 5,
+          "true_negative": 502,
+          "recall": 0.9664429530201343,
+          "precision": 0.35555555555555557,
+          "false_positive_rate": 0.3420707732634338
+        }
+      },
+      "31-40": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 111,
+          "false_positive": 118,
+          "false_negative": 31,
+          "true_negative": 652,
+          "recall": 0.7816901408450704,
+          "precision": 0.4847161572052402,
+          "false_positive_rate": 0.15324675324675324
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 111,
+          "false_positive": 118,
+          "false_negative": 31,
+          "true_negative": 652,
+          "recall": 0.7816901408450704,
+          "precision": 0.4847161572052402,
+          "false_positive_rate": 0.15324675324675324
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 139,
+          "false_positive": 255,
+          "false_negative": 3,
+          "true_negative": 515,
+          "recall": 0.9788732394366197,
+          "precision": 0.35279187817258884,
+          "false_positive_rate": 0.33116883116883117
+        }
+      },
+      "41-50": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 103,
+          "false_positive": 113,
+          "false_negative": 23,
+          "true_negative": 673,
+          "recall": 0.8174603174603174,
+          "precision": 0.47685185185185186,
+          "false_positive_rate": 0.14376590330788805
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 103,
+          "false_positive": 113,
+          "false_negative": 23,
+          "true_negative": 673,
+          "recall": 0.8174603174603174,
+          "precision": 0.47685185185185186,
+          "false_positive_rate": 0.14376590330788805
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 122,
+          "false_positive": 241,
+          "false_negative": 4,
+          "true_negative": 545,
+          "recall": 0.9682539682539683,
+          "precision": 0.33608815426997246,
+          "false_positive_rate": 0.30661577608142493
+        }
+      },
+      "51-60": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 101,
+          "false_positive": 101,
+          "false_negative": 27,
+          "true_negative": 683,
+          "recall": 0.7890625,
+          "precision": 0.5,
+          "false_positive_rate": 0.1288265306122449
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 101,
+          "false_positive": 101,
+          "false_negative": 27,
+          "true_negative": 683,
+          "recall": 0.7890625,
+          "precision": 0.5,
+          "false_positive_rate": 0.1288265306122449
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 121,
+          "false_positive": 211,
+          "false_negative": 7,
+          "true_negative": 573,
+          "recall": 0.9453125,
+          "precision": 0.3644578313253012,
+          "false_positive_rate": 0.26913265306122447
+        }
+      },
+      "61-70": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 90,
+          "false_positive": 104,
+          "false_negative": 24,
+          "true_negative": 694,
+          "recall": 0.7894736842105263,
+          "precision": 0.4639175257731959,
+          "false_positive_rate": 0.13032581453634084
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 90,
+          "false_positive": 104,
+          "false_negative": 24,
+          "true_negative": 694,
+          "recall": 0.7894736842105263,
+          "precision": 0.4639175257731959,
+          "false_positive_rate": 0.13032581453634084
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 111,
+          "false_positive": 211,
+          "false_negative": 3,
+          "true_negative": 587,
+          "recall": 0.9736842105263158,
+          "precision": 0.3447204968944099,
+          "false_positive_rate": 0.2644110275689223
+        }
+      },
+      "71-80": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 93,
+          "false_positive": 98,
+          "false_negative": 19,
+          "true_negative": 702,
+          "recall": 0.8303571428571429,
+          "precision": 0.4869109947643979,
+          "false_positive_rate": 0.1225
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 93,
+          "false_positive": 98,
+          "false_negative": 19,
+          "true_negative": 702,
+          "recall": 0.8303571428571429,
+          "precision": 0.4869109947643979,
+          "false_positive_rate": 0.1225
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 106,
+          "false_positive": 196,
+          "false_negative": 6,
+          "true_negative": 604,
+          "recall": 0.9464285714285714,
+          "precision": 0.3509933774834437,
+          "false_positive_rate": 0.245
+        }
+      },
+      "81-90": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 85,
+          "false_positive": 101,
+          "false_negative": 23,
+          "true_negative": 703,
+          "recall": 0.7870370370370371,
+          "precision": 0.45698924731182794,
+          "false_positive_rate": 0.1256218905472637
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 85,
+          "false_positive": 101,
+          "false_negative": 23,
+          "true_negative": 703,
+          "recall": 0.7870370370370371,
+          "precision": 0.45698924731182794,
+          "false_positive_rate": 0.1256218905472637
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 106,
+          "false_positive": 197,
+          "false_negative": 2,
+          "true_negative": 607,
+          "recall": 0.9814814814814815,
+          "precision": 0.34983498349834985,
+          "false_positive_rate": 0.24502487562189054
+        }
+      },
+      "91-100": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 78,
+          "false_positive": 63,
+          "false_negative": 20,
+          "true_negative": 751,
+          "recall": 0.7959183673469388,
+          "precision": 0.5531914893617021,
+          "false_positive_rate": 0.0773955773955774
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 84,
+          "false_positive": 94,
+          "false_negative": 14,
+          "true_negative": 720,
+          "recall": 0.8571428571428571,
+          "precision": 0.47191011235955055,
+          "false_positive_rate": 0.11547911547911548
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 93,
+          "false_positive": 197,
+          "false_negative": 5,
+          "true_negative": 617,
+          "recall": 0.9489795918367347,
+          "precision": 0.32068965517241377,
+          "false_positive_rate": 0.24201474201474202
+        }
+      },
+      "1-100": {
+        "count": 912,
+        "point_estimate_below_zero": {
+          "true_positive": 332,
+          "false_positive": 127,
+          "false_negative": 23,
+          "true_negative": 430,
+          "recall": 0.9352112676056338,
+          "precision": 0.7233115468409586,
+          "false_positive_rate": 0.22800718132854578
+        },
+        "seasonal_reference_below_zero": {
+          "true_positive": 325,
+          "false_positive": 154,
+          "false_negative": 30,
+          "true_negative": 403,
+          "recall": 0.9154929577464789,
+          "precision": 0.6784968684759917,
+          "false_positive_rate": 0.2764811490125673
+        },
+        "lower_interval_below_zero": {
+          "true_positive": 350,
+          "false_positive": 191,
+          "false_negative": 5,
+          "true_negative": 366,
+          "recall": 0.9859154929577465,
+          "precision": 0.6469500924214417,
+          "false_positive_rate": 0.34290843806104127
+        }
+      }
+    }
+  }
+}

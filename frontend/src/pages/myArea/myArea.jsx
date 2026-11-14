@@ -19,9 +19,7 @@ const MyArea = () => {
 
     const toggleMask = (maskId) => {
         setEnabledMasks((currentMasks) =>
-            currentMasks.includes(maskId)
-                ? currentMasks.filter((id) => id !== maskId)
-                : [...currentMasks, maskId]
+            currentMasks.includes(maskId) ? [] : [maskId]
         );
     };
     
@@ -58,9 +56,9 @@ const MyArea = () => {
                             {MASKS.map((mask) => (
                                 <label className="ma-toggle" key={mask.id}>
                                     <input
-                                        type="checkbox"
-                                        checked={enabledMasks.includes(mask.id)}
-                                        onChange={() => toggleMask(mask.id)}
+                                        type="button"
+                                        className={enabledMasks.includes(mask.id) ? "is-active" : ""}
+                                        onClick={() => toggleMask(mask.id)}
                                     />
                                     <span>{mask.title}</span>
                                 </label>

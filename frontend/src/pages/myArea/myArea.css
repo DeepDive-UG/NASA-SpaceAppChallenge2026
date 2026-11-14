@@ -50,13 +50,13 @@
 
 .ma-base-layer {
     position: relative;
+    z-index: 2;
 }
 
 .ma-mask-layer {
     position: absolute;
     inset: 0;
     height: 100%;
-    opacity: 0.35;
     pointer-events: none;
 }
 

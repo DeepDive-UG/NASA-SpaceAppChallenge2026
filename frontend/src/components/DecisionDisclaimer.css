@@ -64,35 +64,3 @@
 .decision-disclaimer--footer {
   margin-top: 28px;
 }
-
-.decision-disclaimer--sidebar {
-  padding: 9px 10px;
-  gap: 8px;
-  border-left-width: 2px;
-  border-radius: 8px;
-}
-
-.decision-disclaimer--sidebar .decision-disclaimer__badge {
-  flex-basis: 17px;
-  width: 17px;
-  height: 17px;
-  font-size: 0.68rem;
-}
-
-.decision-disclaimer--sidebar .decision-disclaimer__body strong {
-  font-size: 0.73rem;
-  line-height: 1.35;
-}
-
-.decision-disclaimer--sidebar .decision-disclaimer__body p {
-  margin-top: 2px;
-  font-size: 0.7rem;
-  line-height: 1.4;
-  color: var(--color-muted, #777d75);
-}
-
-@media (max-width: 720px) {
-  .decision-disclaimer--sidebar {
-    display: none;
-  }
-}

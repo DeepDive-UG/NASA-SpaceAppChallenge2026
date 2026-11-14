@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useState } from 'react';
-import DecisionDisclaimer from "../DecisionDisclaimer";
 import "./Navigation.css";
 
 const Icon = ({ children }) => (
@@ -150,10 +149,6 @@ export default function Navigation({ items = NAV_ITEMS }) {
                 </ul>
             </nav>
             <div className="sb-session">
-                <DecisionDisclaimer
-                    variant="sidebar"
-                    context="Supports farm decisions; consult qualified agronomists or local specialists."
-                />
                 <button className="sb-item sb-signout" type="button" onClick={signOut} disabled={signingOut} aria-label={signingOut ? 'Signing out' : 'Sign out'} title="Sign out">
                     <Icon><path d="M9 4H4v16h5M14 8l4 4-4 4M8 12h10" /></Icon>
                     <span className="sb-label">{signingOut ? 'Signing out…' : 'Sign out'}</span>

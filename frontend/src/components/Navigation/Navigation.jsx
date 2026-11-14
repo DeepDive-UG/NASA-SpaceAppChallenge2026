@@ -56,7 +56,7 @@ export const NAV_ITEMS = [
     },
     {
         id: "my-gear",
-        path: "/my-gear",
+        path: "/myGear",
         label: "My gear",
         icon: (
             <Icon>

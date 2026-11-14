@@ -8,7 +8,7 @@ import Navigation from "../../components/Navigation/Navigation";
 import overlayBase from "../../assets/myArea/1x/base.png";
 import overlayPPT from "../../assets/myArea/1x/ppt.png";
 import overlaytmax from "../../assets/myArea/1x/tmax.png";
-import overlaytmean_anom from "../../assets/myArea/1x/tmean_anom.png";
+//import overlaytmean_anom from "../../assets/myArea/1x/tmean_anom.png";
 import overlaytmin from "../../assets/myArea/1x/tmin.png";
 import "./myArea.css";
 import { LEGENDS } from "./LEGENDS";
@@ -16,8 +16,8 @@ import { LEGENDS } from "./LEGENDS";
 const MASKS = [
     { id: 1, title: "Total Precipitation", image: overlayPPT, legend: LEGENDS.ppt },
     { id: 2, title: "Temperature Max", image: overlaytmax, legend: LEGENDS.tmax },
-    { id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
-    { id: 4, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
+//{ id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
+    { id: 3, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
 ];
 
 const Legend = ({ legend }) => {
@@ -61,6 +61,9 @@ const MyArea = () => {
 
                     <section className="ma-viewer" aria-label="Map gallery">
                         <div className="ma-image-frame">
+                            <div className="ma-image-date">
+                                2026-11-13
+                            </div>
                             <div className="ma-image-copyright">
                                 Copyright &copy; 2026 PRISM/NACSE, Oregon State University
                             </div>

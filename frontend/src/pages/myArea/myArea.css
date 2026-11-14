@@ -40,6 +40,15 @@
     border-radius: 10px;
     background: var(--color-surface-beige);
 }
+.ma-image-copyright {
+    border: 1px solid var(--color-bg);
+    border-top-right-radius: 6px;
+    background: var(--color-bg);
+    z-index: 3;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
 
 .ma-image {
     display: block;

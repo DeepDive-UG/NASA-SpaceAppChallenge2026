@@ -61,6 +61,9 @@ const MyArea = () => {
 
                     <section className="ma-viewer" aria-label="Map gallery">
                         <div className="ma-image-frame">
+                            <div className="ma-image-copyright">
+                                Copyright &copy; 2026 PRISM/NACSE, Oregon State University
+                            </div>
                             <img
                                 src={overlayBase}
                                 alt="Base map"

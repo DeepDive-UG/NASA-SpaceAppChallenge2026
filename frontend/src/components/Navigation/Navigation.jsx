@@ -115,7 +115,7 @@ export default function Navigation({ items = NAV_ITEMS }) {
                         <path d="M12 14c0-3.5 2.5-6 7-6 0 4-2.5 6-7 6Z" />
                     </svg>
                 </span>
-                <span className="sb-brand-name">Farmly</span>
+                <span className="sb-brand-name">CropTips</span>
             </div>
 
             <nav>

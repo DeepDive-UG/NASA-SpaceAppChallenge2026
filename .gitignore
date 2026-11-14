@@ -17,3 +17,4 @@ out/
 /ml/runs/
 /ml/downloads/
 /ml/reports/*_predictions.csv*
+/backend/.rag/

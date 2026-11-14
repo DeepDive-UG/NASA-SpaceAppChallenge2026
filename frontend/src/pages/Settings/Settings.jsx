@@ -1,6 +1,7 @@
 import Navigation from "../../components/Navigation/Navigation";
-import { useSettings } from "../../context/SettingsContext";
+import { useSettings } from "../../context/SettingsContext.jsx";
 import "./Settings.css";
+import AccountSecurity from "../Settings.jsx";
 
 const THEMES = [
     { id: "light", label: "Light" },
@@ -62,6 +63,7 @@ export default function Settings() {
                             <Segmented label="Font size" options={FONT_SIZES} value={fontSize} onChange={setFontSize} />
                         </div>
                     </section>
+                    <AccountSecurity />
                 </div>
             </main>
         </div>

@@ -1,17 +1,9 @@
-:root {
-    --color-primary: #254d32;
-    --color-secondary: #a8bba0;
-    --color-surface-beige: #f2efe7;
-    --color-bg: #fafaf7;
-    --color-card: #ffffff;
-    --color-heading: #242824;
-    --color-text: #555b55;
-    --color-muted: #777d75;
-    --color-border: #e6e8e1;
-    --color-green-light: #dce8d8;
-    --color-warning: #c58b42;
-    --color-error: #b85c50;
-}
+
+
+.sb-session { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--color-border); }
+.sb-signout { width: 100%; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+.sb-signout:disabled { opacity: .5; cursor: default; }
+.sb-session-error { color: var(--color-error); font-size: 0.75rem; overflow-wrap: anywhere; margin-top: 8px; }
 
 .sb {
     width: 248px;
@@ -50,7 +42,7 @@
 }
 
 .sb-brand-name {
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--color-heading);
@@ -76,7 +68,7 @@
     background: transparent;
     color: var(--color-text);
     font: inherit;
-    font-size: 14.5px;
+    font-size: 0.90625rem;
     font-weight: 500;
     text-align: left;
     cursor: pointer;
@@ -107,11 +99,11 @@
 
 .sb-item.is-active {
     background: var(--color-primary);
-    color: #fff;
+    color: var(--color-on-primary);
 }
 
 .sb-item.is-active .sb-icon {
-    color: #fff;
+    color: var(--color-on-primary);
 }
 
 @media (max-width: 720px) {

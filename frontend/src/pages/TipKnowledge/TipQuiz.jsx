@@ -12,6 +12,7 @@ const QUESTIONS = [
             "Plastic packaging and garden soil",
         ],
         answer: 0,
+        articleTitle: "Start a simple compost pile",
     },
     {
         id: "compost-moisture",
@@ -22,6 +23,7 @@ const QUESTIONS = [
             "Saturated with standing water",
         ],
         answer: 1,
+        articleTitle: "Start a simple compost pile",
     },
     {
         id: "watering-target",
@@ -32,6 +34,7 @@ const QUESTIONS = [
             "On the path around the garden",
         ],
         answer: 1,
+        articleTitle: "Water plants more efficiently",
     },
     {
         id: "mulch",
@@ -42,6 +45,7 @@ const QUESTIONS = [
             "It makes plants need more frequent watering",
         ],
         answer: 0,
+        articleTitle: "Water plants more efficiently",
     },
     {
         id: "nitrogen-fixation",
@@ -52,6 +56,7 @@ const QUESTIONS = [
             "They prevent all nitrogen from leaving the soil",
         ],
         answer: 0,
+        articleTitle: "Nitrogen-fixing crops feed the soil",
     },
     {
         id: "cover-crop-benefit",
@@ -62,6 +67,7 @@ const QUESTIONS = [
             "It stops all water from entering the soil",
         ],
         answer: 0,
+        articleTitle: "Cover crops protect and build soil",
     },
     {
         id: "deep-roots",
@@ -72,6 +78,7 @@ const QUESTIONS = [
             "A permanent barrier that prevents other roots from growing",
         ],
         answer: 0,
+        articleTitle: "Deep roots improve soil structure",
     },
     {
         id: "drought-tolerance",
@@ -82,6 +89,7 @@ const QUESTIONS = [
             "By adding fertility even when all crop residues are removed",
         ],
         answer: 0,
+        articleTitle: "Drought-tolerant crops support resilience",
     },
 ];
 
@@ -175,7 +183,7 @@ export default function TipQuiz() {
                                 >
                                     {answers[question.id] === question.answer
                                         ? "Correct"
-                                        : `Review the article: ${question.options[question.answer]}`}
+                                        : `Review the article: ${question.articleTitle}`}
                                 </p>
                             )}
                         </fieldset>

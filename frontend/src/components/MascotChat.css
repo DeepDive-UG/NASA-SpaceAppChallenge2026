@@ -1,0 +1,14 @@
+.mascot-chat { box-sizing: border-box; width: min(560px, calc(100% - 32px)); max-height: 85vh; overflow: auto; padding: 24px; background: var(--color-bg); color: var(--color-heading); border: 1px solid var(--color-border); border-radius: 16px; font-family: 'DM Sans', sans-serif; }
+.mascot-chat::backdrop { background: rgb(36 40 36 / 40%); }
+.mascot-chat header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.mascot-chat h2 { margin: 0; font-family: Manrope, sans-serif; font-weight: 400; }
+.mascot-chat p { line-height: 1.6; }
+.mascot-chat textarea { display: block; width: 100%; box-sizing: border-box; resize: vertical; padding: 12px; margin: 8px 0 16px; background: var(--color-card); color: var(--color-heading); border: 1px solid var(--color-border); border-radius: 8px; font: inherit; }
+.mascot-chat button { background: var(--color-primary); color: var(--color-card); border: 0; border-radius: 8px; padding: 10px 16px; margin-right: 8px; cursor: pointer; font: inherit; }
+.mascot-chat button:disabled { opacity: .5; cursor: default; }
+.mascot-chat .mascot-error { color: var(--color-error); }
+.mascot-answer { white-space: pre-wrap; overflow-wrap: anywhere; }
+.mascot-source { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border); font-size: 0.875rem; }
+.mascot-chat summary { cursor: pointer; margin: 12px 0; }
+.mascot-chat a { color: var(--color-primary); }
+.mascot-chat :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }

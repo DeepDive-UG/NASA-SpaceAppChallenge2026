@@ -1,0 +1,8 @@
+{
+  "url": "https://cgiar-climate-data-hub.github.io/catalog/ecocrop/",
+  "reviewed_on": "2026-11-14",
+  "sections": [{
+    "title": "Interpreting EcoCrop temperature and rainfall fields",
+    "text": "Reviewed summary of the CGIAR EcoCrop data catalogue. TOPMN and TOPMX describe optimal minimum and maximum temperatures in degrees Celsius; TMIN and TMAX describe absolute minimum and maximum temperatures. ROPMN and ROPMX describe optimal annual rainfall limits in millimetres, and RMIN and RMAX describe absolute annual rainfall limits. These rainfall amounts are annual climatic descriptors, not irrigation prescriptions or totals over a 100-day growing period. Missing values are unknown. The local CSV's complete upstream version and licence have not been established; matching field names to this dictionary does not certify every local record."
+  }]
+}

@@ -1,17 +1,15 @@
+import droughtTolerantImage from "./images/shutterstock_1956949345-2839469729.jpg";
+
 export default function DroughtTolerantArticle() {
     return (
         <div className="tk-article-copy">
-            <figure className="tk-picture-placeholder">
-                <div
-                    className="tk-picture-placeholder-art"
-                    role="img"
-                    aria-label="Picture placeholder for drought-tolerant crops in a dry field"
-                >
-                    <span aria-hidden="true">＋</span>
-                    <span>Picture placeholder</span>
-                </div>
+            <figure className="tk-article-figure">
+                <img
+                    src={droughtTolerantImage}
+                    alt="Rows of green crops growing in dry, cracked soil."
+                />
                 <figcaption>
-                    Suggested picture: drought-tolerant crops growing under dry conditions.
+                    Drought-tolerant crops can maintain ground cover during dry periods. https://modernfarmer.com/2022/06/drought-tolerant-crops/
                 </figcaption>
             </figure>
 

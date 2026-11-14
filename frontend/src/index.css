@@ -64,3 +64,6 @@
    background: var(--color-bg);
    color: var(--color-text);
  }
+:root { --color-surface-green: var(--color-green-light); }
+.settings-security { color: var(--color-heading); font-family: 'DM Sans', system-ui, sans-serif; }
+.settings-security p { margin: 12px 0; line-height: 1.6; color: var(--color-text); }

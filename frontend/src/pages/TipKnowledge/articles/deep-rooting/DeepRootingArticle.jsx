@@ -1,17 +1,15 @@
+import deepRootsImage from "./images/healthy-soil-deep-root-growth-uk-gardens-1024x683-1600655956.jpg";
+
 export default function DeepRootingArticle() {
     return (
         <div className="tk-article-copy">
-            <figure className="tk-picture-placeholder">
-                <div
-                    className="tk-picture-placeholder-art"
-                    role="img"
-                    aria-label="Picture placeholder for a deep-rooted crop and soil profile"
-                >
-                    <span aria-hidden="true">＋</span>
-                    <span>Picture placeholder</span>
-                </div>
+            <figure className="tk-article-figure">
+                <img
+                    src={deepRootsImage}
+                    alt="Illustration of deep plant roots growing through soil, with arrows showing water movement."
+                />
                 <figcaption>
-                    Suggested picture: a soil profile showing roots at different depths.
+                    Deep roots can create channels that help water move through soil. https://gloriousgarden.co.uk/small-roots-heavy-uk-soil/
                 </figcaption>
             </figure>
 

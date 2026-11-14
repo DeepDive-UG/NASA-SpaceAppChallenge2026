@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useState } from 'react';
 import "./Navigation.css";
 
 const Icon = ({ children }) => (
@@ -105,10 +106,29 @@ export const NAV_ITEMS = [
 ];
 
 export default function Navigation({ items = NAV_ITEMS }) {
+    const [signingOut, setSigningOut] = useState(false);
+    const [signOutError, setSignOutError] = useState('');
+
+    async function signOut() {
+        setSigningOut(true);
+        setSignOutError('');
+        try {
+            await fetch('/api/health/');
+            const token = document.cookie.split('; ').find(part => part.startsWith('csrftoken='))?.split('=')[1] || '';
+            const response = await fetch('/api/account/logout/', {
+                method: 'POST', headers: { 'X-CSRFToken': token },
+            });
+            if (!response.ok) throw new Error('Could not sign out. Please try again.');
+            window.location.assign('/');
+        } catch {
+            setSignOutError('Could not sign out. Please try again.');
+            setSigningOut(false);
+        }
+    }
     return (
         <aside className="sb" aria-label="Main navigation">
             <div className="sb-brand">
-                <img className="sb-logo-img" src="/logo.png" alt="Farmly" />
+                <img className="sb-logo-img" src="/logo.png" alt="LogoMascot" />
                 <span className="sb-brand-name">CropTips</span>
             </div>
 
@@ -128,6 +148,13 @@ export default function Navigation({ items = NAV_ITEMS }) {
                     ))}
                 </ul>
             </nav>
+            <div className="sb-session">
+                <button className="sb-item sb-signout" type="button" onClick={signOut} disabled={signingOut} aria-label={signingOut ? 'Signing out' : 'Sign out'} title="Sign out">
+                    <Icon><path d="M9 4H4v16h5M14 8l4 4-4 4M8 12h10" /></Icon>
+                    <span className="sb-label">{signingOut ? 'Signing out…' : 'Sign out'}</span>
+                </button>
+                {signOutError && <p role="alert" className="sb-session-error">{signOutError}</p>}
+            </div>
         </aside>
     );
 }

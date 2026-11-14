@@ -702,8 +702,8 @@ export default function Onboarding() {
     const collections = form.sameHistoryForAll
       ? [form.sharedHistory]
       : form.sectors.map(
-          (sector) => form.sectorHistories[sector.id] || [],
-        );
+        (sector) => form.sectorHistories[sector.id] || [],
+      );
 
     if (collections.some((seasons) => seasons.length === 0)) {
       return 'Add at least one season for each applicable sector, or choose “I don’t know.”';
@@ -987,9 +987,8 @@ export default function Onboarding() {
           <div className="soil-class-grid">
             {SOIL_CLASSES.map((soilClass) => (
               <label
-                className={`radio-card ${
-                  form.defaultSoilClass === soilClass.id ? 'selected' : ''
-                }`}
+                className={`radio-card ${form.defaultSoilClass === soilClass.id ? 'selected' : ''
+                  }`}
                 key={soilClass.id}
               >
                 <input
@@ -1135,9 +1134,8 @@ export default function Onboarding() {
 
           <div className="area-progress" aria-label="Assigned field area">
             <div
-              className={`area-progress-fill ${
-                assignedArea > form.totalAreaHa ? 'over' : ''
-              }`}
+              className={`area-progress-fill ${assignedArea > form.totalAreaHa ? 'over' : ''
+                }`}
               style={{
                 width: `${Math.min(
                   form.totalAreaHa

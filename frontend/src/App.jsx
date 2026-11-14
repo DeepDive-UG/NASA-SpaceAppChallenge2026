@@ -8,7 +8,8 @@ import Settings from './pages/Settings/Settings'
 import TipKnowledge from './pages/TipKnowledge/TipKnowledge'
 import Login from './pages/Login/login'
 import FieldProvider from './components/FieldProvider'
-import CropRotation from './pages/CropRotation'
+import CropRotation from './pages/CropRotation/CropRotation'
+import Onboarding from './pages/onboarding/Onboarding'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/knowledge" element={<TipKnowledge />} />
         <Route path="/login" element={<Login />} />
         <Route path="/crop-rotation" element={<CropRotation />} />
+        <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
     </BrowserRouter></FieldProvider>
   )

@@ -1,6 +1,6 @@
 import Navigation from "../../components/Navigation/Navigation";
 import { useState } from 'react';
-import Alerts from '../Alerts';
+import Alerts from '../Alerts/Alerts'
 import './Home.css'
 
 const Home = () => {

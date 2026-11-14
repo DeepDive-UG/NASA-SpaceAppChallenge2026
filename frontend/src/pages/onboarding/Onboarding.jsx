@@ -298,7 +298,7 @@ function StepHeader({ title, children }) {
   return (
     <header className="onboarding-step-header">
       <h2>{title}</h2>
-      <p>{children}</p>
+      {children && <p>{children}</p>}
     </header>
   );
 }
@@ -497,6 +497,50 @@ export default function Onboarding() {
     form.waterSource.lon,
   ]);
 
+  useEffect(() => {
+    if (form.sectorTemplate !== 'Whole field') return;
+    const lockedArea = makeEqualAreas(form.totalAreaHa, 1)[0];
+
+    setForm((current) => {
+      if (current.sectorTemplate !== 'Whole field') return current;
+
+      if (
+        current.sectors.length === 1 &&
+        current.sectors[0].areaHa === lockedArea
+      ) {
+        return current;
+      }
+
+      if (current.sectors.length === 0) {
+        const id = uid();
+        return {
+          ...current,
+          sectors: [
+            {
+              id,
+              name: 'Whole field',
+              direction: 'Center',
+              areaHa: lockedArea,
+              soilClass: current.defaultSoilClass,
+              currentCrop: '',
+              notes: '',
+            },
+          ],
+          sectorHistories: {
+            ...current.sectorHistories,
+            [id]: [newSeason()],
+          },
+        };
+      }
+
+      const primary = { ...current.sectors[0], areaHa: lockedArea };
+      return {
+        ...current,
+        sectors: [primary],
+      };
+    });
+  }, [form.sectorTemplate, form.totalAreaHa]);
+
   const assignedArea = useMemo(
     () =>
       form.sectors.reduce(
@@ -582,12 +626,21 @@ export default function Onboarding() {
   };
 
   const updateSector = (id, key, value) => {
-    setForm((current) => ({
-      ...current,
-      sectors: current.sectors.map((sector) =>
-        sector.id === id ? { ...sector, [key]: value } : sector,
-      ),
-    }));
+    setForm((current) => {
+      if (
+        current.sectorTemplate === 'Whole field' &&
+        (key === 'areaHa' || key === 'direction')
+      ) {
+        return current;
+      }
+
+      return {
+        ...current,
+        sectors: current.sectors.map((sector) =>
+          sector.id === id ? { ...sector, [key]: value } : sector,
+        ),
+      };
+    });
   };
 
   const addSector = () => {
@@ -978,52 +1031,79 @@ export default function Onboarding() {
     }
 
     if (step === 1) {
+      const activeSoil = getSoilClass(form.defaultSoilClass);
+
       return (
         <>
           <StepHeader title="Choose the default field class">
             Select the USDA NRCS Land Capability Class that best describes most of your field.
           </StepHeader>
 
-          <div className="soil-class-grid">
-            {SOIL_CLASSES.map((soilClass) => (
-              <label
-                className={`radio-card ${form.defaultSoilClass === soilClass.id ? 'selected' : ''
-                  }`}
-                key={soilClass.id}
-              >
-                <input
-                  type="radio"
-                  name="default-soil-class"
-                  value={soilClass.id}
-                  checked={form.defaultSoilClass === soilClass.id}
-                  onChange={() =>
-                    setForm((current) => ({
-                      ...current,
-                      defaultSoilClass: soilClass.id,
-                    }))
-                  }
-                />
-
-                <span className="radio-card-body">
-                  <h3>{soilClass.title}</h3>
-                  <p>{soilClass.description}</p>
-                  <p className="suitable-uses">
-                    <strong>Suitable uses:</strong> {soilClass.suitableUses}
-                  </p>
-                  {soilClass.isArable === true && (
-                    <span className="arable-badge">Arable</span>
-                  )}
-                  {soilClass.isArable === false && (
-                    <span className="non-arable-badge">Non-arable</span>
-                  )}
-                </span>
-              </label>
-            ))}
+          <div className="soil-scale-hints" aria-hidden="true">
+            <span>I–IV · Arable (cultivation)</span>
+            <span>V–VIII · Non-arable (pasture / habitat)</span>
           </div>
 
-          <p className="source-note">
-            Source: USDA NRCS Land Capability Classification (Land Judging Handbook)
-          </p>
+          <div
+            className="soil-class-grid"
+            role="radiogroup"
+            aria-label="Default field class"
+          >
+            {SOIL_CLASSES.map((soilClass) => {
+              const isSelected = form.defaultSoilClass === soilClass.id;
+              const isUnknown = soilClass.id === 'unknown';
+
+              return (
+                <label
+                  className={`soil-tile ${isSelected ? 'selected' : ''}`}
+                  key={soilClass.id}
+                  style={{ '--soil-color': soilClass.color }}
+                  title={soilClass.title}
+                >
+                  <input
+                    className="soil-tile-input"
+                    type="radio"
+                    name="default-soil-class"
+                    value={soilClass.id}
+                    aria-label={soilClass.title}
+                    checked={isSelected}
+                    onChange={() =>
+                      setForm((current) => ({
+                        ...current,
+                        defaultSoilClass: soilClass.id,
+                      }))
+                    }
+                  />
+                  <span className="soil-tile-swatch" aria-hidden="true" />
+                  <span className="soil-tile-code">
+                    {isUnknown ? '?' : soilClass.id}
+                  </span>
+                  <span className="soil-tile-sub">
+                    {isUnknown ? 'Unsure' : 'Class'}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+
+          <div className="soil-selected-bar" aria-live="polite">
+            <div className="soil-selected-info">
+              <span className="soil-selected-main">
+                <span
+                  className="status-dot"
+                  style={{ background: activeSoil.color }}
+                />
+                <strong>{activeSoil.title}</strong>
+              </span>
+              <span className="soil-selected-desc">{activeSoil.description}</span>
+            </div>
+            {activeSoil.isArable === true && (
+              <span className="arable-badge">Arable</span>
+            )}
+            {activeSoil.isArable === false && (
+              <span className="non-arable-badge">Non-arable</span>
+            )}
+          </div>
         </>
       );
     }
@@ -1046,11 +1126,23 @@ export default function Onboarding() {
                 value={form.totalArea}
                 onChange={(event) => {
                   const totalArea = event.target.value;
-                  setForm((current) => ({
-                    ...current,
-                    totalArea,
-                    totalAreaHa: toHectares(totalArea, current.areaUnit),
-                  }));
+                  setForm((current) => {
+                    const totalAreaHa = toHectares(totalArea, current.areaUnit);
+                    const lockedArea = makeEqualAreas(totalAreaHa, 1)[0];
+
+                    return {
+                      ...current,
+                      totalArea,
+                      totalAreaHa,
+                      sectors:
+                        current.sectorTemplate === 'Whole field'
+                          ? current.sectors.map((sector) => ({
+                              ...sector,
+                              areaHa: lockedArea,
+                            }))
+                          : current.sectors,
+                    };
+                  });
                 }}
                 placeholder="Enter area"
               />
@@ -1063,11 +1155,23 @@ export default function Onboarding() {
                 value={form.areaUnit}
                 onChange={(event) => {
                   const areaUnit = event.target.value;
-                  setForm((current) => ({
-                    ...current,
-                    areaUnit,
-                    totalAreaHa: toHectares(current.totalArea, areaUnit),
-                  }));
+                  setForm((current) => {
+                    const totalAreaHa = toHectares(current.totalArea, areaUnit);
+                    const lockedArea = makeEqualAreas(totalAreaHa, 1)[0];
+
+                    return {
+                      ...current,
+                      areaUnit,
+                      totalAreaHa,
+                      sectors:
+                        current.sectorTemplate === 'Whole field'
+                          ? current.sectors.map((sector) => ({
+                              ...sector,
+                              areaHa: lockedArea,
+                            }))
+                          : current.sectors,
+                    };
+                  });
                 }}
               >
                 {AREA_UNITS.map((unit) => (
@@ -1089,6 +1193,8 @@ export default function Onboarding() {
     }
 
     if (step === 3) {
+      const isWholeField = form.sectorTemplate === 'Whole field';
+
       const orientationClass =
         form.sectorTemplate === 'Halves N/S'
           ? 'halves-ns'
@@ -1117,9 +1223,10 @@ export default function Onboarding() {
               'Custom',
             ].map((template) => (
               <button
-                className="template-button"
+                className={`template-button ${form.sectorTemplate === template ? 'selected' : ''}`}
                 type="button"
                 key={template}
+                aria-pressed={form.sectorTemplate === template}
                 onClick={() => applyTemplate(template)}
               >
                 {template}
@@ -1134,7 +1241,7 @@ export default function Onboarding() {
 
           <div className="area-progress" aria-label="Assigned field area">
             <div
-              className={`area-progress-fill ${assignedArea > form.totalAreaHa ? 'over' : ''
+              className={`area-progress-fill ${assignedArea > form.totalAreaHa + 0.0001 ? 'over' : ''
                 }`}
               style={{
                 width: `${Math.min(
@@ -1172,25 +1279,32 @@ export default function Onboarding() {
           <div className="sectors-list">
             {form.sectors.map((sector) => {
               const soilClass = getSoilClass(sector.soilClass);
+              const lockedWholeFieldArea = makeEqualAreas(form.totalAreaHa, 1)[0];
 
               return (
                 <article className="sector-card" key={sector.id}>
                   <div className="sector-card-header">
                     <div>
                       <h3>{sector.name || 'Unnamed sector'}</h3>
-                      <span className="direction-badge">{sector.direction}</span>{' '}
+                      {!isWholeField && (
+                        <>
+                          <span className="direction-badge">{sector.direction}</span>{' '}
+                        </>
+                      )}
                       {soilClass.isArable === false && (
                         <span className="non-arable-badge">Non-arable</span>
                       )}
                     </div>
 
-                    <button
-                      className="danger-button"
-                      type="button"
-                      onClick={() => deleteSector(sector.id)}
-                    >
-                      Delete
-                    </button>
+                    {!isWholeField && (
+                      <button
+                        className="danger-button"
+                        type="button"
+                        onClick={() => deleteSector(sector.id)}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
 
                   <div className="sector-fields">
@@ -1205,22 +1319,24 @@ export default function Onboarding() {
                       />
                     </label>
 
-                    <label className="field-label">
-                      Direction
-                      <select
-                        className="onboarding-select"
-                        value={sector.direction}
-                        onChange={(event) =>
-                          updateSector(sector.id, 'direction', event.target.value)
-                        }
-                      >
-                        {DIRECTIONS.map((direction) => (
-                          <option value={direction} key={direction}>
-                            {direction}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
+                    {!isWholeField && (
+                      <label className="field-label">
+                        Direction
+                        <select
+                          className="onboarding-select"
+                          value={sector.direction}
+                          onChange={(event) =>
+                            updateSector(sector.id, 'direction', event.target.value)
+                          }
+                        >
+                          {DIRECTIONS.map((direction) => (
+                            <option value={direction} key={direction}>
+                              {direction}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
 
                     <label className="field-label">
                       Area in hectares
@@ -1229,7 +1345,9 @@ export default function Onboarding() {
                         type="number"
                         min="0"
                         step="any"
-                        value={sector.areaHa}
+                        value={isWholeField ? lockedWholeFieldArea : sector.areaHa}
+                        disabled={isWholeField}
+                        readOnly={isWholeField}
                         onChange={(event) =>
                           updateSector(sector.id, 'areaHa', event.target.value)
                         }
@@ -1247,7 +1365,7 @@ export default function Onboarding() {
                       >
                         {SOIL_CLASSES.map((item) => (
                           <option value={item.id} key={item.id}>
-                            {item.title}
+                            {item.id === 'unknown' ? "I don't know" : `Class ${item.id}`}
                           </option>
                         ))}
                       </select>
@@ -1282,15 +1400,17 @@ export default function Onboarding() {
             })}
           </div>
 
-          <div className="sector-actions">
-            <button
-              className="secondary-button"
-              type="button"
-              onClick={addSector}
-            >
-              Add sector
-            </button>
-          </div>
+          {!isWholeField && (
+            <div className="sector-actions">
+              <button
+                className="secondary-button"
+                type="button"
+                onClick={addSector}
+              >
+                Add sector
+              </button>
+            </div>
+          )}
         </>
       );
     }
@@ -1585,7 +1705,13 @@ export default function Onboarding() {
                 Edit
               </button>
             </div>
-            <p>{defaultSoil.title}</p>
+            <p>
+              <span
+                className="status-dot"
+                style={{ background: defaultSoil.color }}
+              />
+              {defaultSoil.title}
+            </p>
             {defaultSoil.isArable === false && (
               <span className="non-arable-badge">Non-arable</span>
             )}

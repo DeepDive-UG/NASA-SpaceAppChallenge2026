@@ -21,7 +21,8 @@
 
 .onboarding-page {
   min-height: 100vh;
-  padding: 32px 18px 64px;
+  min-height: 100dvh;
+  padding: 32px 18px 40px;
   color: var(--text-body);
   background: var(--bg-app);
   font-family:
@@ -199,6 +200,15 @@
   box-shadow: 0 0 0 3px rgba(37, 77, 50, 0.13);
 }
 
+.onboarding-input:disabled,
+.onboarding-select:disabled,
+.onboarding-textarea:disabled {
+  border-color: var(--border);
+  color: var(--text-muted);
+  background: var(--bg-section);
+  cursor: not-allowed;
+}
+
 .checkbox-line,
 .toggle-line {
   display: flex;
@@ -293,6 +303,11 @@
   background: var(--highlight-green);
 }
 
+.template-button.selected {
+  border-color: var(--primary);
+  background: var(--highlight-green);
+}
+
 .text-button {
   min-height: auto;
   padding: 3px;
@@ -366,45 +381,134 @@ button:disabled {
   margin: 20px 0 0;
 }
 
+.soil-scale-hints {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .soil-class-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 13px;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 8px;
 }
 
-.radio-card {
+.soil-tile {
   position: relative;
   display: flex;
-  gap: 12px;
-  min-height: 152px;
-  padding: 17px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 84px;
+  padding: 10px 4px;
   border: 2px solid var(--border);
   border-radius: 14px;
+  background: var(--bg-card);
   cursor: pointer;
+  user-select: none;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
-.radio-card:hover {
-  border-color: var(--secondary-accent);
+.soil-tile:hover {
+  border-color: var(--soil-color, var(--secondary-accent));
+  transform: translateY(-2px);
 }
 
-.radio-card.selected {
+.soil-tile.selected {
   border-color: var(--primary);
   background: var(--highlight-green);
+  box-shadow: 0 6px 18px rgba(37, 77, 50, 0.12);
 }
 
-.radio-card-body h3 {
-  margin: 0 0 7px;
+.soil-tile:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 77, 50, 0.18);
+}
+
+.soil-tile-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.soil-tile-swatch {
+  width: 28px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--soil-color, var(--secondary-accent));
+  transition: transform 160ms ease, width 160ms ease;
+}
+
+.soil-tile.selected .soil-tile-swatch {
+  width: 36px;
+}
+
+.soil-tile-code {
   color: var(--text-heading);
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
-.radio-card-body p {
-  margin: 5px 0;
-  line-height: 1.45;
+.soil-tile-sub {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
 }
 
-.suitable-uses {
-  font-size: 0.87rem;
+.soil-tile.selected .soil-tile-sub {
+  color: var(--primary);
+}
+
+.soil-selected-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-section);
+  font-size: 0.9rem;
+}
+
+.soil-selected-info {
+  display: grid;
+  gap: 3px;
+}
+
+.soil-selected-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-heading);
+}
+
+.soil-selected-desc {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
 
 .arable-badge,
@@ -652,10 +756,19 @@ button:disabled {
   .field-size-grid,
   .water-grid,
   .summary-grid,
-  .soil-class-grid,
   .sector-fields,
   .season-fields {
     grid-template-columns: 1fr;
+  }
+
+  .soil-tile {
+    min-height: 72px;
+    padding: 10px 4px;
+    gap: 7px;
+  }
+
+  .soil-tile-code {
+    font-size: 1.05rem;
   }
 
   .sector-fields .wide-field,
@@ -700,5 +813,9 @@ button:disabled {
   .summary-title {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .soil-class-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

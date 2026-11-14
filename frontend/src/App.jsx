@@ -4,31 +4,23 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import MyField from './pages/myField/myField';
 import MyGear from './pages/myGear/myGear';
 import MyArea from './pages/myArea/myArea';
-import { useState } from 'react';
+import FieldProvider from './components/FieldProvider';
+import Settings from './pages/settings/Settings';
+import CropRotation from './pages/CropRotation';
 
 function App() {
-  const [waterStationId, setWaterStationId] = useState(() => {
-    try {
-      const saved = localStorage.getItem('croptips-field-water-station')
-      return /^USGS-\d{8,15}$/.test(saved || '') ? saved : null
-    } catch { return null }
-  })
-
-  function saveWaterStation(id) {
-    localStorage.setItem('croptips-field-water-station', id)
-    setWaterStationId(id)
-  }
-
   return (
     <div>
-      <BrowserRouter>
+      <FieldProvider><BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/myField" element={<MyField waterStationId={waterStationId} onWaterStationSave={saveWaterStation} />} />
+          <Route path="/myField" element={<MyField />} />
           <Route path="/myGear" element={<MyGear />} />
           <Route path="/myArea" element={<MyArea />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/crop-rotation" element={<CropRotation />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter></FieldProvider>
     </div>
   )
 }

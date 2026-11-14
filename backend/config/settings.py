@@ -7,9 +7,13 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-croptips-local
 if not DEBUG and SECRET_KEY == "django-insecure-croptips-local-development-only":
     raise RuntimeError("Set DJANGO_SECRET_KEY before running in production.")
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
+CSRF_TRUSTED_ORIGINS = [origin for origin in os.environ.get(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173" if DEBUG else "",
+).split(",") if origin]
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
-    "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles", "api",
+    "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles", "api", "rag",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

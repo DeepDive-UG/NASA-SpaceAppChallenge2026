@@ -6,3 +6,45 @@
    margin: 0;
    padding: 0
  }
+
+:root {
+  --color-primary: #254D32;
+  --color-on-primary: #FFFFFF;
+  --color-secondary: #A8BBA0;
+  --color-surface-beige: #F2EFE7;
+  --color-bg: #FAFAF7;
+  --color-card: #FFFFFF;
+  --color-heading: #242824;
+  --color-text: #555B55;
+  --color-muted: #777D75;
+  --color-border: #E6E8E1;
+  --color-surface-green: #DCE8D8;
+  --color-warning: #C58B42;
+  --color-error: #B85C50;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --color-primary: #A8CBA5;
+  --color-on-primary: #17251B;
+  --color-secondary: #819C78;
+  --color-surface-beige: #303129;
+  --color-bg: #171D19;
+  --color-card: #222B24;
+  --color-heading: #F2EFE7;
+  --color-text: #D5DDD2;
+  --color-muted: #B3BFAD;
+  --color-border: #495346;
+  --color-surface-green: #344A37;
+  --color-warning: #E0AD68;
+  --color-error: #E79589;
+  color-scheme: dark;
+}
+:root[data-font-size="small"] { font-size: 14px; }
+:root[data-font-size="medium"] { font-size: 16px; }
+:root[data-font-size="large"] { font-size: 18px; }
+:root[data-font-size="xlarge"] { font-size: 20px; }
+body { background: var(--color-bg); color: var(--color-heading); }
+.settings-security { color: var(--color-heading); font-family: 'DM Sans', system-ui, sans-serif; }
+.settings-security p { margin: 12px 0; line-height: 1.6; color: var(--color-text); }
+
+:root { --color-green-light: var(--color-surface-green); }

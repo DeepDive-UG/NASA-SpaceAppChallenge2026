@@ -1,0 +1,19 @@
+.settings-layout { display: flex; align-items: flex-start; min-height: 100vh; background: var(--color-bg); color: var(--color-heading); }
+.settings-main { flex: 1; min-width: 0; max-width: 800px; padding: 32px; font-family: 'DM Sans', sans-serif; }
+.settings-main h1 { font-family: Manrope, sans-serif; font-weight: 300; font-size: 1.875rem; margin-bottom: 12px; }
+.settings-main h2 { font-family: Manrope, sans-serif; font-weight: 400; margin-bottom: 12px; }
+.settings-main p { color: var(--color-text); margin: 12px 0; line-height: 1.6; }
+.settings-card { padding: 24px; margin: 24px 0; border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-card); }
+.settings-card fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+.settings-card label { display: block; margin: 16px 0; font-weight: 500; }
+.settings-card input:not([type="checkbox"]) { display: block; width: 100%; box-sizing: border-box; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-bg); color: var(--color-heading); padding: 12px; margin-top: 8px; font: inherit; font-weight: 400; }
+.settings-card input[hidden] { display: none; }
+.settings-card .settings-checkbox { display: flex; gap: 10px; align-items: center; font-weight: 400; }
+.settings-checkbox input { accent-color: var(--color-primary); }
+.settings-card button { border: 0; border-radius: 8px; background: var(--color-primary); color: var(--color-on-primary); padding: 12px 20px; font: inherit; cursor: pointer; }
+.settings-card button:disabled, .settings-card fieldset:disabled { opacity: .55; }
+.settings-card button:disabled { cursor: default; }
+.settings-main .settings-error { display: block; color: var(--color-error); font-size: 0.875rem; margin-top: 6px; }
+.settings-notice { padding: 16px; background: var(--color-surface-beige); border-radius: 10px; }
+.settings-main :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+@media (max-width: 720px) { .settings-main { padding: 16px; } .settings-card { padding: 16px; } }

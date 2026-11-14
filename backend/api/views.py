@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
 from datetime import datetime, timezone, timedelta
 import math
@@ -9,6 +10,7 @@ from .environment import active_alerts, usgs_features, current_fires
 
 
 @require_GET
+@ensure_csrf_cookie
 def health(request):
     return JsonResponse({"status": "ok", "service": "CropTips"})
 

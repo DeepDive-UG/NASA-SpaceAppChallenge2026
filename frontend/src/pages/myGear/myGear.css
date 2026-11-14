@@ -1,7 +1,7 @@
 .mg-layout {
     display: flex;
     min-height: 100vh;
-    background: #fafaf7;
+    background: var(--color-bg);
 }
 
 .mg-main {
@@ -17,10 +17,10 @@
 
 .mg-title {
     margin: 0 0 24px;
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: #242824;
+    color: var(--color-heading);
 }
 
 /* Add gear + dropdown */
@@ -37,10 +37,10 @@
     padding: 10px 14px 10px 12px;
     border: 0;
     border-radius: 10px;
-    background: #254d32;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--color-card);
     font: inherit;
-    font-size: 14.5px;
+    font-size: 0.90625rem;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.15s ease;
@@ -53,7 +53,7 @@
 .mg-add:focus-visible,
 .mg-option:focus-visible,
 .mg-status-btn:focus-visible {
-    outline: 2px solid #254d32;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
 }
 
@@ -76,8 +76,8 @@
     margin: 0;
     padding: 6px;
     list-style: none;
-    background: #ffffff;
-    border: 1px solid #e6e8e1;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(36, 40, 36, 0.1);
 }
@@ -88,22 +88,22 @@
     border: 0;
     border-radius: 8px;
     background: transparent;
-    color: #555b55;
+    color: var(--color-text);
     font: inherit;
-    font-size: 14.5px;
+    font-size: 0.90625rem;
     text-align: left;
     cursor: pointer;
 }
 
 .mg-option:hover {
-    background: #dce8d8;
-    color: #242824;
+    background: var(--color-surface-green);
+    color: var(--color-heading);
 }
 
 /* List */
 .mg-card {
-    background: #ffffff;
-    border: 1px solid #e6e8e1;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
     border-radius: 14px;
     padding: 8px 24px;
 }
@@ -111,8 +111,8 @@
 .mg-empty {
     margin: 0;
     padding: 24px 0;
-    font-size: 14.5px;
-    color: #777d75;
+    font-size: 0.90625rem;
+    color: var(--color-muted);
 }
 
 .mg-list {
@@ -130,13 +130,13 @@
 }
 
 .mg-row+.mg-row {
-    border-top: 1px solid #e6e8e1;
+    border-top: 1px solid var(--color-border);
 }
 
 .mg-name {
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 500;
-    color: #242824;
+    color: var(--color-heading);
 }
 
 /* Status switch on the right */
@@ -144,7 +144,7 @@
     display: inline-flex;
     padding: 3px;
     gap: 2px;
-    background: #f2efe7;
+    background: var(--color-surface-beige);
     border-radius: 10px;
     flex-shrink: 0;
 }
@@ -154,24 +154,24 @@
     border: 0;
     border-radius: 8px;
     background: transparent;
-    color: #777d75;
+    color: var(--color-muted);
     font: inherit;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
 }
 
 .mg-status-btn:hover {
-    color: #242824;
+    color: var(--color-heading);
 }
 
 .mg-status-btn.available.is-active {
-    background: #254d32;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--color-card);
 }
 
 .mg-status-btn.unavailable.is-active {
-    background: #b85c50;
-    color: #ffffff;
+    background: var(--color-error);
+    color: var(--color-card);
 }

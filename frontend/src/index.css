@@ -6,3 +6,61 @@
    margin: 0;
    padding: 0
  }
+
+ :root {
+   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+ }
+
+ body {
+   font-family: var(--font-sans);
+ }
+
+ button,
+ input,
+ select,
+ textarea {
+   font-family: inherit;
+   /* domyślnie przeglądarka daje im własną czcionkę */
+ }
+
+ :root,
+ :root[data-theme="light"] {
+   --color-primary: #254d32;
+   --color-secondary: #a8bba0;
+   --color-surface-beige: #f2efe7;
+   --color-bg: #fafaf7;
+   --color-card: #ffffff;
+   --color-heading: #242824;
+   --color-text: #555b55;
+   --color-muted: #777d75;
+   --color-border: #e6e8e1;
+   --color-green-light: #dce8d8;
+   --color-warning: #c58b42;
+   --color-error: #b85c50;
+   --color-on-primary: #ffffff;
+ }
+
+ :root[data-theme="dark"] {
+   --color-primary: #5fa874;
+   --color-secondary: #4a5f4c;
+   --color-surface-beige: #2a2e29;
+   --color-bg: #161916;
+   --color-card: #1f231f;
+   --color-heading: #f2efe7;
+   --color-text: #c5cac3;
+   --color-muted: #8f958d;
+   --color-border: #2f352f;
+   --color-green-light: #26352a;
+   --color-warning: #d9a15a;
+   --color-error: #d9766a;
+   --color-on-primary: #10140f;
+ }
+
+ html {
+   font-size: var(--font-size, 100%);
+ }
+
+ body {
+   background: var(--color-bg);
+   color: var(--color-text);
+ }

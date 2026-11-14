@@ -1,0 +1,109 @@
+.st-layout {
+    display: flex;
+    min-height: 100vh;
+    background: var(--color-bg);
+}
+
+.st-main {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+}
+
+.st {
+    max-width: 720px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.st-title {
+    margin: 0 0 24px;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-heading);
+}
+
+.st-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 8px 24px;
+}
+
+.st-section {
+    margin: 0;
+    padding: 16px 0 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+.st-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    padding: 16px 0;
+}
+
+.st-row+.st-row {
+    border-top: 1px solid var(--color-border);
+}
+
+.st-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.st-label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-heading);
+}
+
+.st-desc {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+}
+
+/* Segmented control */
+.st-seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding: 3px;
+    gap: 2px;
+    background: var(--color-surface-beige);
+    border-radius: 10px;
+}
+
+.st-seg-btn {
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.st-seg-btn:hover {
+    color: var(--color-heading);
+}
+
+.st-seg-btn.is-active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+.st-seg-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}

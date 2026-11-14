@@ -1,0 +1,16 @@
+.station-picker { margin-top: 24px; padding: 24px; border: 1px solid #E6E8E1; border-radius: 14px; background: #FFFFFF; color: #242824; }
+.station-picker h2 { margin-top: 0; font-family: Manrope, sans-serif; font-weight: 400; }
+.station-picker p { color: #555B55; }
+.station-picker label { display: block; font-family: 'DM Sans', sans-serif; }
+.station-picker input:not([type="radio"]) { display: block; width: 100%; box-sizing: border-box; padding: 12px; margin: 8px 0 16px; border: 1px solid #E6E8E1; border-radius: 8px; color: #242824; background: #FAFAF7; }
+.station-picker fieldset { margin: 16px 0; padding: 12px; border: 1px solid #E6E8E1; border-radius: 8px; }
+.station-picker .station-option { display: flex; align-items: center; gap: 12px; padding: 12px 8px; cursor: pointer; }
+.station-option:has(input:checked) { background: #DCE8D8; border-radius: 8px; }
+.station-option input { accent-color: #254D32; }
+.station-option small { display: block; color: #777D75; margin-top: 4px; }
+.station-picker button { background: #254D32; color: #FFFFFF; font-family: 'DM Sans', sans-serif; font-weight: 500; border: 0; border-radius: 8px; padding: 12px 20px; cursor: pointer; }
+.station-picker button:disabled { opacity: .5; cursor: default; }
+.station-preview { background: #F2EFE7; padding: 16px; border-radius: 8px; margin-top: 16px; }
+.station-picker a { color: #254D32; }
+.station-picker .station-error { color: #B85C50; }
+.station-picker :focus-visible { outline: 2px solid #254D32; outline-offset: 3px; }

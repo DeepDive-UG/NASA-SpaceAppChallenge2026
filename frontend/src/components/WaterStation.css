@@ -1,0 +1,20 @@
+.water-conditions { margin-top: 24px; padding: 24px; background: #FFFFFF; border: 1px solid #E6E8E1; border-radius: 14px; color: #242824; }
+.water-conditions h2 { font-family: Manrope, sans-serif; font-weight: 400; margin-top: 0; }
+.water-conditions p { color: #555B55; }
+.water-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.water-metrics article { padding: 16px; border: 1px solid #E6E8E1; border-radius: 10px; }
+.water-metrics h4 { margin: 0 0 12px; font-weight: 500; }
+.water-value { font-size: 26px; font-weight: 500; }
+.water-value small { font-size: 14px; color: #777D75; }
+.water-conditions .water-recent { color: #254D32; }
+.water-conditions .water-old { color: #C58B42; }
+.water-conditions .water-caption { color: #777D75; font-size: 13px; }
+.water-conditions [role="alert"] { color: #B85C50; }
+.water-conditions a { color: #254D32; }
+.water-history { list-style: none; padding: 0; }
+.water-history li { display: grid; grid-template-columns: 92px minmax(24px, 1fr) auto; align-items: center; gap: 12px; margin: 12px 0; font-size: 13px; }
+.water-bar { display: block; height: 12px; min-width: 1px; background: #A8BBA0; border-radius: 4px; }
+.water-note { padding: 16px; background: #F2EFE7; border-radius: 10px; margin: 20px 0; }
+.mf-station-settings { margin: 20px 0; }
+.mf-station-settings summary { color: #254D32; cursor: pointer; padding: 8px 0; }
+@media (max-width: 600px) { .water-conditions { padding: 16px; } .water-history li { grid-template-columns: 85px 1fr; } .water-history li > span:last-child { grid-column: 2; } }

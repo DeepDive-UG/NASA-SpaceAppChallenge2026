@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import './Login.css';
+import './login.css';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TOKEN_STORAGE_KEY = 'authToken';
@@ -16,11 +16,6 @@ function validatePassword(value) {
   return '';
 }
 
-/**
- * Remember me checked   -> token in localStorage (kept after the browser closes)
- * Remember me unchecked -> token in sessionStorage (cleared when the tab closes)
- * The other storage is always cleared so an old token is never left behind.
- */
 function persistToken(token, rememberMe) {
   try {
     const target = rememberMe ? window.localStorage : window.sessionStorage;
@@ -28,7 +23,6 @@ function persistToken(token, rememberMe) {
     other.removeItem(TOKEN_STORAGE_KEY);
     target.setItem(TOKEN_STORAGE_KEY, token);
   } catch {
-    // Storage can be unavailable (e.g., some private browsing modes). Fail silently.
   }
 }
 
@@ -84,8 +78,6 @@ export default function Login({
   };
 
   const handleEmailBlur = () => {
-    // Only validate on blur once the user has typed something,
-    // so tabbing through an empty form doesn't show errors.
     if (email) {
       setErrors((prev) => ({ ...prev, email: validateEmail(email) }));
     }

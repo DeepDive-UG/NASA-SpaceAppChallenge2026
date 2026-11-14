@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Navigation from "../../components/Navigation/Navigation";
+import WaterStationPicker from '../../components/WaterStationPicker';
+import WaterStation from '../../components/WaterStation';
 import "./myField.css";
 
 const STEPS = [0, 25, 50, 75, 100]; // 2 końce + 3 punkty pomiędzy
@@ -12,7 +14,7 @@ const ITEMS = [
     "Ut enim ad minim veniam",
 ];
 
-export default function MyField() {
+export default function MyField({ waterStationId, onWaterStationSave }) {
     const [value, setValue] = useState(50);
     const [checked, setChecked] = useState([]);
 
@@ -67,6 +69,11 @@ export default function MyField() {
                             ))}
                         </ul>
                     </section>
+                    <WaterStation key={waterStationId || 'unassigned'} stationId={waterStationId} />
+                    <details className="mf-station-settings" open={!waterStationId} key={waterStationId || 'unassigned'}>
+                        <summary>{waterStationId ? 'Change water station' : 'Choose a water station'}</summary>
+                        <WaterStationPicker stationId={waterStationId} onSave={onWaterStationSave} />
+                    </details>
                 </div>
             </main>
         </div>

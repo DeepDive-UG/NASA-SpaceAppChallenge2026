@@ -1,0 +1,397 @@
+{
+  "temperature_mean": {
+    "1-10": {
+      "validation_rows": 1368,
+      "model_mae": 1.9385649650403733,
+      "baseline_mae": 1.9732803905652034,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.501981275584388
+    },
+    "11-20": {
+      "validation_rows": 1368,
+      "model_mae": 2.315238539112035,
+      "baseline_mae": 2.337753012042328,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.7919528017906678
+    },
+    "21-30": {
+      "validation_rows": 1368,
+      "model_mae": 1.9812552025091676,
+      "baseline_mae": 2.135799936579071,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.658475441774744
+    },
+    "31-40": {
+      "validation_rows": 1368,
+      "model_mae": 2.251735093841075,
+      "baseline_mae": 2.2322412506257,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.27924388000000633
+    },
+    "41-50": {
+      "validation_rows": 1368,
+      "model_mae": 2.269438593668534,
+      "baseline_mae": 2.1846065539134747,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.10737424999999945
+    },
+    "51-60": {
+      "validation_rows": 1368,
+      "model_mae": 2.124210142011454,
+      "baseline_mae": 2.209902910988777,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.7146983587765803
+    },
+    "61-70": {
+      "validation_rows": 1368,
+      "model_mae": 2.1981331695496937,
+      "baseline_mae": 2.2214585657562154,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.7927711657222254
+    },
+    "71-80": {
+      "validation_rows": 1368,
+      "model_mae": 2.2683607109922113,
+      "baseline_mae": 2.1070446311204982,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.3781710000000018
+    },
+    "81-90": {
+      "validation_rows": 1368,
+      "model_mae": 2.284064787758089,
+      "baseline_mae": 2.3977965927591423,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.8329975129722342
+    },
+    "91-100": {
+      "validation_rows": 1368,
+      "model_mae": 2.3159462916016857,
+      "baseline_mae": 2.2952458528034616,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.7007961219999999
+    },
+    "1-100": {
+      "validation_rows": 1368,
+      "model_mae": 1.6336608471372664,
+      "baseline_mae": 1.2984577539135826,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.5007941679999988
+    }
+  },
+  "temperature_min": {
+    "1-10": {
+      "validation_rows": 1368,
+      "model_mae": 2.2616385264735235,
+      "baseline_mae": 2.279688015886568,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.7575324504336223
+    },
+    "11-20": {
+      "validation_rows": 1368,
+      "model_mae": 2.453165775326023,
+      "baseline_mae": 2.54256716158445,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.9697135368960417
+    },
+    "21-30": {
+      "validation_rows": 1368,
+      "model_mae": 2.2805157952635664,
+      "baseline_mae": 2.4078979533429217,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.7258139819386358
+    },
+    "31-40": {
+      "validation_rows": 1368,
+      "model_mae": 2.4691945070822645,
+      "baseline_mae": 2.4276928028510594,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.7895508
+    },
+    "41-50": {
+      "validation_rows": 1368,
+      "model_mae": 2.4930681477261163,
+      "baseline_mae": 2.350645781164749,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.6156309999999996
+    },
+    "51-60": {
+      "validation_rows": 1368,
+      "model_mae": 2.1994890185936025,
+      "baseline_mae": 2.1994579227586013,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.29415895999999997
+    },
+    "61-70": {
+      "validation_rows": 1368,
+      "model_mae": 2.2783099865160654,
+      "baseline_mae": 2.2354359477071566,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.5317139999999991
+    },
+    "71-80": {
+      "validation_rows": 1368,
+      "model_mae": 2.1167992625886694,
+      "baseline_mae": 2.0723798124697392,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.19152799999999992
+    },
+    "81-90": {
+      "validation_rows": 1368,
+      "model_mae": 2.23665282410689,
+      "baseline_mae": 2.2073725232461654,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.48562620000000045
+    },
+    "91-100": {
+      "validation_rows": 1368,
+      "model_mae": 2.110728581965453,
+      "baseline_mae": 2.2870084300032154,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.5142065904239175
+    },
+    "1-100": {
+      "validation_rows": 1368,
+      "model_mae": 1.7665256582937487,
+      "baseline_mae": 1.8468839422055043,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.2889038064586454
+    }
+  },
+  "temperature_max": {
+    "1-10": {
+      "validation_rows": 1368,
+      "model_mae": 2.3168935454229276,
+      "baseline_mae": 2.4094627921173486,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.49668722419283995
+    },
+    "11-20": {
+      "validation_rows": 1368,
+      "model_mae": 2.567768254621763,
+      "baseline_mae": 2.6078223988672553,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.745543941779669
+    },
+    "21-30": {
+      "validation_rows": 1368,
+      "model_mae": 2.4811132307618426,
+      "baseline_mae": 2.516780130466275,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.544635683453647
+    },
+    "31-40": {
+      "validation_rows": 1368,
+      "model_mae": 2.546660139106157,
+      "baseline_mae": 2.409173411700336,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.15380799999999795
+    },
+    "41-50": {
+      "validation_rows": 1368,
+      "model_mae": 2.4018486305776543,
+      "baseline_mae": 2.279087088771779,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0
+    },
+    "51-60": {
+      "validation_rows": 1368,
+      "model_mae": 2.4967533534048667,
+      "baseline_mae": 2.5628069054270077,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.7868779721780186
+    },
+    "61-70": {
+      "validation_rows": 1368,
+      "model_mae": 2.474408058770361,
+      "baseline_mae": 2.4567819789903216,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.3126829999999998
+    },
+    "71-80": {
+      "validation_rows": 1368,
+      "model_mae": 2.6379049674393475,
+      "baseline_mae": 2.571139306155997,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.5234733999999932
+    },
+    "81-90": {
+      "validation_rows": 1368,
+      "model_mae": 2.6698953083971033,
+      "baseline_mae": 2.756217438187706,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.9358051552466833
+    },
+    "91-100": {
+      "validation_rows": 1368,
+      "model_mae": 2.60178034912718,
+      "baseline_mae": 2.652138334124862,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.9098302232056881
+    },
+    "1-100": {
+      "validation_rows": 1368,
+      "model_mae": 2.677028783536029,
+      "baseline_mae": 1.9286479623642443,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 1.1046759999999978
+    }
+  },
+  "precipitation": {
+    "1-10": {
+      "validation_rows": 1368,
+      "model_mae": 13.150003970682851,
+      "baseline_mae": 9.987194488197947,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0010000000242143105
+    },
+    "11-20": {
+      "validation_rows": 1368,
+      "model_mae": 12.19984134487178,
+      "baseline_mae": 9.421051414467387,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.025966657698154816
+    },
+    "21-30": {
+      "validation_rows": 1368,
+      "model_mae": 10.560762784333727,
+      "baseline_mae": 9.052405709478482,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0055555566214024995
+    },
+    "31-40": {
+      "validation_rows": 1368,
+      "model_mae": 8.485886479531006,
+      "baseline_mae": 6.425336046457355,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.004049999825656412
+    },
+    "41-50": {
+      "validation_rows": 1368,
+      "model_mae": 7.575775583504794,
+      "baseline_mae": 6.8064818894708985,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.021547620213823518
+    },
+    "51-60": {
+      "validation_rows": 1368,
+      "model_mae": 7.163403240322257,
+      "baseline_mae": 6.181815537821873,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0
+    },
+    "61-70": {
+      "validation_rows": 1368,
+      "model_mae": 8.88185337641774,
+      "baseline_mae": 8.384016819582046,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0441666627302766
+    },
+    "71-80": {
+      "validation_rows": 1368,
+      "model_mae": 7.785967816470696,
+      "baseline_mae": 8.172979934553208,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.009662187802042099
+    },
+    "81-90": {
+      "validation_rows": 1368,
+      "model_mae": 9.716121599572563,
+      "baseline_mae": 9.010395715225009,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.04706666497513637
+    },
+    "91-100": {
+      "validation_rows": 1368,
+      "model_mae": 8.89670177138116,
+      "baseline_mae": 8.719179659373369,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0327777802012862
+    },
+    "1-100": {
+      "validation_rows": 1368,
+      "model_mae": 50.68630225601189,
+      "baseline_mae": 45.04755478498945,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 27.752233491459634
+    }
+  },
+  "soil_moisture": {
+    "1-10": {
+      "validation_rows": 1368,
+      "model_mae": 0.010103663966384985,
+      "baseline_mae": 0.021172573324878503,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.0
+    },
+    "11-20": {
+      "validation_rows": 1368,
+      "model_mae": 0.011541674254656985,
+      "baseline_mae": 0.019956026490698896,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.0002224588388107518
+    },
+    "21-30": {
+      "validation_rows": 1368,
+      "model_mae": 0.01422500027586639,
+      "baseline_mae": 0.01869879109458763,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.0013058439321775028
+    },
+    "31-40": {
+      "validation_rows": 1368,
+      "model_mae": 0.016619466429856823,
+      "baseline_mae": 0.018269885453571937,
+      "selected": "hist_gradient_boosting",
+      "interval_expansion": 0.003327483160832867
+    },
+    "41-50": {
+      "validation_rows": 1368,
+      "model_mae": 0.0176043011107313,
+      "baseline_mae": 0.017340950014927446,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0018168330192565862
+    },
+    "51-60": {
+      "validation_rows": 1368,
+      "model_mae": 0.018139689709029835,
+      "baseline_mae": 0.01617693290158912,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0019561946392059187
+    },
+    "61-70": {
+      "validation_rows": 1368,
+      "model_mae": 0.019532817607811337,
+      "baseline_mae": 0.01705959684940874,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.0031838514655828792
+    },
+    "71-80": {
+      "validation_rows": 1368,
+      "model_mae": 0.021013208827490342,
+      "baseline_mae": 0.01699934640501293,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.003166236653924015
+    },
+    "81-90": {
+      "validation_rows": 1368,
+      "model_mae": 0.023371766169658626,
+      "baseline_mae": 0.01777697291488102,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.004200552403926833
+    },
+    "91-100": {
+      "validation_rows": 1368,
+      "model_mae": 0.02579989092137977,
+      "baseline_mae": 0.0185277235658722,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.005317426808178441
+    },
+    "1-100": {
+      "validation_rows": 1368,
+      "model_mae": 0.016261370903755498,
+      "baseline_mae": 0.015341738167537478,
+      "selected": "seasonal_baseline",
+      "interval_expansion": 0.003758877202868438
+    }
+  }
+}

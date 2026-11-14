@@ -6,17 +6,45 @@ import overlaytmax from "../../assets/myArea/1x/tmax.png";
 import overlaytmean_anom from "../../assets/myArea/1x/tmean_anom.png";
 import overlaytmin from "../../assets/myArea/1x/tmin.png";
 import "./myArea.css";
+import { LEGENDS } from "./LEGENDS";
 
 const MASKS = [
-    { id: 1, title: "Total Precipitation", image: overlayPPT },
-    { id: 2, title: "Temperature Max", image: overlaytmax },
-    { id: 3, title: "Temperature Anomaly", image: overlaytmean_anom },
-    { id: 4, title: "Temperature Minimum", image: overlaytmin },
+    { id: 1, title: "Total Precipitation", image: overlayPPT, legend: LEGENDS.ppt },
+    { id: 2, title: "Temperature Max", image: overlaytmax, legend: LEGENDS.tmax },
+    { id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
+    { id: 4, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
 ];
+
+const Legend = ({ legend }) => {
+    const { colors, edges, unit } = legend;
+    const n = colors.length;
+    const stops = colors
+        .map((c, i) => `${c} ${(i / n) * 100}% ${((i + 1) / n) * 100}%`)
+        .join(", ");
+    const step = Math.ceil(edges.length / 6); // label roughly every 6th edge
+    return (
+        <div className="ma-legend">
+            <div className="ma-legend-unit">{unit}</div>
+            <div
+                className="ma-legend-bar"
+                style={{ background: `linear-gradient(to right, ${stops})` }}
+            />
+            <div className="ma-legend-ticks">
+                {edges.map((edge, i) =>
+                    i % step === 0 ? (
+                        <span key={edge} style={{ left: `${((i + 1) / n) * 100}%` }}>
+                            {edge}
+                        </span>
+                    ) : null
+                )}
+            </div>
+        </div>
+    );
+};
 
 const MyArea = () => {
     const [enabledMasks, setEnabledMasks] = useState([]);
-
+    const activeMask = MASKS.find((mask) => enabledMasks.includes(mask.id));
     const toggleMask = (maskId) => {
         setEnabledMasks((currentMasks) =>
             currentMasks.includes(maskId) ? [] : [maskId]
@@ -64,6 +92,10 @@ const MyArea = () => {
                                     {mask.title}
                                 </button>
                             ))}
+                        <aside className="ma-legend" aria-label="Map Legend">
+                            <h2 className="ma-controls-title">Legend</h2>
+                            {activeMask && <Legend legend={activeMask.legend} />}
+                        </aside>
                         </aside>
                     </section>
                 </div>

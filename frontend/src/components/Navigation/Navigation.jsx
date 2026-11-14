@@ -108,7 +108,7 @@ export default function Navigation({ items = NAV_ITEMS }) {
     return (
         <aside className="sb" aria-label="Main navigation">
             <div className="sb-brand">
-                <img className="sb-logo-img" src="/logo.png" alt="Farmly" />
+                <img className="sb-logo-img" src="/logo.png" alt="LogoMascot" />
                 <span className="sb-brand-name">CropTips</span>
             </div>
 

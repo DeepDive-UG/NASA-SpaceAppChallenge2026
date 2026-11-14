@@ -3,6 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import Navigation from "../../components/Navigation/Navigation";
 import CompostingArticle from "./articles/composting/CompostingArticle";
 import WateringArticle from "./articles/watering/WateringArticle";
+import NitrogenFixingArticle from "./articles/nitrogen-fixing/NitrogenFixingArticle";
+import CoverCropsArticle from "./articles/cover-crops/CoverCropsArticle";
+import DeepRootingArticle from "./articles/deep-rooting/DeepRootingArticle";
+import DroughtTolerantArticle from "./articles/drought-tolerant/DroughtTolerantArticle";
 import TipQuiz from "./TipQuiz";
 import "./TipKnowledge.css";
 
@@ -18,6 +22,30 @@ const BUILT_IN_ARTICLES = [
         title: "Water plants more efficiently",
         category: "Water management",
         component: WateringArticle,
+    },
+    {
+        id: "nitrogen-fixing",
+        title: "Nitrogen-fixing crops feed the soil",
+        category: "Soil fertility",
+        component: NitrogenFixingArticle,
+    },
+    {
+        id: "cover-crops",
+        title: "Cover crops protect and build soil",
+        category: "Soil cover",
+        component: CoverCropsArticle,
+    },
+    {
+        id: "deep-rooting",
+        title: "Deep roots improve soil structure",
+        category: "Soil structure",
+        component: DeepRootingArticle,
+    },
+    {
+        id: "drought-tolerant",
+        title: "Drought-tolerant crops support resilience",
+        category: "Drought resilience",
+        component: DroughtTolerantArticle,
     },
 ];
 

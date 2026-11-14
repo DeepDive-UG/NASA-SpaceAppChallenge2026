@@ -43,6 +43,46 @@ const QUESTIONS = [
         ],
         answer: 0,
     },
+    {
+        id: "nitrogen-fixation",
+        prompt: "How do legumes such as beans add nitrogen to a crop system?",
+        options: [
+            "Root-nodule bacteria convert atmospheric nitrogen into forms plants can use",
+            "Their leaves absorb fertilizer directly from the air",
+            "They prevent all nitrogen from leaving the soil",
+        ],
+        answer: 0,
+    },
+    {
+        id: "cover-crop-benefit",
+        prompt: "What is one way a cover crop can protect soil between harvests?",
+        options: [
+            "Its leaves and roots help shield and hold soil in place",
+            "It removes the need to manage crop residues",
+            "It stops all water from entering the soil",
+        ],
+        answer: 0,
+    },
+    {
+        id: "deep-roots",
+        prompt: "What can be left behind as deep-rooted crops grow and die back?",
+        options: [
+            "Root channels that may improve paths for water and air",
+            "A guarantee that any compacted soil is fully repaired",
+            "A permanent barrier that prevents other roots from growing",
+        ],
+        answer: 0,
+    },
+    {
+        id: "drought-tolerance",
+        prompt: "How can drought-tolerant crops support soil health over time?",
+        options: [
+            "By maintaining roots and returning residues that cover and feed soil",
+            "By creating water in dry soil",
+            "By adding fertility even when all crop residues are removed",
+        ],
+        answer: 0,
+    },
 ];
 
 export default function TipQuiz() {

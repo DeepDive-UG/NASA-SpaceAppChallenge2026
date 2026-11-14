@@ -16,8 +16,8 @@ import { LEGENDS } from "./LEGENDS";
 const MASKS = [
     { id: 1, title: "Total Precipitation", image: overlayPPT, legend: LEGENDS.ppt },
     { id: 2, title: "Temperature Max", image: overlaytmax, legend: LEGENDS.tmax },
-    { id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
-    { id: 4, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
+/*{ id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom }, */
+    { id: 3, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
 ];
 
 const Legend = ({ legend }) => {

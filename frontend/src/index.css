@@ -56,6 +56,85 @@
    --color-on-primary: #10140f;
  }
 
+ /* Low / soft contrast */
+ :root[data-contrast="low"],
+ :root[data-theme="light"][data-contrast="low"] {
+   --color-primary: #3d6349;
+   --color-secondary: #b2bfb0;
+   --color-surface-beige: #ece8de;
+   --color-bg: #f3f1ea;
+   --color-card: #f8f6f0;
+   --color-heading: #3b403b;
+   --color-text: #606760;
+   --color-muted: #7c837b;
+   --color-border: #dcded6;
+   --color-green-light: #e2ebe0;
+   --color-warning: #b8874a;
+   --color-error: #af655b;
+   --color-on-primary: #f8f6f0;
+ }
+
+ :root[data-theme="dark"][data-contrast="low"] {
+   --color-primary: #639c74;
+   --color-secondary: #4c5e4e;
+   --color-surface-beige: #2f352f;
+   --color-bg: #1f231f;
+   --color-card: #272c27;
+   --color-heading: #d8d6ce;
+   --color-text: #aeb4ad;
+   --color-muted: #8b9189;
+   --color-border: #383f38;
+   --color-green-light: #2b382e;
+   --color-warning: #c89a60;
+   --color-error: #c6766c;
+   --color-on-primary: #171a17;
+ }
+
+ /* High contrast (WCAG AAA oriented) */
+ :root[data-contrast="high"],
+ :root[data-theme="light"][data-contrast="high"] {
+   --color-primary: #0d351a;
+   --color-secondary: #1f4d2e;
+   --color-surface-beige: #e9ede7;
+   --color-bg: #ffffff;
+   --color-card: #ffffff;
+   --color-heading: #000000;
+   --color-text: #0a0e0a;
+   --color-muted: #222722;
+   --color-border: #1b201b;
+   --color-green-light: #cde5d3;
+   --color-warning: #754300;
+   --color-error: #8c1910;
+   --color-on-primary: #ffffff;
+ }
+
+ :root[data-theme="dark"][data-contrast="high"] {
+   --color-primary: #7ef29e;
+   --color-secondary: #59be75;
+   --color-surface-beige: #161d16;
+   --color-bg: #000000;
+   --color-card: #090c09;
+   --color-heading: #ffffff;
+   --color-text: #f4f7f4;
+   --color-muted: #d6dfd6;
+   --color-border: #9eae9e;
+   --color-green-light: #14361e;
+   --color-warning: #ffc46b;
+   --color-error: #ff9288;
+   --color-on-primary: #000000;
+ }
+
+ :root[data-contrast="high"] input,
+ :root[data-contrast="high"] select,
+ :root[data-contrast="high"] textarea {
+   border-color: var(--color-border);
+ }
+
+ :root[data-contrast="high"] :focus-visible {
+   outline: 3px solid var(--color-primary) !important;
+   outline-offset: 2px;
+ }
+
  html {
    font-size: var(--font-size, 100%);
  }

@@ -28,14 +28,12 @@
     padding: 4px 10px;
 }
 
-.sb-logo {
-    width: 34px;
-    height: 34px;
+.sb-logo-img {
+    width: 50px;
+    height: 50px;
     border-radius: 10px;
-    background: var(--color-primary);
-    color: var(--color-on-primary);
-    display: grid;
-    place-items: center;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .sb-logo svg {
@@ -60,7 +58,7 @@
 }
 
 .sb-item {
-    width: 100%;
+    width: 90%;
     display: flex;
     align-items: center;
     gap: 12px;

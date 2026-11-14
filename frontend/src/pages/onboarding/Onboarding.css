@@ -1,0 +1,704 @@
+@import 'leaflet/dist/leaflet.css';
+
+:root {
+  --bg-app: #fafaf7;
+  --bg-section: #f2efe7;
+  --bg-card: #ffffff;
+  --primary: #254d32;
+  --secondary-accent: #a8bba0;
+  --highlight-green: #dce8d8;
+  --text-heading: #242824;
+  --text-body: #555b55;
+  --text-muted: #777d75;
+  --border: #e6e8e1;
+  --warning: #c58b42;
+  --error: #b85c50;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.onboarding-page {
+  min-height: 100vh;
+  padding: 32px 18px 64px;
+  color: var(--text-body);
+  background: var(--bg-app);
+  font-family:
+    Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.onboarding-shell {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+}
+
+.onboarding-header {
+  margin-bottom: 24px;
+}
+
+.onboarding-eyebrow {
+  margin: 0 0 5px;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.onboarding-header h1,
+.onboarding-step h2,
+.onboarding-card h3,
+.summary-section h3 {
+  color: var(--text-heading);
+}
+
+.onboarding-header h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 5vw, 2.6rem);
+}
+
+.onboarding-header p {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.progress-track,
+.area-progress,
+.goal-stack {
+  overflow: hidden;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.progress-track {
+  height: 10px;
+  margin-bottom: 22px;
+}
+
+.progress-fill,
+.area-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width 220ms ease;
+}
+
+.onboarding-step {
+  padding: clamp(22px, 4vw, 38px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--bg-card);
+  box-shadow: 0 16px 45px rgba(37, 77, 50, 0.08);
+}
+
+.onboarding-step-header {
+  margin-bottom: 24px;
+}
+
+.onboarding-step-header h2 {
+  margin: 0 0 7px;
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+}
+
+.onboarding-step-header p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.onboarding-grid,
+.coordinates-grid,
+.field-size-grid,
+.water-grid,
+.summary-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.onboarding-grid.two-column,
+.coordinates-grid,
+.water-grid,
+.summary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field-size-grid {
+  grid-template-columns: minmax(0, 2fr) minmax(160px, 1fr);
+}
+
+.onboarding-card,
+.sector-card,
+.history-panel,
+.summary-section {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+}
+
+.onboarding-card.soft,
+.history-panel,
+.summary-section {
+  background: var(--bg-section);
+}
+
+.onboarding-card h3,
+.sector-card h3,
+.summary-section h3 {
+  margin: 0 0 12px;
+}
+
+.field-label {
+  display: grid;
+  gap: 7px;
+  color: var(--text-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.field-label span small {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.onboarding-input,
+.onboarding-select,
+.onboarding-textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #d6d9d2;
+  border-radius: 10px;
+  outline: none;
+  color: var(--text-heading);
+  background: var(--bg-card);
+  font: inherit;
+}
+
+.onboarding-textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.onboarding-input:focus,
+.onboarding-select:focus,
+.onboarding-textarea:focus,
+.range-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 77, 50, 0.13);
+}
+
+.checkbox-line,
+.toggle-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-heading);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checkbox-line input,
+.toggle-line input,
+.radio-card input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+.location-actions,
+.template-list,
+.step-actions,
+.sector-actions,
+.history-actions,
+.goal-presets,
+.summary-title,
+.area-status,
+.history-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.location-actions,
+.template-list,
+.goal-presets {
+  margin: 18px 0;
+}
+
+.step-actions {
+  justify-content: space-between;
+  margin-top: 22px;
+}
+
+.sector-actions,
+.history-actions {
+  justify-content: flex-end;
+}
+
+.summary-title,
+.area-status,
+.history-heading {
+  justify-content: space-between;
+}
+
+.primary-button,
+.secondary-button,
+.text-button,
+.template-button,
+.preset-button,
+.danger-button {
+  min-height: 42px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-button {
+  border: 1px solid var(--primary);
+  color: #fff;
+  background: var(--primary);
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #183b25;
+}
+
+.secondary-button,
+.template-button,
+.preset-button {
+  border: 1px solid var(--border);
+  color: var(--primary);
+  background: var(--bg-card);
+}
+
+.secondary-button:hover:not(:disabled),
+.template-button:hover,
+.preset-button:hover {
+  border-color: var(--secondary-accent);
+  background: var(--highlight-green);
+}
+
+.text-button {
+  min-height: auto;
+  padding: 3px;
+  border: 0;
+  color: var(--primary);
+  background: transparent;
+  text-decoration: underline;
+}
+
+.danger-button {
+  border: 1px solid rgba(184, 92, 80, 0.35);
+  color: var(--error);
+  background: #fff8f6;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.error-banner,
+.warning-banner,
+.success-banner {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  line-height: 1.45;
+}
+
+.error-banner {
+  border: 1px solid rgba(184, 92, 80, 0.3);
+  color: #873e36;
+  background: #fff1ef;
+}
+
+.warning-banner {
+  border: 1px solid rgba(197, 139, 66, 0.35);
+  color: #79511e;
+  background: #fff8e9;
+}
+
+.success-banner {
+  border: 1px solid rgba(37, 77, 50, 0.25);
+  color: var(--primary);
+  background: var(--highlight-green);
+}
+
+.map-container {
+  overflow: hidden;
+  height: 330px;
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.map-container .leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.help-text,
+.source-note,
+.muted-text {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.source-note {
+  margin: 20px 0 0;
+}
+
+.soil-class-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.radio-card {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  min-height: 152px;
+  padding: 17px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.radio-card:hover {
+  border-color: var(--secondary-accent);
+}
+
+.radio-card.selected {
+  border-color: var(--primary);
+  background: var(--highlight-green);
+}
+
+.radio-card-body h3 {
+  margin: 0 0 7px;
+  color: var(--text-heading);
+  font-size: 1rem;
+}
+
+.radio-card-body p {
+  margin: 5px 0;
+  line-height: 1.45;
+}
+
+.suitable-uses {
+  font-size: 0.87rem;
+}
+
+.arable-badge,
+.non-arable-badge,
+.direction-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 800;
+}
+
+.arable-badge {
+  color: var(--primary);
+  background: var(--highlight-green);
+}
+
+.non-arable-badge {
+  color: #754037;
+  background: #f2d9d5;
+}
+
+.direction-badge {
+  color: var(--primary);
+  background: var(--bg-section);
+}
+
+.area-status {
+  margin-bottom: 8px;
+}
+
+.area-progress {
+  height: 12px;
+  margin-bottom: 16px;
+}
+
+.area-progress-fill.over {
+  background: var(--error);
+}
+
+.sectors-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.sector-card {
+  display: grid;
+  gap: 15px;
+}
+
+.sector-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.sector-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sector-fields .wide-field {
+  grid-column: span 2;
+}
+
+.orientation-grid {
+  display: grid;
+  overflow: hidden;
+  min-height: 190px;
+  margin: 18px 0;
+  border: 3px solid var(--primary);
+  border-radius: 14px;
+  gap: 3px;
+  background: var(--primary);
+}
+
+.orientation-grid.quarters {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.orientation-grid.halves-ns {
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.orientation-grid.halves-ew {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.orientation-tile {
+  display: grid;
+  place-items: center;
+  min-height: 85px;
+  padding: 12px;
+  color: #1f2b20;
+  font-weight: 900;
+  text-align: center;
+}
+
+.season-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.season-row {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--bg-card);
+}
+
+.season-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fertilizer-fieldset {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.fertilizer-fieldset legend {
+  padding: 0 6px;
+  color: var(--text-heading);
+  font-weight: 700;
+}
+
+.fertilizer-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.fertilizer-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.88rem;
+}
+
+.goals-list {
+  display: grid;
+  gap: 22px;
+}
+
+.goal-row {
+  display: grid;
+  gap: 8px;
+}
+
+.goal-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-heading);
+  font-weight: 800;
+}
+
+.range-input {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.goal-stack {
+  display: flex;
+  height: 32px;
+  margin: 20px 0;
+}
+
+.goal-stack span {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.goal-yield {
+  background: #254d32;
+}
+
+.goal-soil {
+  background: #66845f;
+}
+
+.goal-water {
+  background: #729aa1;
+}
+
+.summary-grid {
+  margin-top: 16px;
+}
+
+.summary-section {
+  min-width: 0;
+}
+
+.summary-section p,
+.summary-section ul {
+  margin: 7px 0;
+  line-height: 1.55;
+}
+
+.summary-section ul {
+  padding-left: 19px;
+}
+
+.summary-section.full-width {
+  grid-column: 1 / -1;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+@media (max-width: 760px) {
+  .onboarding-page {
+    padding: 18px 10px 40px;
+  }
+
+  .onboarding-step {
+    padding: 20px 15px;
+    border-radius: 16px;
+  }
+
+  .onboarding-grid.two-column,
+  .coordinates-grid,
+  .field-size-grid,
+  .water-grid,
+  .summary-grid,
+  .soil-class-grid,
+  .sector-fields,
+  .season-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .sector-fields .wide-field,
+  .summary-section.full-width {
+    grid-column: auto;
+  }
+
+  .step-actions {
+    align-items: stretch;
+  }
+
+  .step-actions button {
+    flex: 1;
+  }
+
+  .map-container {
+    height: 270px;
+  }
+}
+
+@media (max-width: 460px) {
+  .progress-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .location-actions,
+  .template-list,
+  .goal-presets {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .location-actions button,
+  .template-list button,
+  .goal-presets button {
+    width: 100%;
+  }
+
+  .sector-card-header,
+  .summary-title {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

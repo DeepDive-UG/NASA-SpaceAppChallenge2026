@@ -1,28 +1,28 @@
 import './App.css'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import Home from './pages/Home/Home'
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import MyField from './pages/myField/myField';
-import MyGear from './pages/myGear/myGear';
-import MyArea from './pages/myArea/myArea';
-import FieldProvider from './components/FieldProvider';
-import Settings from './pages/settings/Settings';
-import CropRotation from './pages/CropRotation';
+import MyField from './pages/myField/myField'
+import MyGear from './pages/myGear/myGear'
+import MyArea from './pages/myArea/myArea'
+import Settings from './pages/Settings/Settings'
+import TipKnowledge from './pages/TipKnowledge/TipKnowledge'
+import Login from './pages/Login/login'
+import FieldProvider from './components/FieldProvider'
+import CropRotation from './pages/CropRotation'
 
-function App() {
+export default function App() {
   return (
-    <div>
-      <FieldProvider><BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/myField" element={<MyField />} />
-          <Route path="/myGear" element={<MyGear />} />
-          <Route path="/myArea" element={<MyArea />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/crop-rotation" element={<CropRotation />} />
-        </Routes>
-      </BrowserRouter></FieldProvider>
-    </div>
+    <FieldProvider><BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/myField" element={<MyField />} />
+        <Route path="/myGear" element={<MyGear />} />
+        <Route path="/myArea" element={<MyArea />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/knowledge" element={<TipKnowledge />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/crop-rotation" element={<CropRotation />} />
+      </Routes>
+    </BrowserRouter></FieldProvider>
   )
 }
-
-export default App

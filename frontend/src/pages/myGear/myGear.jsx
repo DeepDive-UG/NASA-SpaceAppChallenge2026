@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Navigation from "../../components/Navigation/Navigation";
-import "./MyGear.css";
+import "./myGear.css";
 
 const GEAR_TYPES = [
     "Tractor",

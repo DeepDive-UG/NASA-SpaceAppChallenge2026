@@ -59,7 +59,7 @@ const MASKS = [
 ];
 
 const DEFAULT_STATE = "CA"; 
-z
+
 const mapUrl = (variable, field) => {
     const params = new URLSearchParams({ variable });
     const lat = parseFloat(field?.latitude);

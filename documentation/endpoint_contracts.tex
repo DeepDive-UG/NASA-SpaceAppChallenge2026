@@ -6,7 +6,7 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 
-\title{Backend-to-Frontend Endpoint Contract List}
+\title{Backend and External API Contract List}
 \author{Project review}
 \date{\today}
 
@@ -16,129 +16,155 @@
 
 \section*{Summary}
 
-The frontend and backend are connected for most application data flows. The main mismatch is the login flow: the frontend calls \texttt{/api/auth/login}, but the Django route list does not define that endpoint. All other major endpoints reviewed in the frontend are present in the backend router and match the expected URL patterns.
+Most of the application's data endpoints are connected from the frontend to the Django backend. The login page still points to an API route that is not defined by the backend. A separate QuickStats client has been added under the local \texttt{tests} folder to try USDA crop price data. That client is not part of the Django backend and is not connected to the frontend.
 
-\section*{Endpoint contracts}
+\section*{Application API}
+
+The Django URL configuration mounts these routes under \texttt{/api/}.
 
 \begin{itemize}[leftmargin=1.5em, itemsep=0.55em]
 
 \item \textbf{GET /api/health/}
   \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
     \item Backend: \texttt{api.views.health}
-    \item Frontend: used by account, settings, and chat health checks.
-    \item Status: connected and active.
+    \item Frontend: used to initialize or check the session before writes in account, settings, and chat flows.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{GET /api/demo/ and POST /api/demo/start/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.demo.demo\_info} and \texttt{api.demo.start\_demo}
+    \item Frontend: \texttt{DemoWelcome.jsx} reads demo information and starts the demo session.
+    \item Status: connected. Demo start can return an error when demo access is disabled.
+  \end{itemize}
+
+\item \textbf{POST /api/field/example/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.example\_field.example\_field}
+    \item Frontend: no direct call found in the reviewed frontend sources.
+    \item Status: backend route exists; no frontend caller identified.
+  \end{itemize}
+
+\item \textbf{GET /api/field/ and PUT /api/field/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.field.field\_profile}
+    \item Frontend: loaded and saved through \texttt{FieldProvider.jsx} and the field editor.
+    \item Status: connected. Responses include a revision used to prevent overwriting newer edits.
+  \end{itemize}
+
+\item \textbf{GET /api/field/outlook/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.rotation.field\_outlook}
+    \item Frontend: used by \texttt{CropRotation.jsx} to display regional outlook information.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{GET /api/crops/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.rotation.crops}
+    \item Frontend: used by the field editor and \texttt{CropRotation.jsx} to load the crop catalogue.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{POST /api/rotation/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.rotation.rotation}
+    \item Frontend: used by \texttt{CropRotation.jsx} to request crop checks or suggestions.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{GET /api/gear/ and POST /api/gear/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.gear\_list}
+    \item Frontend: used by \texttt{myGear.jsx} to load and add equipment.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{PATCH /api/gear/<id>/ and DELETE /api/gear/<id>/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.gear\_item}
+    \item Frontend: used by \texttt{myGear.jsx} to change equipment status or remove an item.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{GET /api/account/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.account.account}
+    \item Frontend: used by \texttt{Settings.jsx} to load account details.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{POST /api/account/password/ and POST /api/account/logout/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.account.change\_password} and \texttt{api.account.sign\_out}
+    \item Frontend: settings uses \texttt{Settings.jsx}; logout uses \texttt{Navigation.jsx}.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{POST /api/chat/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{rag.views.chat}
+    \item Frontend: used by \texttt{MascotChat.jsx} to submit a question.
+    \item Status: connected.
+  \end{itemize}
+
+\item \textbf{GET /api/chat/status/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{rag.views.status}
+    \item Frontend: no direct call found in the reviewed frontend sources.
+    \item Status: backend route exists; no frontend caller identified.
   \end{itemize}
 
 \item \textbf{GET /api/environment/alerts/}
   \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
     \item Backend: \texttt{api.views.alerts}
-    \item Frontend: called from \texttt{Alerts.jsx} with a point parameter.
-    \item Status: connected and used for environmental alerts.
+    \item Frontend: called from \texttt{Alerts.jsx}, optionally with a location point.
+    \item Status: connected.
   \end{itemize}
 
 \item \textbf{GET /api/environment/water/}
   \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
     \item Backend: \texttt{api.views.water}
     \item Frontend: used by \texttt{WaterStation.jsx} and \texttt{WaterStationPicker.jsx}.
-    \item Status: connected and used for USGS water monitoring data.
+    \item Status: connected to USGS water monitoring data.
   \end{itemize}
 
 \item \textbf{GET /api/environment/fires/}
   \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
     \item Backend: \texttt{api.views.fires}
-    \item Frontend: no direct fetch found in the reviewed frontend files.
-    \item Status: backend route exists, but the current UI does not appear to call it directly.
+    \item Frontend: no direct call found in the reviewed frontend sources.
+    \item Status: backend route exists; no frontend caller identified.
   \end{itemize}
 
-\item \textbf{GET /api/state-map/}
+\item \textbf{GET /api/state-map/ and GET /api/state-legend/}
   \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.views.state\_map}
-    \item Frontend: used in \texttt{myArea.jsx} to render climate maps.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{GET /api/state-legend/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.views.state\_legend}
-    \item Frontend: used by \texttt{myArea.jsx} for the PRISM legend image.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{GET /api/field/ and PUT /api/field/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.field.field\_profile}
-    \item Frontend: consumed by \texttt{FieldProvider.jsx} and \texttt{myField.jsx}.
-    \item Status: connected and used for saved field records.
-  \end{itemize}
-
-\item \textbf{GET /api/crops/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.rotation.crops}
-    \item Frontend: used by \texttt{myField.jsx} and \texttt{CropRotation.jsx}.
-    \item Status: connected and used to populate the crop catalogue.
-  \end{itemize}
-
-\item \textbf{POST /api/rotation/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.rotation.rotation}
-    \item Frontend: called by \texttt{CropRotation.jsx} for crop checks and suggestions.
-    \item Status: connected and used by the crop recommendation flow.
-  \end{itemize}
-
-\item \textbf{GET /api/gear/ and POST /api/gear/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.views.gear\_list}
-    \item Frontend: used by \texttt{myGear.jsx} for loading and creating gear records.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{PATCH /api/gear/<id>/ and DELETE /api/gear/<id>/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.views.gear\_item}
-    \item Frontend: used by \texttt{myGear.jsx} for updating and removing gear items.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{GET /api/account/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.account.account}
-    \item Frontend: used in \texttt{Settings.jsx} to read account details.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{POST /api/account/password/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.account.change\_password}
-    \item Frontend: called from \texttt{Settings.jsx}.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{POST /api/account/logout/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{api.account.sign\_out}
-    \item Frontend: called from \texttt{Navigation.jsx}.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{POST /api/chat/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{rag.views.chat}
-    \item Frontend: used by \texttt{MascotChat.jsx}.
-    \item Status: connected and active.
-  \end{itemize}
-
-\item \textbf{GET /api/chat/status/}
-  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: \texttt{rag.views.status}
-    \item Frontend: exposed through the chat status flow in the same component.
-    \item Status: connected and active.
+    \item Backend: \texttt{api.views.state\_map} and \texttt{api.views.state\_legend}
+    \item Frontend: \texttt{myArea.jsx} loads the map and its PRISM legend image.
+    \item Status: connected.
   \end{itemize}
 
 \item \textbf{POST /api/auth/login}
   \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
-    \item Backend: not present in \texttt{backend/api/urls.py}
-    \item Frontend: default value in \texttt{Login/login.jsx}.
-    \item Status: not connected. This is the main missing backend contract.
+    \item Backend: no matching route in \texttt{backend/api/urls.py}.
+    \item Frontend: default login URL in \texttt{Login/login.jsx}.
+    \item Status: not connected; implement or configure an authentication endpoint before relying on this login flow.
+  \end{itemize}
+
+\end{itemize}
+
+\section*{USDA NASS QuickStats external API}
+
+The local test client requests QuickStats directly; this is not an application endpoint served by Django.
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.55em]
+
+\item \textbf{GET https://quickstats.nass.usda.gov/api/api\_GET/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Client: \texttt{tests/quickstats\_client/client.py}, callable as \texttt{fetch\_latest\_crop\_price}.
+    \item Authentication: requires \texttt{QUICKSTATS\_API\_KEY} in the process environment; the client sends it as the \texttt{key} query parameter.
+    \item Query: requests NASS \texttt{PRICE RECEIVED} records at state aggregation for the chosen commodity and state. It tries monthly records first and falls back to annual records if monthly records are absent.
+    \item Result: the latest record found, including its report period, year, value, and unit. This is the latest published USDA estimate returned by the query, not a live market quote.
+    \item Status: callable from the standalone test script \texttt{tests/market\_request\_test.py}; not yet exposed by Django or connected to the frontend.
   \end{itemize}
 
 \end{itemize}
@@ -146,9 +172,10 @@ The frontend and backend are connected for most application data flows. The main
 \section*{Key conclusions}
 
 \begin{itemize}[leftmargin=1.5em, itemsep=0.5em]
-\item Most frontend pages use the same backend routes that are defined in the Django router.
-\item The field, gear, environment, crop, and account workflows are wired together correctly.
-\item The login page is the only clear mismatch: the UI expects an authentication route that is not implemented in the backend.
+\item The main field, crop planning, gear, account, environment, map, demo, and chat request paths reviewed have matching backend routes and frontend callers.
+\item The login page URL has no matching backend route.
+\item The standalone QuickStats client demonstrates an external USDA data connection only. A Django wrapper and frontend integration would still be needed to make crop price data available in the application.
+\item The QuickStats value is a published price-received estimate with a period and unit, not a real-time commodity market price.
 \end{itemize}
 
 \end{document}

@@ -215,3 +215,14 @@ button.cr-small-tag { cursor: pointer; font: inherit; }
 .cr-goal-summary { display: grid; gap: 12px; margin: 18px 0; }
 .cr-goal-summary > div { display: flex; justify-content: space-between; gap: 16px; font-size: .9375rem; }
 .cr-goal-summary strong { font-weight: 500; color: var(--color-primary); }
+.cr-goal-effects { margin: 16px 0; }
+.cr-goal-effects dl { display: grid; gap: 16px; padding: 16px 0; }
+.cr-goal-effects dt { font-size: .9375rem; font-weight: 500; }
+.cr-goal-effects dt small { font-size: .75rem; font-weight: 400; color: var(--color-muted); margin-left: 8px; }
+.cr-goal-effects dd { font-size: .875rem; line-height: 1.65; margin: 6px 0 0; color: var(--color-text); }
+
+.cr-price-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.cr-price-heading > span { color: var(--color-harvest); font-size: .8125rem; }
+.cr-market-price .cr-price-value { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 1.5rem; line-height: 1.4; }
+.cr-market-price .cr-price-value small { white-space: nowrap; }
+.cr-market-price .term-help-trigger { flex-shrink: 0; margin: 0; }

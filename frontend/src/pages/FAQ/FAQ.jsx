@@ -21,7 +21,7 @@ const sections = [
   { title: 'Weather, water & alerts', questions: [
     ['Where do the growing estimates come from?', 'NASA satellite data combined with weather and soil models. They describe the wider area, not measurements taken on your farm.'],
     ['Are these estimates for today?', 'Read the dates above the numbers. If newer data is missing, we show the last available period. That is not a new forecast starting today.'],
-    ['Is the temperature for air or soil?', 'The displayed temperatures are air temperatures. Soil temperature can be different. The current models use soil temperature as an input but do not predict it separately.'],
+    ['Is the temperature for air or soil?', 'Air and soil temperatures are listed separately. Soil temperature describes the top layer of NASA’s soil model, not a thermometer on your farm. Open the “i” beside each value for details.'],
     ['Can the estimates tell me there will be no frost?', 'No. Conditions on your field can differ from the wider area. Check a current local forecast before planting a crop that frost could damage.'],
     ['Does a nearby river tell me how much water my well has?', 'No. River readings describe that station. They do not measure your well or confirm how much water you can use.'],
     ['What do the three alert groups mean?', 'Water warnings: possible flooding. Fire weather: weather that helps fires spread. Reported fires: places where a fire was reported. Check the place name; the lists cover California.'],

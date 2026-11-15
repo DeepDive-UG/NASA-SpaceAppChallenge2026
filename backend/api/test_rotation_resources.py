@@ -51,7 +51,8 @@ class RotationResourceTests(TestCase):
         water = result['resources']['water']
         self.assertEqual(water['readings'][0]['value'], 0)
         self.assertEqual(water['field_supply'], 'unverified')
-        self.assertIn('zero river flow', result['groups'][0]['candidates'][0]['practical']['water']['text'])
+        self.assertIn('zero flow', result['groups'][0]['candidates'][0]['practical']['water']['text'])
+        self.assertIn('does not measure your well', result['groups'][0]['candidates'][0]['practical']['water']['text'])
 
     @patch('api.views.station_data', side_effect=OSError('Station unavailable'))
     @patch('api.rotation.outlook_for', return_value={'available': False, 'reason': 'No current observations.'})

@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "model_version": "california-100d-v1",
+  "schema_version": "1.1.0",
+  "model_version": "california-100d-v2",
   "python_version": "3.10.12",
   "dependencies": {
     "numpy": "2.2.6",
@@ -155,6 +155,24 @@
       "aggregation": "max",
       "units": "degC"
     },
+    "soil_temperature": {
+      "column": "soil_temperature_k",
+      "aggregation": "mean",
+      "offset": -273.15,
+      "units": "degC",
+      "source_variable": "SMAP soil_temp_layer1",
+      "layer_thickness_m": 0.0988,
+      "sampling": "One 13:30 UTC sample per day; not a daily mean or daily extreme"
+    },
+    "surface_soil_moisture": {
+      "column": "surface_moisture",
+      "aggregation": "mean",
+      "units": "m3 m-3",
+      "depth_cm": [
+        0,
+        5
+      ]
+    },
     "precipitation": {
       "column": "precipitation_mm",
       "aggregation": "sum",
@@ -190,6 +208,14 @@
     "temperature_max": {
       "file": "temperature_max.joblib",
       "sha256": "6c5cf9f4dd815cdd4811ddb9e2b31f6edc79db19d74fd06ec083fdeb129f84ee"
+    },
+    "soil_temperature": {
+      "file": "soil_temperature.joblib",
+      "sha256": "d2a85c7539bf317fdf72c622cfb691271bc36196cef5c82cda32ec12ef005773"
+    },
+    "surface_soil_moisture": {
+      "file": "surface_soil_moisture.joblib",
+      "sha256": "08573726387fbd6cde6aefd39c37c223899e51544632e8a997853d2e49a319dc"
     },
     "precipitation": {
       "file": "precipitation.joblib",
@@ -537,6 +563,230 @@
         "unseen_test_reference_mae": 3.9089738421914157
       }
     },
+    "soil_temperature": {
+      "1-10": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.731359649122807,
+        "unseen_test_coverage": 0.7050438596491229,
+        "known_test_mae": 1.9188039761345723,
+        "unseen_test_mae": 2.035634324668606,
+        "known_test_reference_mae": 1.9378148978445238,
+        "unseen_test_reference_mae": 2.5334780890251323
+      },
+      "11-20": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7492690058479532,
+        "unseen_test_coverage": 0.7280701754385965,
+        "known_test_mae": 1.9759158420719098,
+        "unseen_test_mae": 2.156988124549862,
+        "known_test_reference_mae": 1.8823508353654066,
+        "unseen_test_reference_mae": 2.559289383305263
+      },
+      "21-30": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.741593567251462,
+        "unseen_test_coverage": 0.7160087719298246,
+        "known_test_mae": 1.999348435372986,
+        "unseen_test_mae": 2.1870808690299044,
+        "known_test_reference_mae": 1.9584806193147615,
+        "unseen_test_reference_mae": 2.5767919997397164
+      },
+      "31-40": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7668128654970761,
+        "unseen_test_coverage": 0.7346491228070176,
+        "known_test_mae": 2.0075897000621583,
+        "unseen_test_mae": 2.2297185594722664,
+        "known_test_reference_mae": 1.8544742128667342,
+        "unseen_test_reference_mae": 2.5441403379053518
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7361111111111112,
+        "unseen_test_coverage": 0.5877192982456141,
+        "known_test_mae": 1.9262333147399366,
+        "unseen_test_mae": 2.616178333197594,
+        "known_test_reference_mae": 1.9262333147399366,
+        "unseen_test_reference_mae": 2.616178333197594
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7510964912280702,
+        "unseen_test_coverage": 0.7105263157894737,
+        "known_test_mae": 2.0511796102235507,
+        "unseen_test_mae": 2.264290375669073,
+        "known_test_reference_mae": 1.8339432518444785,
+        "unseen_test_reference_mae": 2.5332200044579793
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7909356725146199,
+        "unseen_test_coverage": 0.7467105263157895,
+        "known_test_mae": 2.077713722163274,
+        "unseen_test_mae": 2.3071917883472968,
+        "known_test_reference_mae": 1.8046647412158965,
+        "unseen_test_reference_mae": 2.5751642343955816
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7390350877192983,
+        "unseen_test_coverage": 0.5899122807017544,
+        "known_test_mae": 1.8913483701406233,
+        "unseen_test_mae": 2.5861114887501095,
+        "known_test_reference_mae": 1.8913483701406233,
+        "unseen_test_reference_mae": 2.5861114887501095
+      },
+      "81-90": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7850877192982456,
+        "unseen_test_coverage": 0.7423245614035088,
+        "known_test_mae": 2.067747306527004,
+        "unseen_test_mae": 2.322341314067761,
+        "known_test_reference_mae": 1.8922462461503333,
+        "unseen_test_reference_mae": 2.652781832428966
+      },
+      "91-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7635233918128655,
+        "unseen_test_coverage": 0.6118421052631579,
+        "known_test_mae": 1.9158347729271554,
+        "unseen_test_mae": 2.653570944448293,
+        "known_test_reference_mae": 1.9158347729271554,
+        "unseen_test_reference_mae": 2.653570944448293
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.6220760233918129,
+        "unseen_test_coverage": 0.44846491228070173,
+        "known_test_mae": 1.4875403877224838,
+        "unseen_test_mae": 2.211174932328083,
+        "known_test_reference_mae": 1.4875403877224838,
+        "unseen_test_reference_mae": 2.211174932328083
+      }
+    },
+    "surface_soil_moisture": {
+      "1-10": {
+        "interval_status": "empirical_coverage_met",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8260233918128655,
+        "unseen_test_coverage": 0.8267543859649122,
+        "known_test_mae": 0.01931966065541703,
+        "unseen_test_mae": 0.02063250092274574,
+        "known_test_reference_mae": 0.03245506381070859,
+        "unseen_test_reference_mae": 0.037542401914682166
+      },
+      "11-20": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7909356725146199,
+        "unseen_test_coverage": 0.7872807017543859,
+        "known_test_mae": 0.024517939528430774,
+        "unseen_test_mae": 0.025833642779439978,
+        "known_test_reference_mae": 0.03133421177285216,
+        "unseen_test_reference_mae": 0.0361178489005256
+      },
+      "21-30": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8029970760233918,
+        "unseen_test_coverage": 0.7763157894736842,
+        "known_test_mae": 0.027083398889544225,
+        "unseen_test_mae": 0.029266451771678293,
+        "known_test_reference_mae": 0.02947975783959129,
+        "unseen_test_reference_mae": 0.03470532850660155
+      },
+      "31-40": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8114035087719298,
+        "unseen_test_coverage": 0.7796052631578947,
+        "known_test_mae": 0.02794927625762477,
+        "unseen_test_mae": 0.03066129558029432,
+        "known_test_reference_mae": 0.029141957147371052,
+        "unseen_test_reference_mae": 0.034488152742439576
+      },
+      "41-50": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8201754385964912,
+        "unseen_test_coverage": 0.7872807017543859,
+        "known_test_mae": 0.027405555086231388,
+        "unseen_test_mae": 0.03091350304900725,
+        "known_test_reference_mae": 0.028708218643804986,
+        "unseen_test_reference_mae": 0.033396710505166696
+      },
+      "51-60": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7711988304093568,
+        "unseen_test_coverage": 0.6326754385964912,
+        "known_test_mae": 0.027939922607766402,
+        "unseen_test_mae": 0.03289107598727507,
+        "known_test_reference_mae": 0.027939922607766402,
+        "unseen_test_reference_mae": 0.03289107598727507
+      },
+      "61-70": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7832602339181286,
+        "unseen_test_coverage": 0.6425438596491229,
+        "known_test_mae": 0.027726322999229985,
+        "unseen_test_mae": 0.032378942130615325,
+        "known_test_reference_mae": 0.027726322999229985,
+        "unseen_test_reference_mae": 0.032378942130615325
+      },
+      "71-80": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.7927631578947368,
+        "unseen_test_coverage": 0.6502192982456141,
+        "known_test_mae": 0.027734948858812256,
+        "unseen_test_mae": 0.032195189569834054,
+        "known_test_reference_mae": 0.027734948858812256,
+        "unseen_test_reference_mae": 0.032195189569834054
+      },
+      "81-90": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8073830409356725,
+        "unseen_test_coverage": 0.6743421052631579,
+        "known_test_mae": 0.0276560993148566,
+        "unseen_test_mae": 0.0315059388691458,
+        "known_test_reference_mae": 0.0276560993148566,
+        "unseen_test_reference_mae": 0.0315059388691458
+      },
+      "91-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8165204678362573,
+        "unseen_test_coverage": 0.6962719298245614,
+        "known_test_mae": 0.026948559029371197,
+        "unseen_test_mae": 0.030978343549210866,
+        "known_test_reference_mae": 0.026948559029371197,
+        "unseen_test_reference_mae": 0.030978343549210866
+      },
+      "1-100": {
+        "interval_status": "below_nominal_coverage",
+        "nominal_coverage": 0.8,
+        "known_test_coverage": 0.8011695906432749,
+        "unseen_test_coverage": 0.7807017543859649,
+        "known_test_mae": 0.023950043358186218,
+        "unseen_test_mae": 0.026359511160019975,
+        "known_test_reference_mae": 0.020950348040383385,
+        "unseen_test_reference_mae": 0.02427091047235906
+      }
+    },
     "precipitation": {
       "1-10": {
         "interval_status": "below_nominal_coverage",
@@ -766,17 +1016,49 @@
   "packaged_code_sha256": {
     "backend/analytics/__init__.py": "bf99d599d7997cb3ea4c0799d1dcb448604f75666378c2c11f39d05fcd4d9db7",
     "backend/analytics/baseline.py": "601cd699398b3e0d06861329a91dc16b6e64487b4873272b11d33192bbbf2319",
-    "backend/analytics/features.py": "7585864be1c229d69f7917e3df8791d54540687e3d9d87089568761610a9fd02",
-    "backend/analytics/predict.py": "6d71f3451959e89b0506742564d9b06a29bbf07e794fe50774d9e0f265aa8e69",
+    "backend/analytics/crops.py": "3a034707dd8e0e86ba9c3a570f4bbdfce4cc6f801567464f92ef7547630ac2bc",
+    "backend/analytics/features.py": "9b842ee31de45cd41fb113069d4ea10ec5c1a9cb208742bc3c403822437760ff",
+    "backend/analytics/predict.py": "10c364c7140e623768e36a0e54f9fc75c015671e1f23a5291d2047afca9dbc5f",
     "backend/analytics/quality.py": "db9693d9a31521949ca116b37ab76b9eedb340eb3d6f11693b4dd33d88dda3bf",
-    "backend/analytics/schema.py": "5978e7f5623770cb6c8b8c6f9a6e73b027b9e10d64c320dcc6d66d7325884f96",
+    "backend/analytics/schema.py": "3c2da023b5ad90559426d37a64f2e6b328eb232d732ce8ea75eaf569d6fe5cb4",
     "backend/analytics/service.py": "5d4e934c57da3452ffaf410246d750b236a2b07d6ec4c91321302eee25090abd",
+    "ml/evaluate_cold.py": "31317baed4438e32e5813a8006e3ab46b9c229ef048926bae8af9236171c37a7",
     "ml/finalize.py": "c0449c2d1f07f173aa7f7473222144303fccffb38aeb65214715ac386ae613b0",
     "ml/prepare_data.py": "849576d8de141f697e028847250ce0dec9f9acc83a5f075db345106fb6d680c3",
-    "ml/report.py": "8a98b5dd076449b9a630786ccbe68e4a56900f2beb6d40495ad97c2a912b7d34",
-    "ml/run_pipeline.py": "16d7d41ff4f4547874c78417c9146d81812bc9838b8406f8f27003aad9994ce4",
-    "ml/train.py": "b49589d0f7014624af99f54de86b0f089acd6bfc3b290b606deaf5cce305d8ad",
-    "ml/validate_artifacts.py": "22789c82fdd6022653c73ed1ebd46821798b7d64e6eb49141d97ed6ab0222dd8"
+    "ml/report.py": "fb641d935ade6543e24e9e5ecfb9e34c0da1c5fa697f7411863e5877a30567bc",
+    "ml/run_pipeline.py": "4ddf08686fb3ca403cc6e6257332851f957986e8b2cbadb11a907edcf358cc6e",
+    "ml/train.py": "88e46325d8ce0db847df312d7f0ac1a626cd2dadb4a1c6cc0342f0c12796c062",
+    "ml/validate_artifacts.py": "31e1f5273694291d41b363b860d58ac97556f5889b769e99bccd2fa7b15f18f6"
   },
-  "evaluation_sha256": "2034d45815d4265fa14aedb7ebfab995a4c9930e9277701de30f9bf47057f3a6"
+  "evaluation_sha256": "987b50e1cf1e12cf7948e6dc6956de13877af128627079cea54edad21dab990f",
+  "target_training": {
+    "temperature_mean": {
+      "trained_in_this_run": false,
+      "artifact_model_version": "california-100d-v1"
+    },
+    "temperature_min": {
+      "trained_in_this_run": false,
+      "artifact_model_version": "california-100d-v1"
+    },
+    "temperature_max": {
+      "trained_in_this_run": false,
+      "artifact_model_version": "california-100d-v1"
+    },
+    "soil_temperature": {
+      "trained_in_this_run": true,
+      "artifact_model_version": "california-100d-v2"
+    },
+    "surface_soil_moisture": {
+      "trained_in_this_run": true,
+      "artifact_model_version": "california-100d-v2"
+    },
+    "precipitation": {
+      "trained_in_this_run": false,
+      "artifact_model_version": "california-100d-v1"
+    },
+    "soil_moisture": {
+      "trained_in_this_run": false,
+      "artifact_model_version": "california-100d-v1"
+    }
+  }
 }

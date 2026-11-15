@@ -45,20 +45,21 @@ def crop_resources(crop, field, context):
     grain = crop['scientific_name'] in GRAIN_CROPS
     matched = grain and 'Combine harvester' in available
     if matched:
-        equipment = {'status': 'ready_to_check', 'text': 'Combine available. Check the header and settings for this crop.'}
+        equipment = {'status': 'ready_to_check', 'text': 'You have a combine. Check it can harvest this crop.'}
     elif grain:
         equipment = {'status': 'check', 'text': 'Combine unavailable. Plan rental or contract harvesting.' if 'Combine harvester' in unavailable else 'Check access to a combine or contract harvesting.'}
     else:
-        equipment = {'status': 'check', 'text': 'Plan hand harvesting or crop-specific harvesting equipment.'}
+        equipment = {'status': 'check', 'text': 'Check whether you need to pick by hand or use a special machine.'}
     water = context['water']
     if water['irrigation'] == 'rainfed':
         water_text = 'Rainfed field. Check rainfall before choosing this crop.'
     elif water['irrigation'] in {'drip', 'sprinkler', 'furrow', 'other'}:
-        water_text = 'Irrigation is recorded. Confirm your water supply and this crop’s needs.'
+        water_text = 'You use irrigation. Check you have enough water for this crop.'
     else:
         water_text = 'Water access is not confirmed. Check before planting.'
     if any(reading['parameter'] == '00060' and reading['fresh'] and reading['value'] == 0 for reading in water['readings']):
-        water_text += ' The station reports zero river flow. Check your source.'
+        is_well = (water.get('source') or {}).get('type', '').casefold() == 'well'
+        water_text += ' A nearby river station reports zero flow; this does not measure your well.' if is_well else ' The station reports zero river flow. Check whether this station describes your water source.'
     if water['status'] in {'unavailable', 'no_recent_readings'}:
         water_text += ' The selected station has no fresh readings.'
     score = 0

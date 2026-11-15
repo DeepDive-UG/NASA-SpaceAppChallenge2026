@@ -77,6 +77,17 @@ def histories_for(field, sector_id):
     return sorted([row for row in field["crop_history"] if sector_id is None or not row["sector_id"] or row["sector_id"] == sector_id], key=lambda row: row["year"], reverse=True)
 
 
+
+def soil_context(climate):
+    current = climate.get("available") is True
+    run = climate if current else climate.get("last_model_run", {})
+    prediction = run.get("prediction")
+    if not prediction:
+        return {"available": False, "current": False}
+    first = prediction["periods"][0]
+    targets = ("soil_temperature", "surface_soil_moisture", "soil_moisture")
+    return {"available": True, "current": current, "start_date": first["start_date"], "end_date": first["end_date"], "conditions": {key: first["conditions"][key] for key in targets if key in first["conditions"]}, "scope": "Regional estimates for the first 10 days. Not seedbed measurements or crop-specific germination clearance."}
+
 def candidate_result(crop, field, sector, climate, resources=None):
     by_id = {row["id"]: row for row in catalogue()}
     sector_id = sector.get("id")
@@ -158,12 +169,16 @@ def candidate_result(crop, field, sector, climate, resources=None):
             red = True
             score -= 100
         reasons.extend(check["reasons"][:1])
+        soil = climate["prediction"].get("periods", [{}])[0].get("conditions", {}).get("soil_temperature")
+        if soil:
+            reasons.append(f"Estimated soil temperature for the first 10 days: {soil['mean_estimate']:.1f} °C in the top model layer.")
+        warnings.append("Check soil temperature at sowing depth and the seed packet’s planting needs. Air-temperature limits do not tell us when seeds will sprout.")
         warnings.append("The estimates cannot tell you whether your field will have frost.")
     else:
         warnings.append("Weather has not been checked for planting today.")
-    if field["goal"] == "water":
+    if field["goal"] == "water" or weights.get("water", 0) > 0:
         warnings.append("Check how much irrigation this crop needs. Water savings are not estimated.")
-    if field["goal"] == "harvest":
+    if field["goal"] == "harvest" or weights.get("yield", 0) > 0:
         warnings.append("These checks do not predict how much you will harvest.")
     applications = [row for row in field["fertilisers"] if (sector_id is None or not row["sector_id"] or row["sector_id"] == sector_id) and date.fromisoformat(row["date"]) >= date.today() - timedelta(days=365)]
     nitrogen = sum(row["amount"] * (1000 if row["unit"] == "t/ha" else 1) * row["nitrogen_pct"] / 100 for row in applications if row["unit"] in {"kg/ha", "t/ha"} and row["nitrogen_pct"] is not None)
@@ -179,6 +194,13 @@ def candidate_result(crop, field, sector, climate, resources=None):
         warnings.append("No recent fertiliser records. Add any applications you know about.")
     if sector_id is None and field["sectors"]:
         warnings.append("Conditions may differ across sectors. Check each sector before planting the whole field.")
+    growth = crop.get("growth_days", {})
+    if growth.get("max") and growth["max"] > 100:
+        warnings.append("This crop may grow beyond the 100-day outlook. Check your variety’s harvest date and the weather after that.")
+    active_crop = sector.get("current_crop", "").strip()
+    if active_crop and active_crop.casefold() not in {"fallow", "none", "bare", "not planted", "unknown"}:
+        warnings.append(f"This sector is recorded as growing {active_crop}. Check it will be clear before planting.")
+    warnings.append("Local planting dates, seedbed temperature, pests and your crop variety still need checking.")
     texture_fit = bool(groups) and bool(optimal) and groups <= optimal
     ph_fit = ph is not None and bounds["optimal_min"] is not None and bounds["optimal_max"] is not None and bounds["optimal_min"] <= ph <= bounds["optimal_max"]
     family_fit = bool(history) and all(by_id.get(row["crop_id"]) for row in previous) and all(by_id[row["crop_id"]]["family"] != crop["family"] for row in previous)
@@ -188,7 +210,15 @@ def candidate_result(crop, field, sector, climate, resources=None):
         from .rotation_resources import crop_resources
         practical = crop_resources(crop, field, resources)
         score += practical['ranking_adjustment']
-    return {"practical": practical, "crop": crop, "status": "red" if red else "green" if field_fit else "amber", "status_scope": "soil_and_rotation_fit", "label": "Mismatch found" if red else "Good soil & rotation fit" if field_fit else "Check before planting", "reasons": reasons, "checks_needed": warnings, "ranking_score": score, "fertiliser_context": {"application_count": len(applications), "recorded_nitrogen_kg_ha": round(nitrogen, 1) if sector_id is not None or not field["sectors"] else None, "meaning": "Applied amounts, not remaining soil nitrogen"}, "sources": [crop["source"], {"url": "https://efotg.sc.egov.usda.gov/references/Public/SD/landcap_introduction.pdf", "title": "USDA NRCS land capability classification"}, {"url": "https://ipm.ucanr.edu/home-and-landscape/rotating-plantings/", "title": "UC IPM rotation guidance"}], "economic_profitability": "not_assessed"}
+    previous = history[:1] if not history else [row for row in history if row["year"] == history[0]["year"]]
+    previous_crops = [by_id.get(row["crop_id"]) for row in previous]
+    related = any(row and row["family"] == crop["family"] for row in previous_crops)
+    goal_effects = [
+        {"goal": "soilHealth", "label": "Healthy soil", "weight": weights.get("soilHealth", 100 if field["goal"] in {"soil", "diversity"} else 0), "status": "check" if related else "fit" if family_fit else "unknown", "text": "A related crop grew here last time. Check disease risk." if related else "A different crop family from last time. A useful change, but healthier soil is not guaranteed." if family_fit else "Past crop families need checking before we can compare rotation choices."},
+        {"goal": "yield", "label": "A good harvest", "weight": weights.get("yield", 100 if field["goal"] == "harvest" else 0), "status": "check", "text": practical["equipment"]["text"] + " We cannot yet tell how much you will harvest." if practical else "Harvest size is not predicted. Equipment and growing conditions still need checking."},
+        {"goal": "water", "label": "Using less water", "weight": weights.get("water", 100 if field["goal"] == "water" else 0), "status": "unknown", "text": "Will it use less water? We cannot tell yet. Check how much it needs and how much you have."},
+    ]
+    return {"goal_effects": goal_effects, "practical": practical, "crop": crop, "status": "red" if red else "green" if field_fit else "amber", "status_scope": "soil_and_rotation_fit", "label": "Mismatch found" if red else "Good soil & rotation fit" if field_fit else "Check before planting", "reasons": reasons, "checks_needed": warnings, "ranking_score": score, "fertiliser_context": {"application_count": len(applications), "recorded_nitrogen_kg_ha": round(nitrogen, 1) if sector_id is not None or not field["sectors"] else None, "meaning": "Applied amounts, not remaining soil nitrogen"}, "sources": [crop["source"], {"url": "https://efotg.sc.egov.usda.gov/references/Public/SD/landcap_introduction.pdf", "title": "USDA NRCS land capability classification"}, {"url": "https://ipm.ucanr.edu/home-and-landscape/rotating-plantings/", "title": "UC IPM rotation guidance"}], "economic_profitability": "not_assessed"}
 
 
 @require_POST
@@ -231,6 +261,7 @@ def rotation(request):
         ranked = [candidate_result(crop, stored.data, sector, climate, resources) for crop in choices]
         for candidate in ranked:
             candidate["market"] = market_context(candidate["crop"], market_data, market_rows)
+            candidate["goal_effects"].append({"goal": "profit", "label": "Earn more", "weight": stored.data.get("farm_profile", {}).get("goals", {}).get("profit", 100 if stored.data["goal"] == "profit" else 0), "status": "check" if candidate["market"] else "unknown", "text": "An example market price is available. A higher price per tonne does not mean a higher profit." if candidate["market"] else "No market price is listed for this crop. Earnings cannot be compared."})
         if planning_goal == "earn_more":
             weight = stored.data.get("farm_profile", {}).get("goals", {}).get("profit", 100) / 100
             maximum_price = max((row["market"]["usd_per_tonne"] for row in ranked if row["market"]), default=1)
@@ -243,4 +274,4 @@ def rotation(request):
         count = 1 if crop_id or scope == "mix" else 4
         groups.append({"sector": sector, "candidates": ranked[:count]})
         used.add(ranked[0]["crop"]["id"])
-    return JsonResponse({"planning_goal": planning_goal, "market_basis": {"is_example": market_data.get("isMockData", True), "as_of": market_data.get("updatedAt"), "note": "Example prices, not live quotes. Prices may change before harvest. The Earn more weight adds a small price-per-tonne preference within each field-fit colour. No yield, costs or future sale prices are predicted."}, "resources": resources, "field_revision": stored.revision, "goal": stored.data["goal"], "goal_weights": stored.data.get("farm_profile", {}).get("goals"), "planting_date": date.today().isoformat(), "horizon_days": 100, "outlook": climate, "groups": groups, "basis": "Saved field records and EcoCrop descriptors. Family diversification is a screening heuristic, not a validated rotation or yield model.", "limitations": ["Estimates do not replace human expertise or local agronomic advice.", "No green planting clearance is issued without a validated current forecast and crop-specific frost and water thresholds.", "Market figures are illustrative. Prices are not a prediction of profit or harvest-time selling prices."]})
+    return JsonResponse({"planning_goal": planning_goal, "market_basis": {"is_example": market_data.get("isMockData", True), "as_of": market_data.get("updatedAt"), "note": "Example prices, not live quotes. Prices may change before harvest. The Earn more weight adds a small price-per-tonne preference within each field-fit colour. No yield, costs or future sale prices are predicted."}, "resources": resources, "field_revision": stored.revision, "goal": stored.data["goal"], "goal_weights": stored.data.get("farm_profile", {}).get("goals"), "planting_date": date.today().isoformat(), "horizon_days": 100, "outlook": climate, "soil_conditions": soil_context(climate), "groups": groups, "basis": "Saved field records and EcoCrop descriptors. Family diversification is a screening heuristic, not a validated rotation or yield model.", "limitations": ["Estimates do not replace human expertise or local agronomic advice.", "No green planting clearance is issued without a validated current forecast and crop-specific frost and water thresholds.", "Market figures are illustrative. Prices are not a prediction of profit or harvest-time selling prices."]})

@@ -86,7 +86,7 @@ def inference_features(history: pd.DataFrame) -> tuple[pd.Timestamp, pd.DataFram
     return dates.iloc[-1], result
 
 
-def future_target(values: pd.Series, start: int, end: int, aggregation: str) -> pd.Series:
+def future_target(values: pd.Series, start: int, end: int, aggregation: str, offset: float = 0) -> pd.Series:
     shifted = pd.concat([values.shift(-lead) for lead in range(start, end + 1)], axis=1)
     complete = shifted.notna().all(axis=1)
     if aggregation == "mean":
@@ -99,4 +99,4 @@ def future_target(values: pd.Series, start: int, end: int, aggregation: str) -> 
         result = shifted.sum(axis=1)
     else:
         raise ValueError("Unsupported target aggregation")
-    return result.where(complete)
+    return (result + offset).where(complete)

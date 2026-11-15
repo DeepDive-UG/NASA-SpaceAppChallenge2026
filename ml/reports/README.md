@@ -67,3 +67,25 @@ Errors retain target units: degC, mm, or m3/m3. Improvement is relative to the t
 ## Limits
 
 These are retrospective regional outlook experiments without external weather or seasonal forecast inputs. Publication latency was not reconstructed. The small number of annual cycles, overlapping forecast windows, product changes and limited spatial holdout prevent claims of operational 100-day forecast skill. Temperature extremes represent extrema of hourly mean air temperature, not ground frost. Source rasters and observation examples remain outside the repository. Full per-window metrics, pinball losses, cold-subset errors and provenance are in the accompanying JSON files.
+
+
+## Soil extension (v2)
+
+Soil-temperature errors use °C. Surface-moisture errors use m³/m³; multiply by 100 for percentage points. These errors compare held-out NASA model products, not field instruments.
+
+| Target | Area | Days | MAE | Reference MAE | Coverage |
+|---|---|---|---:|---:|---:|
+| soil_temperature | known | 1-10 | 1.9188 | 1.9378 | 73.1% |
+| soil_temperature | known | 91-100 | 1.9158 | 1.9158 | 76.4% |
+| soil_temperature | known | 1-100 | 1.4875 | 1.4875 | 62.2% |
+| soil_temperature | unseen | 1-10 | 2.0356 | 2.5335 | 70.5% |
+| soil_temperature | unseen | 91-100 | 2.6536 | 2.6536 | 61.2% |
+| soil_temperature | unseen | 1-100 | 2.2112 | 2.2112 | 44.8% |
+| surface_soil_moisture | known | 1-10 | 0.0193 | 0.0325 | 82.6% |
+| surface_soil_moisture | known | 91-100 | 0.0269 | 0.0269 | 81.7% |
+| surface_soil_moisture | known | 1-100 | 0.0240 | 0.0210 | 80.1% |
+| surface_soil_moisture | unseen | 1-10 | 0.0206 | 0.0375 | 82.7% |
+| surface_soil_moisture | unseen | 91-100 | 0.0310 | 0.0310 | 69.6% |
+| surface_soil_moisture | unseen | 1-100 | 0.0264 | 0.0243 | 78.1% |
+
+Validation selected gradient boosting for 7/11 soil-temperature windows and 6/11 surface-moisture windows. The 100-day soil-temperature estimate selected the seasonal reference. Its interval coverage is below 80%, particularly in unseen areas; it is not a validated sowing-temperature guarantee.

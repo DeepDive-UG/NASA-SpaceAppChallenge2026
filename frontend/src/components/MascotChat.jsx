@@ -4,10 +4,16 @@ import './MascotChat.css'
 export default function MascotChat({ src = '/Scene1.gif' }) {
   const [open, setOpen] = useState(false)
   const [answer, setAnswer] = useState(null)
+  const [hidden, setHidden] = useState(false)
 
   function close() {
     setOpen(false)
     setAnswer(null)
+  }
+
+  function toggleHidden() {
+    if (!hidden) close()
+    setHidden(value => !value)
   }
 
   return (
@@ -19,16 +25,29 @@ export default function MascotChat({ src = '/Scene1.gif' }) {
       {open && answer && (
         <AnswerBubble key={answer.answer} result={answer} onClose={close} onAskAgain={() => setAnswer(null)} />
       )}
-      <button
-        type="button"
-        className="mascot-toggle"
-        onClick={() => (open ? close() : setOpen(true))}
-        aria-expanded={open}
-        aria-controls="mascot-bubble"
-        aria-label={open ? 'Close CropTips chat' : 'Open CropTips chat'}
-      >
-        <img src={src} className="mascot" alt="" />
-      </button>
+      <div className={`mascot-figure${hidden ? ' is-hidden' : ''}`}>
+        <button
+          type="button"
+          className="mascot-toggle"
+          // Restore the mascot before opening its chat.
+          onClick={() => (hidden ? setHidden(false) : open ? close() : setOpen(true))}
+          aria-expanded={hidden ? undefined : open}
+          aria-controls={hidden ? undefined : 'mascot-bubble'}
+          aria-label={hidden ? 'Bring Tip back' : open ? 'Close CropTips chat' : 'Open CropTips chat'}
+        >
+          <img src={src} className="mascot" alt="" />
+        </button>
+        <button
+          type="button"
+          className="mascot-hide"
+          onClick={toggleHidden}
+          aria-label={hidden ? 'Show Tip' : 'Hide Tip'}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
     </div>
   )
 }

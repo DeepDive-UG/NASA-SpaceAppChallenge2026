@@ -1,0 +1,154 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{Backend-to-Frontend Endpoint Contract List}
+\author{Project review}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Summary}
+
+The frontend and backend are connected for most application data flows. The main mismatch is the login flow: the frontend calls \texttt{/api/auth/login}, but the Django route list does not define that endpoint. All other major endpoints reviewed in the frontend are present in the backend router and match the expected URL patterns.
+
+\section*{Endpoint contracts}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.55em]
+
+\item \textbf{GET /api/health/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.health}
+    \item Frontend: used by account, settings, and chat health checks.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{GET /api/environment/alerts/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.alerts}
+    \item Frontend: called from \texttt{Alerts.jsx} with a point parameter.
+    \item Status: connected and used for environmental alerts.
+  \end{itemize}
+
+\item \textbf{GET /api/environment/water/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.water}
+    \item Frontend: used by \texttt{WaterStation.jsx} and \texttt{WaterStationPicker.jsx}.
+    \item Status: connected and used for USGS water monitoring data.
+  \end{itemize}
+
+\item \textbf{GET /api/environment/fires/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.fires}
+    \item Frontend: no direct fetch found in the reviewed frontend files.
+    \item Status: backend route exists, but the current UI does not appear to call it directly.
+  \end{itemize}
+
+\item \textbf{GET /api/state-map/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.state\_map}
+    \item Frontend: used in \texttt{myArea.jsx} to render climate maps.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{GET /api/state-legend/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.state\_legend}
+    \item Frontend: used by \texttt{myArea.jsx} for the PRISM legend image.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{GET /api/field/ and PUT /api/field/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.field.field\_profile}
+    \item Frontend: consumed by \texttt{FieldProvider.jsx} and \texttt{myField.jsx}.
+    \item Status: connected and used for saved field records.
+  \end{itemize}
+
+\item \textbf{GET /api/crops/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.rotation.crops}
+    \item Frontend: used by \texttt{myField.jsx} and \texttt{CropRotation.jsx}.
+    \item Status: connected and used to populate the crop catalogue.
+  \end{itemize}
+
+\item \textbf{POST /api/rotation/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.rotation.rotation}
+    \item Frontend: called by \texttt{CropRotation.jsx} for crop checks and suggestions.
+    \item Status: connected and used by the crop recommendation flow.
+  \end{itemize}
+
+\item \textbf{GET /api/gear/ and POST /api/gear/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.gear\_list}
+    \item Frontend: used by \texttt{myGear.jsx} for loading and creating gear records.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{PATCH /api/gear/<id>/ and DELETE /api/gear/<id>/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.views.gear\_item}
+    \item Frontend: used by \texttt{myGear.jsx} for updating and removing gear items.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{GET /api/account/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.account.account}
+    \item Frontend: used in \texttt{Settings.jsx} to read account details.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{POST /api/account/password/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.account.change\_password}
+    \item Frontend: called from \texttt{Settings.jsx}.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{POST /api/account/logout/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{api.account.sign\_out}
+    \item Frontend: called from \texttt{Navigation.jsx}.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{POST /api/chat/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{rag.views.chat}
+    \item Frontend: used by \texttt{MascotChat.jsx}.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{GET /api/chat/status/}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: \texttt{rag.views.status}
+    \item Frontend: exposed through the chat status flow in the same component.
+    \item Status: connected and active.
+  \end{itemize}
+
+\item \textbf{POST /api/auth/login}
+  \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
+    \item Backend: not present in \texttt{backend/api/urls.py}
+    \item Frontend: default value in \texttt{Login/login.jsx}.
+    \item Status: not connected. This is the main missing backend contract.
+  \end{itemize}
+
+\end{itemize}
+
+\section*{Key conclusions}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=0.5em]
+\item Most frontend pages use the same backend routes that are defined in the Django router.
+\item The field, gear, environment, crop, and account workflows are wired together correctly.
+\item The login page is the only clear mismatch: the UI expects an authentication route that is not implemented in the backend.
+\end{itemize}
+
+\end{document}

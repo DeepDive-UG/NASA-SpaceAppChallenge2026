@@ -1,0 +1,512 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tcolorbox}
+\usepackage{framed}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!80!black},
+    stringstyle=\color{red},
+    backgroundcolor=\color{yellow!8},
+    breaklines=true,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    numbers=left,
+    numberstyle=\tiny\color{black},
+    stepnumber=1,
+    numbersep=5pt,
+    frame=single,
+    xleftmargin=10pt,
+    xrightmargin=10pt
+}
+
+\title{Predykcja złośliwości guzów nerek\\przy użyciu cech radiomicznych\\i algorytmów uczenia maszynowego}
+\author{Piotr Przypaśniak}
+\date{2025}
+
+\begin{document}
+
+\begin{framed}
+\begin{center}
+    {\Large Predykcja złośliwości guzów nerek\\
+    przy użyciu cech radiomicznych i algorytmów uczenia maszynowego}
+\end{center}
+\end{framed}
+
+\maketitle
+
+\section{Wstęp}
+
+Radiomika jest dziedziną medycyny zajmującą się ekstrakcją ilościowych cech z medycznych obrazów diagnostycznych (CT, MRI). Cechy radiomiczne zawierają informacje o teksturze, kształcie i intensywności obrazu, które mogą być predyktorami stanów patologicznych. W przypadku guzów nerek, predykcja złośliwości jest kluczowa dla planowania leczenia pacjenta.\\\\
+
+Niniejszy projekt implementuje kompleksowy system klasyfikacji binarnej, którego celem jest predykcja tego, czy guz nerek jest złośliwy (malignant) czy łagodny (benign). System wykorzystuje trzy konkurencyjne modele uczenia maszynowego: Support Vector Machine (SVM), Random Forest oraz XGBoost.
+
+\section{Architektura systemu}
+
+System opiera się na klasycznym pipeline'u uczenia maszynowego, który można podzielić na cztery główne etapy: przetwarzanie danych, uczenie modelu, ewaluację oraz wydajność predykcyjną. Poniżej opisano każdy z komponentów.
+
+\subsection{Przetwarzanie danych}
+
+Moduł \texttt{preprocess.py} odpowiada za załadowanie i przygotowanie danych surowych. Główna funkcja to \textit{build\_original\_dataset}, która wykonuje następujące operacje:
+
+\begin{enumerate}
+    \item \textbf{Załadowanie danych} – wczytanie pliku CSV z cechami radiomicznymi ekstrahowanymi z obrazów medycznych.
+    \item \textbf{Weryfikacja kolumny docelowej} – sprawdzenie obecności kolumny \textit{malignant}, która stanowi etykietę do klasyfikacji.
+    \item \textbf{Selekcja cech} – filtrowanie kolumn, których nazwy zaczynają się od prefiksu \texttt{original\_}. Te kolumny reprezentują cechy radiomiczne.
+    \item \textbf{Obsługa brakujących wartości} – usunięcie wierszy, w których brakuje etykiety docelowej, oraz obsługa niekompletnych rekordów (zachowywane są wiersze z co najmniej 90\% kompletnych danych).
+    \item \textbf{Zapis przetworzonych danych} – zapisanie przygotowanego zbioru do pliku CSV.
+\end{enumerate}
+
+\noindent
+Funkcja zwraca ramkę danych (DataFrame) zawierającą metadane (identyfikator przypadku, id annotator, numer guza, indeks wycinka) oraz wyekstrahowane cechy radiomiczne.
+
+\begin{tcolorbox}[colframe=brown!75!black, colback=brown!10, title={\large Funkcja budowania zestawu danych}, fonttitle=\bfseries]
+Moduł \texttt{src/preprocess.py} (linie 22–130) definiuje funkcję \textit{build\_original\_dataset}, której celem jest transformacja surowych danych radiomicznych w gotowy zbiór uczący. Kluczowe operacje to filtrowanie cech o prefiksie \texttt{original\_} oraz usunięcie wierszy z brakującymi wartościami.
+\end{tcolorbox}
+
+\begin{lstlisting}[caption={\texttt{src/preprocess.py} (linie 22--88): Budowanie i czyszczenie zestawu danych}]
+# Linia 22-24: Załadowanie surowych danych
+df = load_raw()
+
+# Linia 30-31: Weryfikacja kolumny docelowej
+if "malignant" not in df.columns:
+    raise ValueError("Column 'malignant' not found")
+
+# Linia 64-67: Selekcja cech radiomicznych
+feature_columns = [
+    c for c in df.columns
+    if c.startswith("original_")
+]
+
+print(f"Found {len(feature_columns)} radiomics features")
+
+# Linia 74-75: Obsługa braków danych - etykiety
+df = df.dropna(subset=["malignant"])
+
+# Linia 82-87: Obsługa braków danych - cechy
+min_non_null = int(len(feature_columns) * 0.9)
+df = df.dropna(
+    thresh=min_non_null,
+    subset=feature_columns
+)
+\end{lstlisting}
+
+\subsection{Konfiguracja parametrów modeli}
+
+Plik \texttt{config.py} przechowuje hiperparametry dla wszystkich trzech modeli. Wybrane parametry zostały dobrane empirycznie:
+
+\begin{lstlisting}[caption={\texttt{src/config.py} (linie 9--29): Hiperparametry modeli klasyfikacyjnych}]
+MODEL_PARAMS = {
+    "SVM": {
+        "C": 3,
+        "kernel": "rbf",
+        "gamma": "scale",
+        "probability": True
+    },
+    "RandomForest": {
+        "n_estimators": 500,
+        "max_depth": 12,
+        "class_weight": "balanced"
+    },
+    "XGBoost": {
+        "n_estimators": 500,
+        "max_depth": 5,
+        "learning_rate": 0.02,
+        "subsample": 0.9,
+        "colsample_bytree": 0.9,
+        "eval_metric": "logloss"
+    }
+}
+\end{lstlisting}
+
+\noindent
+\begin{tcolorbox}[colframe=blue!75!black, colback=blue!10, title={\large Wybór hiperparametrów}, fonttitle=\bfseries]
+\textit{SVM} z jądrem RBF (Radial Basis Function) jest przydatny dla wysokowymiarowych danych radiomicznych. Parametr $C=3$ kontroluje dywersyfikację błędów. \textit{RandomForest} z 500 drzewami zapewnia robustność poprzez agregację, zaś ograniczenie głębokości do 12 zapobiega overfittingowi. \textit{XGBoost} łączy gradient boosting z regularyzacją, gdzie mały learning rate (0.02) i subsample (0.9) zapewniają stabilność na złożonych zbiorach danych.
+\end{tcolorbox}
+
+\subsection{Modele klasyfikacyjne}
+
+Moduł \texttt{models.py} dostarcza fabrykę do tworzenia instancji modeli na podstawie nazwy. Funkcja \textit{get\_model} enkapsuluje logikę inicjalizacji:
+
+\begin{lstlisting}[caption={\texttt{src/models.py} (linie 8--18): Fabryka modeli}]
+def get_model(name: str):
+    params = MODEL_PARAMS[name]
+
+    if name == "SVM":
+        return SVC(**params)
+    elif name == "RandomForest":
+        return RandomForestClassifier(**params)
+    elif name == "XGBoost":
+        return XGBClassifier(**params)
+    else:
+        raise ValueError(f"Unknown model: {name}")
+\end{lstlisting}
+
+\noindent
+Ta architektura ułatwia dodanie nowych modeli bez modyfikacji kodu treningowego. Każda instancja modelu jest inicjalizowana z hiperparametrami zdefiniowanymi w \texttt{config.py}.
+
+\section{Pipeline uczenia maszynowego}
+
+\subsection{Przygotowanie danych}
+
+Etap uczenia w module \texttt{train.py} implementuje zaawansowany pipeline z wieloma etapami przetwarzania:
+
+\begin{enumerate}
+    \item \textbf{Imputation} (SimpleImputer) – uzupełnianie brakujących wartości medianą
+    \item \textbf{Normalizacja} (StandardScaler) – standaryzacja cech do średniej 0 i wariancji 1
+    \item \textbf{Filtr korelacji} (CorrelationFilter) – usunięcie cech o wysokiej korelacji ($> 0.90$)
+    \item \textbf{Klasyfikacja} – aplikacja wybranego modelu
+\end{enumerate}
+
+\noindent
+Pipeline'u towarzyszy następujący kod z pliku \texttt{src/train.py} (linie 132--137):
+
+\begin{lstlisting}[caption={\texttt{src/train.py} (linie 132--137): Definicja pipeline'u przetwarzania}]
+pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="median")),
+    ("scaler", StandardScaler()),
+    ("correlation", CorrelationFilter(0.90)),
+    ("model", model),
+])
+\end{lstlisting}
+
+\subsection{Filtr korelacji}
+
+\begin{tcolorbox}[colframe=green!75!black, colback=green!10, title={\large Redukcja wymiarowości radiomicznej}, fonttitle=\bfseries]
+Filtr korelacji jest własnym transformatorem (ang. custom transformer) implementującym interfejs scikit-learn. W radomicznych cechach często występują wysokie korelacje między zmiennymi, które mogą prowadzić do overfittingu. Transformator eliminuje cechy skorelowane powyżej progu 0.90, zachowując reprezentatywny podzbiór cech.
+\end{tcolorbox}
+
+\begin{lstlisting}[caption={\texttt{src/train.py} (linie 27--60): Klasa CorrelationFilter dla redukcji wymiarowości}]
+class CorrelationFilter(BaseEstimator, TransformerMixin):
+
+    def __init__(self, threshold=0.90):
+        self.threshold = threshold
+
+    def fit(self, X, y=None):
+        X_df = pd.DataFrame(X)
+        corr = X_df.corr().abs()
+
+        # Znalezienie kolumn do usunięcia
+        upper = corr.where(
+            np.triu(np.ones(corr.shape), k=1).astype(bool)
+        )
+
+        to_drop = [
+            col for col in upper.columns
+            if any(upper[col] > self.threshold)
+        ]
+
+        self.keep_columns_ = [
+            c for c in X_df.columns
+            if c not in to_drop
+        ]
+
+        print(f"Correlation filter removed: {len(to_drop)} features")
+
+        return self
+
+    def transform(self, X):
+        X_df = pd.DataFrame(X)
+        return X_df[self.keep_columns_]
+\end{lstlisting}
+
+\subsection{Walidacja krzyżowa z grupami}
+
+Kluczowym aspektem jest \textit{StratifiedGroupKFold}, która zapewnia, że przypadki pacjentów nie są podzielone między zbiory treningowe i walidacyjne. Jest to ważne, ponieważ wiele wycieków danych z tego samego pacjenta może prowadzić do nierealistycznie wysokich wyników.
+
+\begin{lstlisting}[caption={\texttt{src/train.py} (linie 114--147): Walidacja krzyżowa z group-aware splitting}]
+# Linie 114-118: Definicja schematu CV
+cv = StratifiedGroupKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=RANDOM_STATE,
+)
+
+# Linie 139-147: Cross-validation z numeracją grup
+scores = cross_val_score(
+    pipe,
+    X_train,
+    y_train,
+    cv=cv,
+    groups=groups.loc[train_mask],
+    scoring="roc_auc",
+    n_jobs=-1
+)
+\end{lstlisting}
+
+\noindent
+\begin{tcolorbox}[colframe=purple!75!black, colback=purple!10, title={\large Zapobieganie wyciekom danych}, fonttitle=\bfseries]
+\textit{StratifiedGroupKFold} jest niezbędna w kontekście medycznych danych radiomicznych. Bez separacji pacjentów między splitami, wiele wycieków tego samego przypadku tworzyłoby sztucznie zawyżone wyniki. Parametr \textit{groups} zawiera \texttt{case\_id}, zapewniając, że wszystkie próbki jednego pacjenta trafiają do tej samej części walidacyjnej.
+\end{tcolorbox}
+
+\subsection{Selekcja modelu}
+
+System iteruje przez wszystkie dostępne modele, trenuje każdy przy użyciu walidacji krzyżowej i wybiera ten z najwyższym średnim wynikiem ROC AUC. Pełna logika znajduje się w \texttt{src/train.py} (linie 128--165):
+
+\begin{lstlisting}[caption={\texttt{src/train.py} (linie 124--165): Pętla selekcji modelu}]
+# Linie 124-126: Inicjalizacja zmiennych śledzących
+best_score = -np.inf
+best_name = None
+best_pipe = None
+
+# Linie 128-157: Iteracja po modelach
+for name in MODEL_PARAMS.keys():
+    model = get_model(name)
+
+    pipe = Pipeline([
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler()),
+        ("correlation", CorrelationFilter(0.90)),
+        ("model", model),
+    ])
+
+    scores = cross_val_score(
+        pipe, X_train, y_train,
+        cv=cv,
+        groups=groups.loc[train_mask],
+        scoring="roc_auc",
+        n_jobs=-1
+    )
+
+    mean_score = scores.mean()
+    std_score = scores.std()
+
+    print(f"{name}: ROC AUC = {mean_score:.3f} ± {std_score:.3f}")
+
+    # Linie 154-157: Aktualizacja najlepszego modelu
+    if mean_score > best_score:
+        best_score = mean_score
+        best_name = name
+        best_pipe = pipe
+
+# Linie 161-166: Finalny trening na całym zbiorze treningowym
+best_pipe.fit(X_train, y_train)
+
+print(f"\nBest model: {best_name}")
+print(f"CV ROC AUC: {best_score:.3f}")
+\end{lstlisting}
+
+\section{Ewaluacja modelu}
+
+Po wyborze najlepszego modelu, moduł \texttt{evaluate.py} przeprowadza kompleksową ewaluację na zbiorze testowym:
+
+\begin{lstlisting}[caption={\texttt{src/evaluate.py} (linie 11--39): Funkcja ewaluacji}]
+def evaluate(pipe, X_test, y_test, model_name: str):
+    # Linie 12-16: Predykcja i metryki podstawowe
+    y_pred = pipe.predict(X_test)
+
+    print(f"\n=== Evaluation for {model_name} ===")
+    acc = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {acc:.3f}")
+
+    # Linie 18-33: Metryki i wizualizacja dla modeli z predict_proba
+    model = pipe.named_steps["model"]
+    if hasattr(model, "predict_proba"):
+        y_proba = pipe.predict_proba(X_test)[:, 1]
+        auc = roc_auc_score(y_test, y_proba)
+        print(f"ROC AUC: {auc:.3f}")
+
+        fpr, tpr, _ = roc_curve(y_test, y_proba)
+        plt.figure()
+        plt.plot(fpr, tpr, label=f"AUC = {auc:.3f}")
+        plt.plot([0, 1], [0, 1], linestyle="--")
+        plt.xlabel("False Positive Rate")
+        plt.ylabel("True Positive Rate")
+        plt.title(f"ROC curve – {model_name}")
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
+    # Linie 35-39: Raporty szczegółowe
+    print("\nConfusion matrix:")
+    print(confusion_matrix(y_test, y_pred))
+
+    print("\nClassification report:")
+    print(classification_report(y_test, y_pred))
+\end{lstlisting}
+
+\noindent
+\begin{tcolorbox}[colframe=red!75!black, colback=red!10, title={\large Metryki ewaluacji}, fonttitle=\bfseries]
+Ewaluacja obejmuje:
+\begin{itemize}
+    \item \textbf{Dokładność} (Accuracy) – odsetek poprawnych predykcji
+    \item \textbf{ROC AUC} – pole pod krzywą ROC, odporne na niezrównoważone klasy
+    \item \textbf{Macierz błędów} – liczba TP, TN, FP, FN
+    \item \textbf{Raport klasyfikacji} – precyzja, recall, F1-score dla każdej klasy
+    \item \textbf{Krzywa ROC} – wizualizacja wydajności klasyfikatora
+\end{itemize}
+\end{tcolorbox}
+
+\section{Pipeline główny}
+
+Moduł \texttt{main.py} orchestruje cały przepływ:
+
+\begin{lstlisting}[caption={\texttt{src/main.py} (linie 1--6): Punkt wejścia aplikacji}]
+# Linie 1-2: Import modułów
+from src.train import train_all
+from src.evaluate import evaluate
+
+# Linie 4-6: Główna pętla
+if __name__ == "__main__":
+    pipe, X_test, y_test, best_name = train_all()
+    evaluate(pipe, X_test, y_test, best_name)
+\end{lstlisting}
+
+\noindent
+Funkcja \texttt{train\_all()} zwraca:
+\begin{itemize}
+    \item \texttt{pipe} – wytrenowany pipeline z najlepszym modelem
+    \item \texttt{X\_test, y\_test} – zbiór testowy
+    \item \texttt{best\_name} – nazwa wybranego modelu
+\end{itemize}
+
+\section{Przepływ danych}
+
+Poniżej przedstawiono diagram przepływu danych w systemie:
+
+\begin{verbatim}
+┌─────────────────────────────────────────────────────────────┐
+│                   Surowe dane radiomiczne                    │
+│                    (data/raw/original.csv)                   │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+        ┌────────────────────────────────────┐
+        │    preprocess.build_original_dataset()    │
+        │  - Wczytanie danych                │
+        │  - Filtrowanie cech radiomicznych │
+        │  - Obsługa braków danych           │
+        │  - Zapis przetworzonych danych    │
+        └────────────────────┬───────────────┘
+                             │
+                             ▼
+            ┌─────────────────────────────────┐
+            │   Przetworzone dane             │
+            │  (data/processed/original_clean.csv)  │
+            └────────────────┬────────────────┘
+                             │
+                             ▼
+            ┌─────────────────────────────────┐
+            │   train.train_all()             │
+            │  - Podział na zbióry            │
+            │  - Pipeline przetwarzania       │
+            │  - Walidacja krzyżowa           │
+            │  - Selekcja modelu              │
+            │  - Trening finalny              │
+            └────────────────┬────────────────┘
+                             │
+                             ▼
+            ┌─────────────────────────────────┐
+            │   Wytrenowany model             │
+            │   + Zbiór testowy               │
+            └────────────────┬────────────────┘
+                             │
+                             ▼
+            ┌─────────────────────────────────┐
+            │   evaluate.evaluate()           │
+            │  - Predykcja na zbiorze test.   │
+            │  - Obliczenie metryk            │
+            │  - Generacja raportów           │
+            │  - Wizualizacja wyników         │
+            └─────────────────────────────────┘
+\end{verbatim}
+
+\section{Technologiczne komponenty}
+
+\subsection{Biblioteki}
+
+\begin{itemize}
+    \item \textbf{scikit-learn} – implementacja algorytmów ML, preprocessing, pipeline, ewaluacja (wykorzystane w \texttt{train.py}, \texttt{evaluate.py})
+    \item \textbf{XGBoost} – gradient boosting model (importowany w \texttt{models.py}, wiersz 3)
+    \item \textbf{pandas} – przetwarzanie danych tabelarycznych (fundamentalne w \texttt{preprocess.py})
+    \item \textbf{numpy} – operacje numeryczne (operacje na macierzach w \texttt{train.py})
+    \item \textbf{matplotlib} – wizualizacja wyników (krzywe ROC w \texttt{evaluate.py})
+\end{itemize}
+
+\subsection{Struktura katalogów}
+
+\begin{lstlisting}[language=bash, caption=Hierarchia plików projektu]
+kidney-tumors-malignancy-predictor/
+├── src/
+│   ├── __init__.py               
+│   ├── config.py                  
+│   ├── preprocess.py                
+│   ├── models.py                    # Fabryka modeli 
+│   ├── train.py                     
+│   ├── evaluate.py                  
+│   └── main.py                      
+├── data/
+│   ├── raw/                         
+│   └── processed/                  
+├── examples/                       
+│   ├── 01_pyradiomics_quickstart.py
+│   ├── 02_pyradiomics_filters.py
+│   ├── 03_pyradiomics_feature_maps.py
+│   ├── 04_pandas_features_overview.py
+│   ├── 05_sklearn_introduction.py
+│   └── 06_shap_explainability.py
+├── PROJEKT.tex                      # Niniejsza dokumentacja
+└── envs/env-radiomics.yaml          # Zależności środowiska Conda
+\end{lstlisting}
+
+\section{Zaawansowane aspekty}
+
+\subsection{Problem niezrównoważonych klas}
+
+W danych medycznych często występuje niezrównoważenie klas (więcej przypadków łagodnych niż złośliwych). System adresuje to poprzez:
+
+\begin{itemize}
+    \item \textbf{Stratified sampling} – walidacja krzyżowa ze \textit{StratifiedGroupKFold} (linie 114--118 w \texttt{train.py})
+    \item \textbf{class\_weight='balanced'} – w RandomForest i XGBoost (linie 19 w \texttt{config.py})
+    \item \textbf{ROC AUC} – metryka odporna na niezrównoważenie klas (linia 145 w \texttt{train.py})
+\end{itemize}
+
+\subsection{Zapobieganie wyciekom danych}
+
+\begin{tcolorbox}[colframe=orange!75!black, colback=orange!10, title={\large Krytyczne kwestie walidacji w radiomice}, fonttitle=\bfseries]
+Wysokowymiarowe cechy radiomiczne z tego samego pacjenta są silnie skorelowane. Bez odpowiedniej ostrożności, wiele wycieków tego samego przypadku tworzy sztucznie zawyżone wyniki. System zapobiega temu poprzez:
+
+\begin{itemize}
+    \item \textbf{GroupKFold} (linie 95--109 w \texttt{train.py}) – podział wg. przypadków pacjentów na podstawie \texttt{case\_id}, nie indywidualnych próbek
+    \item \textbf{Holdout split} (linie 104--108 w \texttt{train.py}) – testowy zbiór zawiera zupełnie inne przypadki niż zbiór treningowy
+    \item \textbf{Fit na zbiorze treningowym} – transformatory (imputer, scaler, correlation filter) dopasowywane tylko do danych treningowych
+\end{itemize}
+\end{tcolorbox}
+
+\section{Podsumowanie}
+
+Projekt implementuje kompleksowy system predykcji złośliwości guzów nerek przy użyciu nowoczesnych technik uczenia maszynowego. Architektura systemu jest modułowa i rozszerzalna:
+
+\begin{itemize}
+    \item \textbf{Modułowość} – każdy komponent (preprocessing, modele, training, evaluation) jest niezależny i łatwo testowany
+    \item \textbf{Rozszerzalność} – łatwe dodanie nowych modeli poprzez modyfikację \texttt{config.py} i \texttt{models.py}
+    \item \textbf{Robustwo naukowe} – rigorous validation procedures (group-aware cross-validation, holdout testing) zapewniają, że wyniki są wiarygodne i transferowalne do rzeczywistych aplikacji medycznych
+\end{itemize}
+
+\begin{tcolorbox}[colframe=black!75!black, colback=gray!10, title={\large Kluczowe osiągnięcia}, fonttitle=\bfseries]
+\begin{enumerate}
+    \item \textbf{Automatyczna selekcja modelu} – system autonomicznie wybiera optymalny model (SVM, RandomForest lub XGBoost) na podstawie walidacji krzyżowej
+    \item \textbf{Redukcja wymiarowości} – filtr korelacji eliminuje redundantne cechy radiomiczne, zmniejszając overfitting
+    \item \textbf{Zapobieganie wyciekom danych} – group-aware splitting zapewnia realistyczne szacunki wydajności w kontekście medycznym
+    \item \textbf{Kompleksowa ewaluacja} – raport zawiera dokładność, ROC AUC, macierz błędów, precision/recall i wizualizacje
+\end{enumerate}
+\end{tcolorbox}
+
+\vspace{1cm}
+\noindent
+System jest gotowy do wdrożenia i może służyć jako punkt wyjścia dla bardziej zaawansowanych technik, takich jak feature engineering, ensemble methods czy deep learning.
+
+\end{document}

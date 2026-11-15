@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Navigation from "../../components/Navigation/Navigation";
 import { fieldApi } from "../../lib/field";
 import "./myGear.css";
+import MascotChat from "../../components/MascotChat";
 
 const GEAR_TYPES = [
     "Tractor",
@@ -185,6 +186,7 @@ export default function MyGear() {
                     </section>
                 </div>
             </main>
+            <MascotChat />
         </div>
     );
 }

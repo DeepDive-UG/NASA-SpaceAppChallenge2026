@@ -3,6 +3,7 @@ import Navigation from "../../components/Navigation/Navigation";
 import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 import { useField } from "../../lib/field";
 import "./myArea.css";
+import MascotChat from "../../components/MascotChat";
 // import { LEGENDS } from "./LEGENDS"; -- API pulls the legend from images
 // gradients were hardcoded in LEGENDS.js and needed to be updated manually, the pulled legend seems more readable
 
@@ -211,6 +212,8 @@ const MyArea = () => {
                     />
                 </div>
             </main>
+            <MascotChat />
+
         </div>
     );
 }

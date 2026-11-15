@@ -8,12 +8,13 @@ import Settings from './pages/Settings/Settings'
 import TipKnowledge from './pages/TipKnowledge/TipKnowledge'
 import Login from './pages/Login/login'
 import FieldProvider from './components/FieldProvider'
+import DemoWelcome from './components/DemoWelcome'
 import CropRotation from './pages/CropRotation/CropRotation'
 import Onboarding from './pages/onboarding/Onboarding'
 
 export default function App() {
   return (
-    <FieldProvider><BrowserRouter>
+    <FieldProvider><BrowserRouter><DemoWelcome />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/myField" element={<MyField />} />

@@ -40,20 +40,21 @@ def water(request):
     if not re.fullmatch(r"USGS-\d{8,15}", station):
         return JsonResponse({"error": "Invalid USGS station ID"}, status=400)
 
-    def retrieve():
-        metadata = list(usgs_features("monitoring-locations", id=station))
-        if not metadata or metadata[0]["properties"].get("state_code") != "06":
-            raise ValueError("Station must be located in California")
-        observations = list(usgs_features("latest-continuous", monitoring_location_id=station))
-        today = datetime.now(timezone.utc).date()
-        try:
-            recent = list(usgs_features("daily", monitoring_location_id=station, parameter_code="00060", statistic_id="00003", time=f"{today - timedelta(days=8)}/{today - timedelta(days=1)}"))
-            history_status = "available" if recent else "no_observations"
-        except (OSError, ValueError):
-            recent, history_status = [], "unavailable"
-        return {"station": metadata[0], "observations": observations, "recent_discharge": recent, "history_status": history_status}
+    return environmental_response("water:" + station, lambda: station_data(station))
 
-    return environmental_response("water:" + station, retrieve)
+
+def station_data(station):
+    metadata = list(usgs_features("monitoring-locations", id=station))
+    if not metadata or metadata[0]["properties"].get("state_code") != "06":
+        raise ValueError("Station must be located in California")
+    observations = list(usgs_features("latest-continuous", monitoring_location_id=station))
+    today = datetime.now(timezone.utc).date()
+    try:
+        recent = list(usgs_features("daily", monitoring_location_id=station, parameter_code="00060", statistic_id="00003", time=f"{today - timedelta(days=8)}/{today - timedelta(days=1)}"))
+        history_status = "available" if recent else "no_observations"
+    except (OSError, ValueError):
+        recent, history_status = [], "unavailable"
+    return {"station": metadata[0], "observations": observations, "recent_discharge": recent, "history_status": history_status}
 
 
 @require_GET

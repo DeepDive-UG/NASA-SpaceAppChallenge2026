@@ -3,10 +3,16 @@ from .views import health, alerts, water, fires, state_map, state_legend, gear_i
 from rag.views import chat, status as rag_status
 from .account import account, change_password, sign_out
 from .field import field_profile
-from .rotation import crops, rotation
+from .example_field import example_field
+from .demo import demo_info, start_demo
+from .rotation import crops, rotation, field_outlook
 
 urlpatterns = [
+    path("demo/", demo_info, name="demo-info"),
+    path("demo/start/", start_demo, name="demo-start"),
+    path("field/example/", example_field, name="example-field"),
     path("field/", field_profile, name="field-profile"),
+    path("field/outlook/", field_outlook, name="field-outlook"),
     path("crops/", crops, name="crops"),
     path("rotation/", rotation, name="rotation"),
     path("account/", account, name="account"),

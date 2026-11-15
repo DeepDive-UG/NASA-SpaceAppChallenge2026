@@ -18,3 +18,10 @@
 .mf-station-settings { margin: 20px 0; }
 .mf-station-settings summary { color: var(--color-primary); cursor: pointer; padding: 8px 0; }
 @media (max-width: 600px) { .water-conditions { padding: 16px; } .water-history li { grid-template-columns: 85px 1fr; } .water-history li > span:last-child { grid-column: 2; } }
+.water-reading-details { margin: 14px 0; }
+.water-reading-details summary { cursor: pointer; color: var(--color-primary); padding: 8px 0; font-size: .875rem; }
+.water-metrics article > p { margin-bottom: 0; font-size: .875rem; }
+.water-metrics article .water-reading-details p { font-size: .8125rem; }
+.water-metrics article { background: var(--color-water-soft); border-color: transparent; }
+.water-value { color: var(--color-water); }
+.water-bar { background: var(--color-water); }

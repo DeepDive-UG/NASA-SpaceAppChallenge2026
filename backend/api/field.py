@@ -86,7 +86,7 @@ def validate_field(raw):
         for row in rows:
             if not isinstance(row, dict):
                 raise ValueError("Invalid field record.")
-            identifier = text(row.get("id"), "Record ID", True, 64)
+            identifier = text(row.get("id"), "Record ID", True, 140)
             if identifier in ids:
                 raise ValueError("Field record IDs must be unique.")
             ids.add(identifier)
@@ -105,6 +105,10 @@ def validate_field(raw):
                 except (ValueError, TypeError):
                     raise ValueError("Fertiliser date must be a valid date up to today.") from None
                 result[key].append({"id": identifier, "date": applied.isoformat(), "product": text(row.get("product"), "Fertiliser product", True, 120), "amount": numeric(row.get("amount"), "Fertiliser amount", 0.001, 100000), "unit": choice(row.get("unit"), {"kg/ha", "t/ha", "L/ha"}, "Fertiliser unit"), "nitrogen_pct": numeric(row.get("nitrogen_pct"), "Nitrogen content (%)", 0, 100, True), "sector_id": row.get("sector_id") or None, "notes": text(row.get("notes", ""), "Fertiliser notes", False, 1000)})
+    for normalized, original in zip(result["sectors"], raw.get("sectors", [])):
+        for key in ("soil_class", "direction", "current_crop", "notes"):
+            if key in original:
+                normalized[key] = text(original[key], f"Sector {key}", False, 1000)
     if sum(sector["area_ha"] for sector in result["sectors"]) > result["area_ha"] + 0.00001:
         raise ValueError("The combined sector area exceeds the total field area.")
     sector_ids = {sector["id"] for sector in result["sectors"]}
@@ -127,9 +131,24 @@ def field_profile(request):
         revision = payload["revision"]
         if type(revision) is not int or revision < 0:
             raise ValueError("Invalid field revision.")
-        data = validate_field(payload["field"])
-    except (ValueError, TypeError, KeyError, UnicodeDecodeError) as exc:
+        if "onboarding_profile" in payload:
+            from .onboarding import normalize_profile
+            converted, profile = normalize_profile(payload["onboarding_profile"], stored.data if stored else empty_field())
+            data = validate_field(converted)
+            data["farm_profile"] = profile
+        else:
+            data = validate_field(payload["field"])
+            if stored and "farm_profile" in stored.data:
+                protected = ("area_ha", "latitude", "longitude", "soil_class", "goal", "sectors", "crop_history")
+                if any(data[key] != stored.data[key] for key in protected):
+                    raise ValueError("Update these details through the shared field editor.")
+                data["farm_profile"] = stored.data["farm_profile"]
+    except (ValueError, TypeError, KeyError, AttributeError, UnicodeDecodeError) as exc:
         return JsonResponse({"error": str(exc) if isinstance(exc, ValueError) else "Provide valid field details."}, status=400)
+    if stored:
+        for marker in ("example_data", "demo_account"):
+            if stored.data.get(marker):
+                data[marker] = True
     try:
         with transaction.atomic():
             if stored:

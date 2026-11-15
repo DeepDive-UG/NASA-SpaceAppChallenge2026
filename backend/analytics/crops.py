@@ -30,6 +30,7 @@ def _catalogue(path, modified):
                 "category": row.get("CAT", ""),
                 "temperature_c": {"optimal_min": number(row.get("TOPMN")), "optimal_max": number(row.get("TOPMX")), "absolute_min": number(row.get("TMIN")), "absolute_max": number(row.get("TMAX"))},
                 "annual_rainfall_mm": {"optimal_min": number(row.get("ROPMN")), "optimal_max": number(row.get("ROPMX"))},
+                "soil_texture": {"optimal": [item.strip().lower() for item in row.get("TEXT", "").split(",") if item.strip()], "absolute": [item.strip().lower() for item in row.get("TEXTR", "").split(",") if item.strip()]},
                 "soil_ph": {"optimal_min": number(row.get("PHOPMN")), "optimal_max": number(row.get("PHOPMX")), "absolute_min": number(row.get("PHMIN")), "absolute_max": number(row.get("PHMAX"))},
                 "growth_days": {"min": number(row.get("GMIN")), "max": number(row.get("GMAX"))},
                 "source": {"file": "data/EcoCrop_DB.csv", "line": reader.line_num},

@@ -1,0 +1,16 @@
+.demo-welcome { width: min(520px,calc(100vw - 40px)); margin: auto; padding: 36px; box-sizing: border-box; max-height: calc(100dvh - 32px); overflow: auto; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-card); color: var(--color-heading); font-family: var(--font-sans); }
+.demo-welcome::backdrop { background: rgba(15,25,18,.65); }
+.demo-close { position: absolute; top: 12px; right: 14px; border: 0; background: transparent; color: var(--color-text); cursor: pointer; font-size: 1.5rem; width: 36px; height: 36px; }
+.demo-location { font-size: .75rem; color: var(--color-primary); letter-spacing: .12em; margin: 8px 0 14px; }
+.demo-welcome h1 { font-size: 1.75rem; font-weight: 500; line-height: 1.3; margin-bottom: 16px; }
+.demo-welcome p { line-height: 1.65; }
+.demo-farm-facts { display: grid; gap: 12px; margin: 24px 0; padding: 20px 0; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
+.demo-example-note { color: var(--color-muted); font-size: .8125rem; }
+.demo-actions { display: grid; gap: 10px; margin-top: 24px; }
+.demo-actions button { min-height: 48px; border-radius: 7px; font: inherit; cursor: pointer; padding: 12px; }
+.demo-enter { background: var(--color-primary); color: var(--color-on-primary); border: 1px solid var(--color-primary); }
+.demo-own { border: 1px solid var(--color-border); background: transparent; color: var(--color-text); }
+.demo-error { color: var(--color-error); margin-top: 16px; }
+
+.demo-launch { position: fixed; bottom: 84px; left: 24px; z-index: 3; padding: 10px 14px; border: 1px solid var(--color-border); border-radius: 6px; color: var(--color-primary); background: var(--color-card); cursor: pointer; font: inherit; font-size: .8125rem; }
+@media(max-width:720px) { .demo-launch { left: auto; right: 16px; bottom: 16px; } }

@@ -1,96 +1,77 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Navigation from '../../components/Navigation/Navigation'
-import DecisionDisclaimer from '../../components/DecisionDisclaimer'
+import FieldEditor from '../../components/FieldEditor'
 import WaterStation from '../../components/WaterStation'
 import WaterStationPicker from '../../components/WaterStationPicker'
-import { GOALS, SOILS, fieldApi, useField } from '../../lib/field'
+import { SOILS, useField } from '../../lib/field'
 import './myField.css'
 
-const TODAY = new Date().toLocaleDateString('en-CA')
-const YEAR = new Date().getFullYear()
-function Input({ label, hint, value, onChange, options, ...props }) {
-  return <label className="field-input">{label}{hint && <small>{hint}</small>}{options ? <select value={value ?? ''} onChange={e => onChange(e.target.value)} {...props}>{options.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select> : <input value={value ?? ''} onChange={e => onChange(e.target.value)} {...props} />}</label>
+const number = value => Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 })
+const directions = { N: 'North', NE: 'Northeast', E: 'East', SE: 'Southeast', S: 'South', SW: 'Southwest', W: 'West', NW: 'Northwest', Center: 'Centre', Other: '' }
+const fertiliserNames = { N: 'Nitrogen (N)', P: 'Phosphorus (P)', K: 'Potassium (K)', NPK: 'Mixed nutrients (NPK)', manure: 'Manure', compost: 'Compost', lime: 'Lime', none: 'No fertiliser', other: 'Other fertiliser' }
+function soilLabel(value) { return value && value !== 'unknown' ? `Class ${value}` : 'Not known' }
+function Season({ row }) {
+  return <article className="field-season"><div className="field-season-heading"><strong>{row.crop === 'Other' ? row.otherCrop : row.crop}</strong><span className="field-area-label">{row.area}</span></div><p className="field-season-fertiliser"><small>Fertiliser</small> {row.fertilizers.map(value => fertiliserNames[value] || value).join(', ') || 'Fertiliser not recorded'}{row.amountKgHa != null ? ` (${number(row.amountKgHa)} kg/ha)` : ''}</p><details><summary>Harvest details</summary><dl className="field-season-facts"><div><dt>Fertiliser</dt><dd>{row.fertilizers.map(value => fertiliserNames[value] || value).join(', ') || 'Not recorded'}</dd></div>{row.amountKgHa != null && <div><dt>Amount</dt><dd>{number(row.amountKgHa)} kg/ha</dd></div>}<div><dt>Harvested amount</dt><dd>{row.yield || 'Not recorded'}</dd></div></dl></details></article>
 }
-function Panel({ step, title, description, children }) {
-  return <section className="field-paper"><div className="field-section-heading"><span>{step}</span><div><h2>{title}</h2>{description && <p>{description}</p>}</div></div>{children}</section>
+
+
+function SectorOverview({ field, profile }) {
+  const [selectedId, setSelectedId] = useState(null)
+  const selected = field.sectors.find(sector => sector.id === selectedId) || field.sectors[0]
+  const source = profile?.sectors.find(sector => sector.id === selected.id)
+  const previous = [...(profile?.cropHistory.sameForAllSectors ? profile.cropHistory.shared : profile?.cropHistory.bySector[selected.id] || [])].sort((a, b) => b.year - a.year)[0]
+  const assigned = field.sectors.reduce((sum, sector) => sum + Number(sector.area_ha || 0), 0)
+  const unassigned = Math.max(0, Number(field.area_ha || 0) - assigned)
+  return <div className="field-sector-overview">
+    <figure className="field-area-figure">
+      <div className="field-area-diagram" aria-label="Sector areas">
+        {field.sectors.map((sector, index) => <button type="button" key={sector.id}
+          className={`field-area-piece field-area-tone-${index % 3}${selected.id === sector.id ? ' is-selected' : ''}`}
+          style={{ flexGrow: Number(sector.area_ha) || 1 }}
+          aria-pressed={selected.id === sector.id} onClick={() => setSelectedId(sector.id)}>
+          <strong>{sector.name}</strong><span>{number(sector.area_ha)} ha</span>
+        </button>)}
+        {unassigned > 0.01 && <div className="field-area-unassigned" style={{ flexGrow: unassigned }}>Unassigned <span>{number(unassigned)} ha</span></div>}
+      </div>
+      <figcaption>Area overview · not field boundaries</figcaption>
+    </figure>
+    <div className="field-selected-sector" aria-live="polite">
+      <span className="field-area-label">{directions[source?.direction] || 'Selected sector'}</span>
+      <h3>{selected.name}</h3>
+      <p className="field-sector-size">{number(selected.area_ha)} <small>ha</small></p>
+      <dl><div><dt>Soil</dt><dd>{soilLabel(source?.soilClass || field.soil_class)}</dd></div>
+        <div><dt>Last crop</dt><dd>{previous ? <>{previous.crop === 'Other' ? previous.otherCrop : previous.crop}<small>{previous.year}</small></> : 'Not recorded'}</dd></div></dl>
+      <p className="field-sector-hint">Choose a sector to see its details.</p>
+    </div>
+  </div>
 }
+
 
 export default function MyField() {
-  const { record, loading, saving, error, save } = useField()
-  const [draft, setDraft] = useState(null)
-  const [crops, setCrops] = useState([])
-  const [dirty, setDirty] = useState(false)
+  const { record, loading, error, save, saving, loadExample } = useField()
+  const [section, setSection] = useState(null)
+  const field = record?.field
+  const profile = field?.farm_profile
+  const [soil, setSoil] = useState(null)
   const [notice, setNotice] = useState('')
-  useEffect(() => {
-    const controller = new AbortController()
-    fieldApi('crops/', { signal: controller.signal }).then(result => setCrops(result.crops)).catch(() => { })
-    return () => controller.abort()
-  }, [])
-  const value = draft || record?.field
-  function edit(key, next) { setDraft(previous => ({ ...(previous || record.field), [key]: next })); setDirty(true); setNotice('') }
-  function rowEdit(key, id, name, next) { edit(key, value[key].map(row => row.id === id ? { ...row, [name]: next } : row)) }
-  function add(key, row) { edit(key, [...value[key], { id: crypto.randomUUID(), ...row }]) }
-  function remove(key, id) { edit(key, value[key].filter(row => row.id !== id)) }
-  async function persist(event) {
-    event.preventDefault()
-    try { await save(value); setDraft(null); setDirty(false); setNotice('Saved.') }
-    catch { setNotice('Changes have not been saved. Check the message above.') }
+  async function saveSoil(event) {
+    event.preventDefault(); setNotice('')
+    try { await save({ ...field, ...soil }); setSoil(null); setNotice('Saved.') } catch { setNotice('Could not save changes.') }
   }
-  const areas = [['', 'Whole field'], ...(value?.sectors || []).map(row => [row.id, row.name || 'Unnamed sector'])]
-  const details = (key, label, hint, props = {}) => <Input label={label} hint={hint} value={value[key]} onChange={next => edit(key, next)} {...props} />
-  const item = (group, row, key, label, hint, props = {}) => <Input label={label} hint={hint} value={row[key]} onChange={next => rowEdit(group, row.id, key, next)} {...props} />
-
+  const open = step => setSection(step)
+  const seasons = (profile ? profile.cropHistory.unknown ? [] : profile.cropHistory.sameForAllSectors ? profile.cropHistory.shared.map(row => ({ ...row, area: 'Whole field' })) : profile.sectors.flatMap(sector => (profile.cropHistory.bySector[sector.id] || []).map(row => ({ ...row, area: sector.name }))) : []).sort((a, b) => b.year - a.year)
   return <div className="mf-layout"><Navigation /><main className="mf-main field-ledger">
-    <header className="field-heading"><div><p className="field-eyebrow">MY FIELD</p><h1>{record?.revision ? record.field.name : 'My field'}</h1><p></p></div><span className="field-save-state">{dirty ? 'Unsaved changes' : record?.saved_at ? `Saved ${new Date(record.saved_at).toLocaleDateString()}` : 'Not saved yet'}</span></header>
-    {loading && <p role="status">Loading your field…</p>}{error && <p className="field-error" role="alert">{error}</p>}
-    {value && <><form onSubmit={persist}>
-      <Panel step="01" title="Field details" description="">
-        <div className="field-form-grid">
-          {details('name', 'Field name', null, { required: true, maxLength: 100, placeholder: 'Name this field' })}
-          {details('area_ha', 'Field size', 'hectares', { type: 'number', required: true, min: 0.001, step: 0.001 })}
-          {details('soil_texture', 'Soil texture', null, { options: SOILS })}
-          {details('soil_class', 'Soil class', 'US classes I–VIII', { options: [['unknown', 'Not known yet'], ...['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'].map(id => [id, `Class ${id}`])] })}
-          {details('soil_ph', 'Soil pH', 'from a soil test, optional', { type: 'number', min: 0, max: 14, step: 0.1 })}
-          {details('irrigation', 'Watering method', null, { options: [['unknown', 'Not known yet'], ['rainfed', 'Rainfed'], ['drip', 'Drip irrigation'], ['sprinkler', 'Sprinkler'], ['furrow', 'Furrow irrigation'], ['other', 'Other']] })}
-        </div>
-        <details className="field-details"><summary>Field location for regional conditions</summary><p>California coordinates match your field to environmental observations.</p><div className="field-form-grid">{details('latitude', 'Latitude', null, { type: 'number', step: 'any', min: 32.53, max: 42.01 })}{details('longitude', 'Longitude', null, { type: 'number', step: 'any', min: -124.48, max: -114.13 })}</div></details>
-      </Panel>
-      <Panel step="02" title="Goal" description=""><fieldset className="field-goals"><legend className="field-sr-only">Main farming goal</legend>{GOALS.map(([id, title]) => <label key={id} className={value.goal === id ? 'selected' : ''}><input type="radio" name="field-goal" checked={value.goal === id} onChange={() => edit('goal', id)} /><span><strong>{title}</strong></span></label>)}</fieldset></Panel>
-      <Panel step="03" title="Sectors" description="Optional. Add sectors if parts of your field differ.">
-        {!value.sectors.length && <p className="field-empty">No sectors added.</p>}
-        {value.sectors.map((row, index) => <div className="field-entry" key={row.id}><div className="field-entry-top"><strong>Sector {index + 1}</strong><button className="field-text-button" type="button" onClick={() => remove('sectors', row.id)}>Remove sector</button></div><div className="field-form-grid">
-          {item('sectors', row, 'name', 'Sector name', null, { required: true })}{item('sectors', row, 'area_ha', 'Area', 'hectares', { type: 'number', required: true, min: 0.001, step: 0.001 })}
-          {item('sectors', row, 'soil_texture', 'Sector soil texture', null, { options: SOILS.map(([id, label]) => [id, id === 'unknown' ? 'Use field information' : label]) })}
-          {item('sectors', row, 'soil_ph', 'Sector pH', 'optional override', { type: 'number', min: 0, max: 14, step: 0.1 })}
-        </div></div>)}
-        <button className="field-secondary" type="button" onClick={() => add('sectors', { name: '', area_ha: '', soil_texture: 'unknown', soil_ph: null })}>+ Add sector</button>
-        {value.sectors.length > 0 && <p className="field-footnote">Assigned area: {value.sectors.reduce((sum, row) => sum + (Number(row.area_ha) || 0), 0).toLocaleString()} / {value.area_ha || '—'} ha. Reassign history before removing a sector it refers to.</p>}
-      </Panel>
-      <Panel step="04" title="Previous crops" description="">
-        {!value.crop_history.length && <p className="field-empty">No crops added.</p>}
-        <datalist id="field-crop-options">{crops.map(crop => <option key={crop.id} value={crop.name}>{crop.scientific_name}</option>)}</datalist>
-        {value.crop_history.map(row => <div className="field-entry" key={row.id}><div className="field-entry-top"><strong>Crop record</strong><button className="field-text-button" type="button" onClick={() => remove('crop_history', row.id)}>Remove record</button></div><div className="field-form-grid">
-          <Input label="Crop" value={row.crop_name} required list="field-crop-options" placeholder="Choose or enter a crop" onChange={name => { const found = crops.find(crop => crop.name.toLowerCase() === name.toLowerCase() || crop.scientific_name.toLowerCase() === name.toLowerCase()); edit('crop_history', value.crop_history.map(previous => previous.id === row.id ? { ...previous, crop_name: name, crop_id: found?.id || '' } : previous)) }} />
-          {item('crop_history', row, 'year', 'Year', null, { type: 'number', required: true, min: 1900, max: YEAR })}{item('crop_history', row, 'sector_id', 'Area', null, { options: areas })}{item('crop_history', row, 'notes', 'Notes', 'disease, cover crop, residue', { maxLength: 1000 })}
-        </div></div>)}
-        <button className="field-secondary" type="button" onClick={() => add('crop_history', { crop_id: '', crop_name: '', year: YEAR - 1, sector_id: null, notes: '' })}>+ Add previous crop</button>
-      </Panel>
-      <Panel step="05" title="Fertilisers" description="">
-        {!value.fertilisers.length && <p className="field-empty">No applications added.</p>}
-        {value.fertilisers.map(row => <div className="field-entry" key={row.id}><div className="field-entry-top"><strong>Application record</strong><button className="field-text-button" type="button" onClick={() => remove('fertilisers', row.id)}>Remove record</button></div><div className="field-form-grid">
-          {item('fertilisers', row, 'product', 'Product or amendment', null, { required: true, maxLength: 120 })}{item('fertilisers', row, 'date', 'Application date', null, { type: 'date', required: true, max: TODAY })}
-          {item('fertilisers', row, 'amount', 'Amount', null, { type: 'number', min: 0.001, step: 'any', required: true })}{item('fertilisers', row, 'unit', 'Unit', null, { options: ['kg/ha', 't/ha', 'L/ha'].map(unit => [unit, unit]) })}
-          {item('fertilisers', row, 'sector_id', 'Area', null, { options: areas })}{item('fertilisers', row, 'nitrogen_pct', 'Nitrogen content', '% on label, optional', { type: 'number', min: 0, max: 100, step: 'any' })}{item('fertilisers', row, 'notes', 'Notes', null, { maxLength: 1000 })}
-        </div></div>)}
-        <button className="field-secondary" type="button" onClick={() => add('fertilisers', { product: '', date: TODAY, amount: '', unit: 'kg/ha', nitrogen_pct: null, sector_id: null, notes: '' })}>+ Add application</button>
-      </Panel>
-      <div className="field-save-bar"><div><strong>{dirty ? 'Unsaved changes' : 'Field records'}</strong><p role="status">{notice || (!record.revision ? 'Save these details to use them in Crop rotation.' : record.storage === 'account' ? 'Saved to your account.' : 'Saved for this browser session. Sign in to keep it with your account.')}</p></div><button className="field-primary" type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save changes'}</button></div>
-    </form>
-      {record.revision > 0 && <section className="field-paper"><WaterStation key={record.field.water_station_id || 'none'} stationId={record.field.water_station_id} /><details className="field-details"><summary>{record.field.water_station_id ? 'Change water monitoring station' : 'Assign a water monitoring station'}</summary><WaterStationPicker stationId={record.field.water_station_id} onSave={async id => { await save({ ...value, water_station_id: id }); setDraft(null); setDirty(false) }} /></details></section>}
+    <header className="field-heading"><div><h1>My field</h1>{record?.revision > 0 && <p>{field.name}</p>}</div>{record?.revision > 0 && <button type="button" className="field-primary" onClick={() => open(7)}>Edit field</button>}</header>
+    {loading && <p role="status">Loading field…</p>}{error && <p role="alert" className="field-error">{error}</p>}
+    {field && !record.revision && <section className="field-paper field-start"><h2>Add your field</h2><p>Keep your field size, soil and past crops in one place.</p><div className="field-start-actions"><button type="button" className="field-primary" onClick={() => open(0)} disabled={saving}>Add field details</button><button type="button" className="field-secondary" disabled={saving} onClick={async () => { try { await loadExample() } catch { /* FieldProvider displays the failure. */ } }}>{saving ? 'Loading…' : 'Try a California farm'}</button></div></section>}
+    {field && record.revision > 0 && <>
+      <section className="field-paper"><div className="field-entry-top"><h2>Field details</h2><button className="field-secondary" onClick={() => open(7)} aria-label="Edit field details">Edit</button></div><dl className="field-facts"><div><dt>Size</dt><dd>{profile ? `${number(profile.originalArea.value)} ${profile.originalArea.unit}` : field.area_ha ? `${number(field.area_ha)} ha` : 'Not added'}</dd></div><div><dt>Soil class</dt><dd>{soilLabel(field.soil_class)}</dd></div><div><dt>Location</dt><dd>{field.latitude == null ? 'Not recorded' : <details><summary>Location saved</summary><span>{field.latitude}, {field.longitude}</span></details>}</dd></div></dl></section>
+      <section className="field-paper"><div className="field-entry-top"><h2>Sectors</h2><button className="field-secondary" onClick={() => open(3)} aria-label="Edit sectors">Edit</button></div>{field.sectors.length ? <SectorOverview field={field} profile={profile} /> : <p className="field-empty">No sectors added.</p>}</section>
+      <section className="field-paper field-history-paper"><div className="field-entry-top"><h2>Past crops</h2><button className="field-secondary" onClick={() => open(4)} aria-label="Edit past crops and fertilisers">Edit</button></div>{seasons.length ? <div className="field-years">{[...new Set(seasons.map(row => row.year))].map(year => <section className="field-year" key={year}><h3>{year}</h3><div className="field-season-list">{seasons.filter(row => row.year === year).map((row, index) => <Season key={`${row.id}-${index}`} row={row} />)}</div></section>)}</div> : field.crop_history.length ? field.crop_history.map(row => <p key={row.id}>{row.year} · {row.crop_name}</p>) : <p className="field-empty">{profile?.cropHistory.unknown ? 'History not known.' : 'No crops added.'}</p>}{field.fertilisers.length > 0 && <details className="field-details"><summary>More fertiliser records ({field.fertilisers.length})</summary>{field.fertilisers.map(row => <p key={row.id}>{row.date} · {row.product} · {row.amount} {row.unit}</p>)}</details>}</section>
+      <section className="field-paper"><div className="field-entry-top"><h2>Your crop rotation goals</h2><button className="field-secondary" onClick={() => open(5)} aria-label="Edit farming goals">Edit</button></div>{profile ? <><div className="field-priority-list">{[['yield', 'A good harvest'], ['soilHealth', 'Healthy soil'], ['water', 'Using less water']].sort((a, b) => profile.goals[b[0]] - profile.goals[a[0]]).map(([key, label]) => <div key={key} data-goal={key}><span>{label}</span><meter min="0" max="100" value={profile.goals[key]} aria-label={`${label}: ${profile.goals[key]}% priority`} /></div>)}</div><details className="field-details"><summary>Priority percentages</summary><p>Harvest {profile.goals.yield}% · Soil {profile.goals.soilHealth}% · Water {profile.goals.water}%</p></details></> : <p>Set your priorities.</p>}</section>
+      <section className="field-paper field-water-paper"><div className="field-entry-top"><h2>Water source</h2><button className="field-secondary" onClick={() => open(6)} aria-label="Edit water source">Edit</button></div>{profile ? <><div className="field-water-source"><span className="field-area-label">{profile.waterSource.type}</span><h3>{profile.waterSource.name || profile.waterSource.type}</h3><p>{profile.waterSource.type?.toLowerCase() === 'well' ? 'Well supply has not been measured in this app.' : 'Water supply for this field has not been confirmed.'}</p></div><p>{profile.waterSource.address}</p>{!profile.waterSource.address && profile.waterSource.lat != null && <details className="field-details"><summary>Water source location</summary><p>{profile.waterSource.lat}, {profile.waterSource.lon}</p></details>}{profile.waterSource.description && <p>{profile.waterSource.description}</p>}</> : <p>Not added.</p>}{record.revision > 0 && <><details className="field-details field-river-details"><summary>Nearby river readings</summary><p>These readings describe the river, not your {profile?.waterSource.type?.toLowerCase() === 'well' ? 'well' : 'field’s water supply'}.</p><WaterStation stationId={field.water_station_id} /></details><details className="field-details"><summary>{field.water_station_id ? 'Change water station' : 'Choose a water station'}</summary><WaterStationPicker stationId={field.water_station_id} onSave={id => save({ ...field, water_station_id: id })} /></details></>}</section>
+      {record.revision > 0 && <details className="field-paper"><summary>Soil test & watering method</summary><form onSubmit={saveSoil} className="field-form-grid field-supplement"><label className="field-input">Soil pH<input type="number" min="0" max="14" step="0.1" value={soil?.soil_ph ?? field.soil_ph ?? ''} onChange={event => setSoil({ ...soil, soil_ph: event.target.value })} /></label><label className="field-input">Soil texture<select value={soil?.soil_texture ?? field.soil_texture} onChange={event => setSoil({ ...soil, soil_texture: event.target.value })}>{SOILS.map(([id, title]) => <option key={id} value={id}>{title}</option>)}</select></label><label className="field-input">Watering method<select value={soil?.irrigation ?? field.irrigation} onChange={event => setSoil({ ...soil, irrigation: event.target.value })}>{['unknown','rainfed','drip','sprinkler','furrow','other'].map(value => <option key={value} value={value}>{value === 'unknown' ? 'Not known' : value}</option>)}</select></label><button className="field-primary" disabled={saving}>Save</button><p role="status">{notice}</p></form></details>}
     </>}
-    <DecisionDisclaimer
-      variant="footer"
-      context="Field records, soil classifications, and water station data power automated decision-support tools and do not replace accredited soil testing, irrigation engineering, or human agronomic expertise."
-    />
+    {section !== null && <FieldEditor section={section} onClose={() => setSection(null)} />}
   </main></div>
 }

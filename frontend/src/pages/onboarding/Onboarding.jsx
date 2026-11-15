@@ -10,7 +10,10 @@ import {
 } from 'react-leaflet';
 import { SOIL_CLASSES, getSoilClass } from '../../constants/soilClasses';
 import DecisionDisclaimer from '../../components/DecisionDisclaimer';
+import 'leaflet/dist/leaflet.css';
 import './Onboarding.css';
+import { SOILS, useField } from '../../lib/field';
+import { profileForm, legacyFieldForm } from '../../lib/farmProfile';
 
 const DRAFT_KEY = 'onboardingDraft';
 const PROFILE_KEY = 'farmProfile';
@@ -62,6 +65,7 @@ const newSeason = () => ({
 
 const createInitialState = () => ({
   consent: false,
+  soilTest: { ph: '', texture: 'unknown', irrigation: 'unknown' },
   farmLocation: { lat: '', lon: '' },
   defaultSoilClass: 'unknown',
   totalArea: '',
@@ -167,7 +171,7 @@ function RecenterMap({ location }) {
     if (hasValidCoordinates(location)) {
       map.setView([Number(location.lat), Number(location.lon)], Math.max(map.getZoom(), 13));
     }
-  }, [location?.lat, location?.lon, map]);
+  }, [location, map]);
 
   return null;
 }
@@ -355,7 +359,7 @@ function SeasonEditor({ seasons, onChange }) {
                   className="onboarding-input"
                   type="number"
                   min="1900"
-                  max={new Date().getFullYear() + 1}
+                  max={new Date().getFullYear()}
                   value={season.year}
                   onChange={(event) =>
                     updateSeason(season.id, 'year', event.target.value)
@@ -456,91 +460,45 @@ function SeasonEditor({ seasons, onChange }) {
   );
 }
 
-export default function Onboarding() {
+export default function Onboarding(props) {
+  const { loading, record, error } = useField();
+  if (loading) return <p role="status">Loading field…</p>;
+  if (!record) return <p role="alert">{error || 'Field service unavailable.'}</p>;
+  return <FarmSetup {...props} />;
+}
+
+function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
   const navigate = useNavigate();
-  const [form, setForm] = useState(loadInitialState);
-  const [step, setStep] = useState(0);
+  const { record, saveProfile } = useField();
+  const [rawForm, setRawForm] = useState(() => {
+    const saved = profileForm(record?.field) || legacyFieldForm(record?.field);
+    return saved ? { ...createInitialState(), ...saved, waterSource: { ...createInitialState().waterSource, ...saved.waterSource } } : loadInitialState();
+  });
+  const distance = haversineDistance(rawForm.farmLocation, rawForm.waterSource);
+  const form = { ...rawForm, waterSource: { ...rawForm.waterSource, distanceKm: distance === null ? null : Number(distance.toFixed(2)) } };
+  function setForm(updater) {
+    setRawForm(current => {
+      const next = typeof updater === 'function' ? updater(current) : updater;
+      if (next.sectorTemplate === 'Whole field') {
+        const previous = next.sectors[0];
+        const id = previous?.id || uid();
+        return { ...next, sectors: [{ ...(previous || { id, name: 'Whole field', direction: 'Center', soilClass: next.defaultSoilClass, currentCrop: '', notes: '' }), areaHa: makeEqualAreas(next.totalAreaHa, 1)[0] }] };
+      }
+      return next;
+    });
+  }
+  const [step, setStep] = useState(initialStep);
   const [error, setError] = useState('');
   const [geoStatus, setGeoStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(form));
+      if (!embedded) localStorage.setItem(DRAFT_KEY, JSON.stringify(rawForm));
     } catch {
       // Continue without draft persistence when storage is unavailable.
     }
-  }, [form]);
-
-  useEffect(() => {
-    const distance = haversineDistance(
-      form.farmLocation,
-      form.waterSource,
-    );
-    const roundedDistance =
-      distance === null ? null : Number(distance.toFixed(2));
-
-    setForm((current) => {
-      if (current.waterSource.distanceKm === roundedDistance) return current;
-
-      return {
-        ...current,
-        waterSource: {
-          ...current.waterSource,
-          distanceKm: roundedDistance,
-        },
-      };
-    });
-  }, [
-    form.farmLocation.lat,
-    form.farmLocation.lon,
-    form.waterSource.lat,
-    form.waterSource.lon,
-  ]);
-
-  useEffect(() => {
-    if (form.sectorTemplate !== 'Whole field') return;
-    const lockedArea = makeEqualAreas(form.totalAreaHa, 1)[0];
-
-    setForm((current) => {
-      if (current.sectorTemplate !== 'Whole field') return current;
-
-      if (
-        current.sectors.length === 1 &&
-        current.sectors[0].areaHa === lockedArea
-      ) {
-        return current;
-      }
-
-      if (current.sectors.length === 0) {
-        const id = uid();
-        return {
-          ...current,
-          sectors: [
-            {
-              id,
-              name: 'Whole field',
-              direction: 'Center',
-              areaHa: lockedArea,
-              soilClass: current.defaultSoilClass,
-              currentCrop: '',
-              notes: '',
-            },
-          ],
-          sectorHistories: {
-            ...current.sectorHistories,
-            [id]: [newSeason()],
-          },
-        };
-      }
-
-      const primary = { ...current.sectors[0], areaHa: lockedArea };
-      return {
-        ...current,
-        sectors: [primary],
-      };
-    });
-  }, [form.sectorTemplate, form.totalAreaHa]);
+  }, [rawForm, embedded]);
 
   const assignedArea = useMemo(
     () =>
@@ -552,10 +510,6 @@ export default function Onboarding() {
   );
 
   const remainingArea = Math.max(form.totalAreaHa - assignedArea, 0);
-  const assignedPercent = form.totalAreaHa
-    ? Math.min((assignedArea / form.totalAreaHa) * 100, 100)
-    : 0;
-
   const updateLocation = (location) => {
     setForm((current) => ({
       ...current,
@@ -770,7 +724,7 @@ export default function Onboarding() {
         if (
           !Number.isInteger(year) ||
           year < 1900 ||
-          year > new Date().getFullYear() + 1
+          year > new Date().getFullYear()
         ) {
           return 'Enter a valid year for each season.';
         }
@@ -893,6 +847,7 @@ export default function Onboarding() {
     const profile = {
       ...previousProfile,
       consent: form.consent,
+      soilTest: form.soilTest,
       farmLocation: {
         lat: Number(form.farmLocation.lat),
         lon: Number(form.farmLocation.lon),
@@ -930,53 +885,15 @@ export default function Onboarding() {
     };
 
     try {
-      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-      localStorage.removeItem(DRAFT_KEY);
-    } catch {
+      await saveProfile(profile);
+      try { localStorage.removeItem(DRAFT_KEY); } catch { /* Saving the server record does not depend on local draft storage. */ }
+      if (onSaved) onSaved();
+      else navigate('/', { replace: true });
+    } catch (failure) {
+      setError(failure.message);
+    } finally {
       setSubmitting(false);
-      setError('Your browser could not save the farm profile locally.');
-      return;
     }
-
-    const apiBase =
-      import.meta.env.VITE_DJANGO_API_URL || 'http://127.0.0.1:8000';
-    const token =
-      localStorage.getItem('authToken') ||
-      sessionStorage.getItem('authToken');
-
-    try {
-      const response = await fetch(`${apiBase}/api/onboarding/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(profile),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Backend returned ${response.status}`);
-      }
-
-      localStorage.setItem(
-        PROFILE_KEY,
-        JSON.stringify({
-          ...profile,
-          backendSyncStatus: 'synced',
-          backendSyncedAt: new Date().toISOString(),
-        }),
-      );
-    } catch {
-      localStorage.setItem(
-        PROFILE_KEY,
-        JSON.stringify({
-          ...profile,
-          backendSyncStatus: 'pending',
-        }),
-      );
-    }
-
-    navigate('/', { replace: true });
   };
 
   const renderStep = () => {
@@ -1105,6 +1022,11 @@ export default function Onboarding() {
               <span className="non-arable-badge">Non-arable</span>
             )}
           </div>
+          <details className="field-details"><summary>Soil test & watering method</summary><div className="field-size-grid">
+            <label className="field-label">Soil pH<input className="onboarding-input" type="number" min="0" max="14" step="0.1" value={form.soilTest?.ph ?? ''} onChange={event => setForm(current => ({ ...current, soilTest: { ...current.soilTest, ph: event.target.value } }))} /></label>
+            <label className="field-label">Soil texture<select className="onboarding-select" value={form.soilTest?.texture || 'unknown'} onChange={event => setForm(current => ({ ...current, soilTest: { ...current.soilTest, texture: event.target.value } }))}>{SOILS.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
+            <label className="field-label">Watering method<select className="onboarding-select" value={form.soilTest?.irrigation || 'unknown'} onChange={event => setForm(current => ({ ...current, soilTest: { ...current.soilTest, irrigation: event.target.value } }))}>{['unknown','rainfed','drip','sprinkler','furrow','other'].map(value => <option key={value} value={value}>{value === 'unknown' ? 'Not known' : value}</option>)}</select></label>
+          </div></details>
         </>
       );
     }
@@ -1804,14 +1726,15 @@ export default function Onboarding() {
   };
 
   return (
-    <main className="onboarding-page">
+    <div className={`onboarding-page${embedded ? " onboarding-embedded" : ""}`}>
       <div className="onboarding-shell">
         <header className="onboarding-header">
           <p className="onboarding-eyebrow">Farm setup</p>
-          <h1>Build your farm profile</h1>
-          <p>Your draft is saved automatically on this device.</p>
+          <h1>{embedded ? "Edit field" : "Build your farm profile"}</h1>
+          {!embedded && <p>Your draft is saved automatically on this device.</p>}
         </header>
 
+        {embedded && <nav className="field-editor-tabs" aria-label="Field sections">{STEP_TITLES.map((title, index) => <button type="button" key={title} aria-pressed={step === index} onClick={() => setStep(index)}>{title}</button>)}</nav>}
         <div className="progress-header">
           <span>
             Step {step + 1} of {STEP_TITLES.length}
@@ -1851,6 +1774,7 @@ export default function Onboarding() {
               Back
             </button>
 
+            {embedded && step < STEP_TITLES.length - 1 && <button className="primary-button" type="button" onClick={submitProfile} disabled={submitting}>{submitting ? 'Saving…' : 'Save changes'}</button>}
             {step < STEP_TITLES.length - 1 ? (
               <button
                 className="primary-button"
@@ -1866,7 +1790,7 @@ export default function Onboarding() {
                 onClick={submitProfile}
                 disabled={submitting}
               >
-                {submitting ? 'Submitting…' : 'Submit farm profile'}
+                {submitting ? 'Saving…' : 'Save field'}
               </button>
             )}
           </div>
@@ -1879,6 +1803,6 @@ export default function Onboarding() {
           />
         )}
       </div>
-    </main>
+    </div>
   );
 }

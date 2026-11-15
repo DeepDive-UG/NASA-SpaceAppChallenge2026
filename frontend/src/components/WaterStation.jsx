@@ -6,6 +6,7 @@ export default function WaterStation({ stationId }) {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [checkedAt, setCheckedAt] = useState(() => Date.now())
   useEffect(() => {
     if (!station) return
     const controller = new AbortController()
@@ -14,6 +15,7 @@ export default function WaterStation({ stationId }) {
       if (running) return
       running = true
       setLoading(true)
+      setCheckedAt(Date.now())
       try {
         const response = await fetch(`/api/environment/water/?station=${encodeURIComponent(station)}`, { signal: controller.signal })
         if (!response.ok) throw new Error('Water measurements are temporarily unavailable for this station.')
@@ -51,23 +53,23 @@ export default function WaterStation({ stationId }) {
     {current && <>
       <h3>{current.data.station.properties.monitoring_location_name}</h3>
       <p>{station} · {current.data.station.properties.county_name || 'California'}</p>
-      <p className="water-caption">Checked: {new Date(current.retrieved_at).toLocaleString()} · Refreshes every 5 minutes while this page is open</p>
+      <details className="water-reading-details"><summary>Reading times & updates</summary><p className="water-caption">Checked: {new Date(current.retrieved_at).toLocaleString()} · Refreshes every 5 minutes while this page is open</p></details>
       {observations.length === 0 && <p>No river flow, level or water temperature readings are available for this station.</p>}
       <div className="water-metrics">{observations.map(observation => {
         const p = observation.properties
-        const ageHours = (Date.now() - Date.parse(p.time)) / 3600000
+        const ageHours = (checkedAt - Date.parse(p.time)) / 3600000
         const recent = Number.isFinite(ageHours) && ageHours >= -0.25 && ageHours <= 6
         const valid = p.value != null && p.value !== '' && Number.isFinite(Number(p.value))
         return <article key={p.time_series_id}>
           <h4>{names[p.parameter_code]}</h4>
-          <strong className="water-value">{valid ? Number(p.value).toLocaleString(undefined, { maximumFractionDigits: 2 }) : 'Unavailable'} <small>{valid && p.unit_of_measure}</small></strong>
-          <p className={recent && valid ? 'water-recent' : 'water-old'}>{!valid ? 'No numeric reading' : recent ? 'Reading within the last 6 hours' : 'Older or unverified reading time'}</p>
-          <p>Measured: {new Date(p.time).toLocaleString()}</p>
-          <p>{p.approval_status === 'Provisional' ? 'Provisional · may be revised by USGS' : p.approval_status}</p>
-          {p.qualifier && <p>Qualifier: {String(p.qualifier)}</p>}
+          <strong className="water-value">{valid ? Number(p.value).toLocaleString(undefined, { maximumFractionDigits: 2 }) : 'Unavailable'} <small>{valid && ({ 'ft^3/s': 'ft³/s', degC: '°C' }[p.unit_of_measure] || p.unit_of_measure)}</small></strong>
+          <p className={recent && valid ? 'water-recent' : 'water-old'}>{!valid ? 'No numeric reading' : recent ? 'Recent reading' : 'Older or unverified reading time'}</p>
+          <details className="water-reading-details"><summary>Reading details</summary><p>Measured: {new Date(p.time).toLocaleString()}</p>
+          <p>{p.approval_status === 'Provisional' ? 'Preliminary reading' : p.approval_status}</p>
+          {p.qualifier && <p>Qualifier: {String(p.qualifier)}</p>}</details>
         </article>
       })}</div>
-      <h3>Recent daily river flow</h3>
+      <details className="water-reading-details"><summary>Past 7 days</summary><h3>Recent daily river flow</h3>
       {history.length > 0 ? <>
         <p>Average of {history.length} available daily readings: <strong>{mean.toLocaleString(undefined, { maximumFractionDigits: 2 })} {lastDay.unit_of_measure}</strong></p>
         <ul className="water-history" aria-label="Daily mean river flow">
@@ -79,9 +81,9 @@ export default function WaterStation({ stationId }) {
         </ul>
         <p className="water-caption">Daily means use local station dates. Missing days are not filled. Recent values may be provisional.</p>
       </> : <p>{current.data.history_status === 'unavailable' ? 'Recent flow history could not be loaded.' : 'No recent daily flow records are available.'}</p>}
-      <div className="water-note"><strong>What does this mean for irrigation?</strong>
-        <p>These readings show conditions at your selected station. Water available for your field also depends on its connection to this source, pumping access and local restrictions.</p>
-        <p>Irrigation availability: not assessed. Station metrics are for decision support only and do not replace hydrological or agronomic expertise.</p>
+      </details><div className="water-note"><strong>Before watering</strong>
+        <p>Check your own water source, pump and local watering rules.</p>
+
       </div>
     </>}
     {station && <a href={`https://waterdata.usgs.gov/monitoring-location/${station}/`} target="_blank" rel="noreferrer">USGS station source</a>}

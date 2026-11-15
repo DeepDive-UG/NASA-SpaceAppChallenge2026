@@ -146,3 +146,28 @@
 :root { --color-surface-green: var(--color-green-light); }
 .settings-security { color: var(--color-heading); font-family: 'DM Sans', system-ui, sans-serif; }
 .settings-security p { margin: 12px 0; line-height: 1.6; color: var(--color-text); }
+
+:root {
+  --color-water: #35677D;
+  --color-water-soft: #EDF4F7;
+  --color-harvest: #846626;
+  --color-harvest-soft: #F6F1E3;
+  --color-earth: #84695A;
+}
+:root[data-theme="dark"] {
+  --color-water: #94C2D5;
+  --color-water-soft: #202F37;
+  --color-harvest: #D8BE78;
+  --color-harvest-soft: #302D23;
+  --color-earth: #C5AA98;
+}
+:root[data-contrast="high"] {
+  --color-water: #16485F;
+  --color-harvest: #604500;
+  --color-earth: #634533;
+}
+:root[data-theme="dark"][data-contrast="high"] {
+  --color-water: #B7E5FA;
+  --color-harvest: #FFE296;
+  --color-earth: #F0CBB0;
+}

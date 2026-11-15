@@ -1,0 +1,181 @@
+{
+  "name": "Valley Farm \u2014 Fresno County",
+  "profile": {
+    "consent": true,
+    "farmLocation": {
+      "lat": 36.65,
+      "lon": -119.9
+    },
+    "defaultSoilClass": "II",
+    "originalArea": {
+      "value": 32,
+      "unit": "hectares"
+    },
+    "sectorTemplate": "Custom",
+    "soilTest": {
+      "ph": 6.7,
+      "texture": "loam",
+      "irrigation": "drip"
+    },
+    "sectors": [
+      {
+        "id": "valley-north",
+        "name": "North field",
+        "direction": "N",
+        "areaHa": 12,
+        "soilClass": "II",
+        "currentCrop": "Fallow",
+        "notes": ""
+      },
+      {
+        "id": "valley-centre",
+        "name": "Middle field",
+        "direction": "Center",
+        "areaHa": 10,
+        "soilClass": "II",
+        "currentCrop": "Fallow",
+        "notes": ""
+      },
+      {
+        "id": "valley-south",
+        "name": "South field",
+        "direction": "S",
+        "areaHa": 10,
+        "soilClass": "III",
+        "currentCrop": "Fallow",
+        "notes": ""
+      }
+    ],
+    "cropHistory": {
+      "unknown": false,
+      "sameForAllSectors": false,
+      "shared": [],
+      "bySector": {
+        "valley-north": [
+          {
+            "id": "north-2025",
+            "year": 2025,
+            "crop": "Corn",
+            "otherCrop": "",
+            "fertilizers": [
+              "NPK"
+            ],
+            "amountKgHa": 180,
+            "yield": "9 t/ha"
+          },
+          {
+            "id": "north-2024",
+            "year": 2024,
+            "crop": "Wheat",
+            "otherCrop": "",
+            "fertilizers": [
+              "N"
+            ],
+            "amountKgHa": 100,
+            "yield": "5 t/ha"
+          }
+        ],
+        "valley-centre": [
+          {
+            "id": "centre-2025",
+            "year": 2025,
+            "crop": "Other",
+            "otherCrop": "Common bean",
+            "fertilizers": [
+              "compost"
+            ],
+            "amountKgHa": 3000,
+            "yield": "2.4 t/ha"
+          },
+          {
+            "id": "centre-2024",
+            "year": 2024,
+            "crop": "Barley",
+            "otherCrop": "",
+            "fertilizers": [
+              "NPK"
+            ],
+            "amountKgHa": 90,
+            "yield": "4.5 t/ha"
+          }
+        ],
+        "valley-south": [
+          {
+            "id": "south-2025",
+            "year": 2025,
+            "crop": "Other",
+            "otherCrop": "Broccoli",
+            "fertilizers": [
+              "NPK"
+            ],
+            "amountKgHa": 140,
+            "yield": "12 t/ha"
+          },
+          {
+            "id": "south-2024",
+            "year": 2024,
+            "crop": "Other",
+            "otherCrop": "Peas",
+            "fertilizers": [
+              "compost"
+            ],
+            "amountKgHa": 2500,
+            "yield": "3 t/ha"
+          }
+        ]
+      }
+    },
+    "goals": {
+      "yield": 25,
+      "soilHealth": 45,
+      "water": 30
+    },
+    "waterSource": {
+      "name": "Farm irrigation well",
+      "description": "",
+      "type": "Well",
+      "lat": 36.651,
+      "lon": -119.9,
+      "address": ""
+    }
+  },
+  "water_station_id": "USGS-11222975",
+  "gear": [
+    "Tractor",
+    "Seed drill",
+    "Combine harvester",
+    "Trailer"
+  ],
+  "fertilisers": [
+    {
+      "id": "demo-north-npk-2025",
+      "date": "2025-05-10",
+      "product": "NPK fertiliser",
+      "amount": 180,
+      "unit": "kg/ha",
+      "nitrogen_pct": null,
+      "sector_id": "valley-north",
+      "notes": "Example application for the 2025 corn crop."
+    },
+    {
+      "id": "demo-middle-compost-2025",
+      "date": "2025-03-15",
+      "product": "Compost",
+      "amount": 3000,
+      "unit": "kg/ha",
+      "nitrogen_pct": null,
+      "sector_id": "valley-centre",
+      "notes": "Example application for the 2025 bean crop."
+    },
+    {
+      "id": "demo-south-npk-2025",
+      "date": "2025-08-20",
+      "product": "NPK fertiliser",
+      "amount": 140,
+      "unit": "kg/ha",
+      "nitrogen_pct": null,
+      "sector_id": "valley-south",
+      "notes": "Example application for the 2025 broccoli crop."
+    }
+  ]
+}

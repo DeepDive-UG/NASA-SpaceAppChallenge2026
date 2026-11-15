@@ -1,0 +1,182 @@
+{
+  "Carrot": {
+    "src": "/crops/carrot.jpg",
+    "author": "Evan-Amos",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Vegetable-Carrot-Bundle-wStalks.jpg",
+    "title": "Vegetable-Carrot-Bundle-wStalks.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Cucumber": {
+    "src": "/crops/cucumber.jpg",
+    "author": "Stephen Ausmus, USDA ARS",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:ARS_cucumber.jpg",
+    "title": "ARS_cucumber.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Okra": {
+    "src": "/crops/okra.jpg",
+    "author": "Earth100",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Hong_Kong_Okra_Aug_25_2012.JPG",
+    "title": "Hong_Kong_Okra_Aug_25_2012.JPG",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Spinach": {
+    "src": "/crops/spinach.jpg",
+    "author": "Rasbak",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Spinacia_oleracea_Spinazie_bloeiend.jpg",
+    "title": "Spinacia_oleracea_Spinazie_bloeiend.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Barley": {
+    "src": "/crops/barley.jpg",
+    "author": "Cliff from Arlington, Virginia, USA",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Barley_(Hordeum_vulgare)_-_United_States_National_Arboretum_-_24_May_2009.jpg",
+    "title": "Barley_(Hordeum_vulgare)_-_United_States_National_Arboretum_-_24_May_2009.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Lettuce": {
+    "src": "/crops/lettuce.jpg",
+    "author": "en:User:Geographer",
+    "license": "CC BY 1.0",
+    "license_url": "https://creativecommons.org/licenses/by/1.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Iceberg_lettuce_in_SB.jpg",
+    "title": "Iceberg_lettuce_in_SB.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Maize (corn)": {
+    "src": "/crops/maize-corn.jpg",
+    "author": "Franz Eugen K\u00f6hler, K\u00f6hler's Medizinal-Pflanzen",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Zea_mays_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-283.jpg",
+    "title": "Zea_mays_-_K\u00f6hler\u2013s_Medizinal-Pflanzen-283.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Wheat": {
+    "src": "/crops/wheat.jpg",
+    "author": "kallerna",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Vehn%C3%A4pelto_6.jpg",
+    "title": "Vehn\u00e4pelto_6.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Common bean": {
+    "src": "/crops/common-bean.jpg",
+    "author": "Rasbak",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Snijboon_peulen_Phaseolus_vulgaris.jpg",
+    "title": "Snijboon_peulen_Phaseolus_vulgaris.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Onion": {
+    "src": "/crops/onion.jpg",
+    "author": "Colin",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Mixed_onions.jpg",
+    "title": "Mixed_onions.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Oats": {
+    "src": "/crops/oats.jpg",
+    "author": "Christian Fischer",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:AvenaSativa3.jpg",
+    "title": "AvenaSativa3.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Tomato": {
+    "src": "/crops/tomato.jpg",
+    "author": "Softeis",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Tomato_je.jpg",
+    "title": "Tomato_je.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Potato": {
+    "src": "/crops/potato.jpg",
+    "author": "Scott Bauer, USDA ARS",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Patates.jpg",
+    "title": "Patates.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Rice": {
+    "src": "/crops/rice.jpg",
+    "author": "Hpannu7",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Rice_Grains_.png",
+    "title": "Rice Grains .png",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Peas": {
+    "src": "/crops/peas.jpg",
+    "author": "Fumikas Sagisavas",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Green_pea_pods.jpg",
+    "title": "Green pea pods.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Radish": {
+    "src": "/crops/radish.jpg",
+    "author": "Barbara Regina Dietzsch",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Barbara_Regina_Dietsch_Radishes.jpg",
+    "title": "Barbara Regina Dietsch Radishes.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Rye": {
+    "src": "/crops/rye.jpg",
+    "author": "Roger Culos",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Secale_cereale_MHNT.BOT.2015.2.40.jpg",
+    "title": "Secale cereale MHNT.BOT.2015.2.40.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Sunflower": {
+    "src": "/crops/sunflower.jpg",
+    "author": "George Chernilevsky",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Sunflower_head_2026_G1.jpg",
+    "title": "Sunflower head 2026 G1.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Broccoli": {
+    "src": "/crops/broccoli.jpg",
+    "author": "HaJunkiyada",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Broccoli_from_San_Francisco_farmers_market.jpg",
+    "title": "Liat Portal for Foodie Disorder - Broccoli from San Francisco farmers market.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  },
+  "Chickpea": {
+    "src": "/crops/chickpea.jpg",
+    "author": "Roger Culos",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cicer_arietinum_noir_MHNT.BOT.2017.12.2.jpg",
+    "title": "Cicer arietinum noir MHNT.BOT.2017.12.2.jpg",
+    "changes": "Resized and converted to JPEG; displayed cropped."
+  }
+}

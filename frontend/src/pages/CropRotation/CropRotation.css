@@ -226,3 +226,19 @@ button.cr-small-tag { cursor: pointer; font: inherit; }
 .cr-market-price .cr-price-value { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 1.5rem; line-height: 1.4; }
 .cr-market-price .cr-price-value small { white-space: nowrap; }
 .cr-market-price .term-help-trigger { flex-shrink: 0; margin: 0; }
+
+.cr-horizon { display: flex; gap: 6px; padding: 4px; margin: 18px 0 10px; border-radius: 12px; background: var(--color-bg); border: 1px solid var(--color-border); }
+.cr-horizon button { flex: 1; min-height: 44px; padding: 10px; border: 0; border-radius: 8px; background: transparent; color: var(--color-text); font: 500 .875rem 'DM Sans', sans-serif; cursor: pointer; }
+.cr-horizon button[aria-pressed="true"] { background: var(--color-primary); color: var(--color-on-primary); }
+.cr-horizon button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.cr-period-meaning { color: var(--color-muted); font-size: .8125rem; line-height: 1.6; }
+.cr-forecast .cr-weather-grid .cr-typical-error { color: var(--color-text); font-size: .75rem; line-height: 1.5; }
+.cr-typical-error .term-help-trigger { width: 24px; height: 24px; min-height: 24px; }
+
+.cr-reliability { padding: 16px 0; border-top: 1px solid var(--color-border); }
+.cr-reliability summary { color: var(--color-primary); font-size: .875rem; font-weight: 500; cursor: pointer; }
+.cr-reliability p { color: var(--color-text); font-size: .8125rem; line-height: 1.65; }
+.cr-reliability dl { margin: 16px 0; }
+.cr-reliability dl > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: .8125rem; }
+.cr-reliability dt { color: var(--color-text); }
+.cr-reliability dd { margin: 0; font-weight: 500; color: var(--color-heading); }

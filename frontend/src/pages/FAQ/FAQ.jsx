@@ -12,7 +12,6 @@ const sections = [
     ['Why add my past crops and fertilisers?', 'Past crops and fertiliser affect soil health and the fit of future crops. Add what you know, even if it is only a few years.'],
   ] },
   { title: 'Choosing a crop', questions: [
-    ['What do green, yellow and red mean?', 'Green: the recorded soil and past crops fit. Yellow: some checks are missing or need attention. Red: a mismatch was found. Green does not guarantee a safe planting or harvest.'],
     ['How do I set my goals?', 'Move the four goal sliders. Others sliders adjust so the total stays at 100%.'],
     ['Does Earn more tell me my profit?', 'No. It gives example market prices a small part in choosing between crops with the same fit colour. What you earn also depends on your harvest, costs and sale price.'],
     ['Does my equipment matter?', <>Yes. Add it in <Link to="/myGear">My gear</Link>. We check whether harvesting may need different equipment or a contractor. </>],

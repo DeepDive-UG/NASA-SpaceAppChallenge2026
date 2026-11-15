@@ -10,14 +10,16 @@ import overlayPPT from "../../assets/myArea/1x/ppt.png";
 import overlaytmax from "../../assets/myArea/1x/tmax.png";
 //import overlaytmean_anom from "../../assets/myArea/1x/tmean_anom.png";
 import overlaytmin from "../../assets/myArea/1x/tmin.png";
+import overlayvpdmax from "../../assets/myArea/1x/vpdmax.png";
 import "./myArea.css";
 import { LEGENDS } from "./LEGENDS";
 
 const MASKS = [
     { id: 1, title: "Total Precipitation", image: overlayPPT, legend: LEGENDS.ppt },
-    { id: 2, title: "Temperature Max", image: overlaytmax, legend: LEGENDS.tmax },
-//{ id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
-    { id: 3, title: "Temperature Minimum", image: overlaytmin, legend: LEGENDS.tmin },
+    { id: 2, title: "Maximum Temperature", image: overlaytmax, legend: LEGENDS.tmax },
+    //{ id: 3, title: "Temperature Anomaly", image: overlaytmean_anom, legend: LEGENDS.tmean_anom },
+    { id: 3, title: "Minimum Temperature", image: overlaytmin, legend: LEGENDS.tmin },
+    { id: 5, title: "Maximum Vapor Pressure Deficit", image: overlayvpdmax, legend: LEGENDS.vpdmax },
 ];
 
 const Legend = ({ legend }) => {

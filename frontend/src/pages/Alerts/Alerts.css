@@ -10,4 +10,5 @@
 .close-alerts { float: right; }
 .home-environment select { max-width: 100%; padding: 8px; background: var(--color-card); color: var(--color-heading); border: 1px solid var(--color-border); border-radius: 8px; }
 .alert-text { white-space: pre-line; }
+.alerts-disclaimer { margin: 12px 0 14px; }
 @media (max-width: 720px) { .home-environment { padding: 16px; } }

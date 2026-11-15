@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Navigation from "../../components/Navigation/Navigation";
+import { fieldApi } from "../../lib/field";
 import "./myGear.css";
 
 const GEAR_TYPES = [
@@ -23,9 +24,24 @@ const STATUSES = [
 
 export default function MyGear() {
     const [gear, setGear] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
-    const nextId = useRef(1);
+
+    // wczytaj zapisany sprzęt z backendu
+    useEffect(() => {
+        const controller = new AbortController();
+        fieldApi("gear/", { signal: controller.signal })
+            .then((result) => setGear(result.gear))
+            .catch((e) => {
+                if (e.name !== "AbortError") setError(e.message);
+            })
+            .finally(() => {
+                if (!controller.signal.aborted) setLoading(false);
+            });
+        return () => controller.abort();
+    }, []);
 
     // zamknij dropdown po kliknięciu poza nim lub po Escape
     useEffect(() => {
@@ -41,13 +57,48 @@ export default function MyGear() {
         };
     }, []);
 
-    const addGear = (name) => {
-        setGear((prev) => [...prev, { id: nextId.current++, name, status: "available" }]);
+    const addGear = async (name) => {
         setOpen(false);
+        setError("");
+        try {
+            const { gear: created } = await fieldApi("gear/", { method: "POST", body: { name } });
+            setGear((prev) => [...prev, created]);
+        } catch (e) {
+            setError(e.message);
+        }
     };
 
-    const setStatus = (id, status) =>
+    // zmiana od razu na ekranie; jeśli zapis się nie uda, cofamy
+    const setStatus = async (id, status) => {
+        const previous = gear.find((g) => g.id === id)?.status;
+        if (!previous || previous === status) return;
+        setError("");
         setGear((prev) => prev.map((g) => (g.id === id ? { ...g, status } : g)));
+        try {
+            await fieldApi(`gear/${id}/`, { method: "PATCH", body: { status } });
+        } catch (e) {
+            setGear((prev) => prev.map((g) => (g.id === id ? { ...g, status: previous } : g)));
+            setError(e.message);
+        }
+    };
+
+    const removeGear = async (item) => {
+        if (!window.confirm(`Remove ${item.name}?`)) return;
+        setError("");
+        const index = gear.findIndex((g) => g.id === item.id);
+        setGear((prev) => prev.filter((g) => g.id !== item.id));
+        try {
+            await fieldApi(`gear/${item.id}/`, { method: "DELETE" });
+        } catch (e) {
+            // przywróć element na dawne miejsce
+            setGear((prev) => {
+                const next = [...prev];
+                next.splice(Math.min(index, next.length), 0, item);
+                return next;
+            });
+            setError(e.message);
+        }
+    };
 
     return (
         <div className="mg-layout">
@@ -87,8 +138,12 @@ export default function MyGear() {
                         )}
                     </div>
 
+                    {error && <p className="mg-error" role="alert">{error}</p>}
+
                     <section className="mg-card">
-                        {gear.length === 0 ? (
+                        {loading ? (
+                            <p className="mg-empty" role="status">Loading your gear…</p>
+                        ) : gear.length === 0 ? (
                             <p className="mg-empty">No gear yet. Use “Add gear” to add your first machine.</p>
                         ) : (
                             <ul className="mg-list">
@@ -96,18 +151,32 @@ export default function MyGear() {
                                     <li key={item.id} className="mg-row">
                                         <span className="mg-name">{item.name}</span>
 
-                                        <div className="mg-status" role="group" aria-label={`Status of ${item.name}`}>
-                                            {STATUSES.map((s) => (
-                                                <button
-                                                    key={s.id}
-                                                    type="button"
-                                                    className={`mg-status-btn ${s.id}${item.status === s.id ? " is-active" : ""}`}
-                                                    aria-pressed={item.status === s.id}
-                                                    onClick={() => setStatus(item.id, s.id)}
-                                                >
-                                                    {s.label}
-                                                </button>
-                                            ))}
+                                        <div className="mg-actions">
+                                            <div className="mg-status" role="group" aria-label={`Status of ${item.name}`}>
+                                                {STATUSES.map((s) => (
+                                                    <button
+                                                        key={s.id}
+                                                        type="button"
+                                                        className={`mg-status-btn ${s.id}${item.status === s.id ? " is-active" : ""}`}
+                                                        aria-pressed={item.status === s.id}
+                                                        onClick={() => setStatus(item.id, s.id)}
+                                                    >
+                                                        {s.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className="mg-remove"
+                                                aria-label={`Remove ${item.name}`}
+                                                title="Remove"
+                                                onClick={() => removeGear(item)}
+                                            >
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                    <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v5M14 11v5" />
+                                                </svg>
+                                            </button>
                                         </div>
                                     </li>
                                 ))}

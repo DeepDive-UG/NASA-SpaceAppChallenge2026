@@ -1,3 +1,9 @@
+.ma-legend-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
 .ma-layout {
     display: flex;
     min-height: 100vh;

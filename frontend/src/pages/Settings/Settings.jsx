@@ -8,6 +8,12 @@ const THEMES = [
     { id: "dark", label: "Dark" },
 ];
 
+const CONTRASTS = [
+    { id: "low", label: "Low" },
+    { id: "normal", label: "Normal" },
+    { id: "high", label: "High" },
+];
+
 const FONT_SIZES = [
     { id: "small", label: "Small" },
     { id: "medium", label: "Medium" },
@@ -34,7 +40,7 @@ function Segmented({ label, options, value, onChange }) {
 }
 
 export default function Settings() {
-    const { theme, setTheme, fontSize, setFontSize } = useSettings();
+    const { theme, setTheme, contrast, setContrast, fontSize, setFontSize } = useSettings();
 
     return (
         <div className="st-layout">
@@ -53,6 +59,14 @@ export default function Settings() {
                                 <span className="st-desc">Choose a light or dark appearance.</span>
                             </div>
                             <Segmented label="Theme" options={THEMES} value={theme} onChange={setTheme} />
+                        </div>
+
+                        <div className="st-row">
+                            <div className="st-text">
+                                <span className="st-label">Contrast</span>
+                                <span className="st-desc">Adjust visual contrast across text, surfaces, and borders.</span>
+                            </div>
+                            <Segmented label="Contrast" options={CONTRASTS} value={contrast} onChange={setContrast} />
                         </div>
 
                         <div className="st-row">

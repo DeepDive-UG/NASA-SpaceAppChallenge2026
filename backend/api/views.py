@@ -1,10 +1,15 @@
-from django.http import JsonResponse
-from django.views.decorators.http import require_GET
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest  
+from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
 from datetime import datetime, timezone, timedelta
 import math
 import re
+import json
+
+import hashlib
+from datetime import datetime, timezone
+from .prism_state import get_state_map, get_legend
 
 from .environment import active_alerts, usgs_features, current_fires
 
@@ -67,3 +72,146 @@ def environmental_response(key, retrieve):
             return JsonResponse({"status": "unavailable", "error": "Environmental source is unavailable"}, status=503)
         cache.set(key, payload, timeout=300)
     return JsonResponse({"status": "ok", "cache_seconds": 300, **payload})
+
+
+ALLOWED_VARIABLES = {"tmax", "tmin", "tmean", "tdmean", "ppt", "vpdmax", "vpdmin"}
+ 
+ 
+@require_GET
+def state_map(request):
+    """GET /api/state-map/?variable=tmax&lat=30.27&lon=-97.74&label=Austin -> image/png (stan wykrywany ze współrzędnych)
+    GET /api/state-map/?state=TX&variable=tmax -> image/png (bez znacznika)"""
+    variable = request.GET.get("variable", "tmax")
+    state = request.GET.get("state") or None
+    if not state and not (request.GET.get("lat") and request.GET.get("lon")):
+        return HttpResponseBadRequest("Podaj state albo lat i lon")
+    if variable not in ALLOWED_VARIABLES:  # wartość trafia do adresu URL, więc tylko z listy
+        return HttpResponseBadRequest("Nieobsługiwana zmienna")
+ 
+    marker = None
+    lat, lon = request.GET.get("lat"), request.GET.get("lon")
+    if lat and lon:
+        try:
+            marker = {"lat": float(lat), "lon": float(lon)}
+        except ValueError:
+            return HttpResponseBadRequest("lat/lon muszą być liczbami")
+        if request.GET.get("label"):
+            marker["label"] = request.GET["label"][:40]
+ 
+    raw_key = repr((variable, (state or "").lower(), marker, datetime.now(timezone.utc).strftime("%Y%m%d%H")))
+    key = "prism:" + hashlib.md5(raw_key.encode()).hexdigest()  # krótki klucz bezpieczny dla memcached
+    cached = cache.get(key)
+    if cached is None:
+        try:
+            cached = get_state_map(variable, state, marker=marker, return_date=True)
+        except ValueError as e:          # zły stan / współrzędne
+            return HttpResponseBadRequest(str(e))
+        except FileNotFoundError as e:   # brak mapy w ostatnich dniach
+            return HttpResponse(str(e), status=404)
+        cache.set(key, cached, 3600)
+ 
+    png, map_date = cached
+    resp = HttpResponse(png, content_type="image/png")
+    if map_date:
+        resp["X-Prism-Date"] = map_date  # data mapy, odczytywana przez frontend
+    resp["Cache-Control"] = "public, max-age=3600"
+    return resp
+ 
+ 
+@require_GET
+def state_legend(request):
+    """GET /api/state-legend/?variable=tmean -> image/png (legenda wycięta z mapy PRISM danej zmiennej)"""
+    variable = request.GET.get("variable", "tmax")
+    if variable not in ALLOWED_VARIABLES:
+        return HttpResponseBadRequest("Nieobsługiwana zmienna")
+ 
+    key = "prism-legend:" + hashlib.md5(
+        repr((variable, datetime.now(timezone.utc).strftime("%Y%m%d%H"))).encode()).hexdigest()
+    png = cache.get(key)
+    if png is None:
+        try:
+            png, _ = get_legend(variable)
+        except FileNotFoundError as e:
+            return HttpResponse(str(e), status=404)
+        except ValueError as e:
+            return HttpResponseBadRequest(str(e))
+        cache.set(key, png, 3600)
+ 
+    resp = HttpResponse(png, content_type="image/png")
+    resp["Cache-Control"] = "public, max-age=3600"
+    return resp
+
+from .models import Gear
+ 
+# Te same typy co GEAR_TYPES we froncie (MyGear.jsx)
+GEAR_TYPES = {
+    "Tractor", "Combine harvester", "Plough", "Seed drill", "Sprayer",
+    "Fertilizer spreader", "Cultivator", "Harrow", "Mower", "Baler", "Trailer",
+}
+STATUSES = {"available", "unavailable"}
+MAX_GEAR = 200  # limit na użytkownika/sesję
+ 
+ 
+def _scope(request):
+    """Czyj sprzęt: zalogowanego użytkownika albo bieżącej sesji gościa."""
+    if request.user.is_authenticated:
+        return {"owner": request.user}
+    if not request.session.session_key:
+        request.session.create()
+    return {"owner": None, "session_key": request.session.session_key}
+ 
+ 
+def _dump(g):
+    return {"id": g.id, "name": g.name, "status": g.status}
+ 
+ 
+def _error(message, status):
+    # fieldApi we froncie oczekuje JSON-a, także przy błędach: {"error": "..."}
+    return JsonResponse({"error": message}, status=status)
+ 
+ 
+def _body(request):
+    try:
+        data = json.loads(request.body or b"{}")
+    except ValueError:
+        return None
+    return data if isinstance(data, dict) else None
+ 
+ 
+@require_http_methods(["GET", "POST"])
+def gear_list(request):
+    """GET /api/gear/ -> {"gear": [...]}   POST /api/gear/ {"name": "Tractor"} -> 201 {"gear": {...}}"""
+    scope = _scope(request)
+    if request.method == "GET":
+        return JsonResponse({"gear": [_dump(g) for g in Gear.objects.filter(**scope)]})
+ 
+    data = _body(request)
+    if data is None:
+        return _error("Invalid request.", 400)
+    name = data.get("name")
+    if name not in GEAR_TYPES:
+        return _error("Unknown gear type.", 400)
+    if Gear.objects.filter(**scope).count() >= MAX_GEAR:
+        return _error("Gear limit reached.", 400)
+    gear = Gear.objects.create(name=name, **scope)
+    return JsonResponse({"gear": _dump(gear)}, status=201)
+ 
+ 
+@require_http_methods(["PATCH", "DELETE"])
+def gear_item(request, pk):
+    """PATCH /api/gear/<id>/ {"status": "unavailable"}   DELETE /api/gear/<id>/ -> {"ok": true}"""
+    gear = Gear.objects.filter(pk=pk, **_scope(request)).first()
+    if gear is None:
+        return _error("Gear not found.", 404)
+ 
+    if request.method == "DELETE":
+        gear.delete()
+        return JsonResponse({"ok": True})  # JSON, nie 204: fieldApi wymaga odpowiedzi JSON
+ 
+    data = _body(request)
+    status = data.get("status") if data else None
+    if status not in STATUSES:
+        return _error("Invalid status.", 400)
+    gear.status = status
+    gear.save(update_fields=["status"])
+    return JsonResponse({"gear": _dump(gear)})

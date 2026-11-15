@@ -1,3 +1,36 @@
+.mg-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mg-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.mg-remove:hover,
+.mg-remove:focus-visible {
+    opacity: 1;
+    color: #b42318;
+    border-color: currentColor;
+}
+
+.mg-error {
+    color: #b42318;
+    margin: 0.5rem 0;
+}
+
 .mg-layout {
     display: flex;
     min-height: 100vh;

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import health, alerts, water, fires
+from .views import health, alerts, water, fires, state_map, state_legend, gear_item, gear_list
 from rag.views import chat, status as rag_status
 from .account import account, change_password, sign_out
 from .field import field_profile
@@ -18,4 +18,8 @@ urlpatterns = [
     path("environment/alerts/", alerts, name="environment-alerts"),
     path("environment/water/", water, name="environment-water"),
     path("environment/fires/", fires, name="environment-fires"),
+    path("state-map/", state_map, name="state-map"),
+    path("state-legend/", state_legend, name="state-legend"),
+    path("gear/", gear_list, name="gear-list"),
+    path("gear/<int:pk>/", gear_item, name="gear-item"),
 ]

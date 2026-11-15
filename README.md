@@ -34,7 +34,7 @@ The backend uses Django, the browser app uses React and Vite, and the Android/iO
 - **ML:** histogram gradient boosting for estimates and quantiles, compared with a historical seasonal baseline. Validation selects the method for each variable and time window. Seven outputs cover air temperature (average/min/max), soil temperature, rain and soil moisture near seeds and roots.
 - **RAG:** Ollama `ministral-3:3b`, `embeddinggemma`, and hybrid text/vector retrieval from `data/`.
 
-Trained models are saved as `.joblib` files in `backend/analytics/artifacts/`. Training code, data provenance and evaluation reports are in `ml/`. Raw NASA downloads stay outside Git. Crop ranking uses rules and goal weights; it is not a trained yield or profit model.
+Trained models are saved as `.joblib` files in `backend/analytics/artifacts/`. Training code, data provenance and evaluation reports are in `ml/`. Raw NASA downloads stay outside Git. A small processed 30-day input sample is included in `backend/analytics/demo/` so Growing Conditions works on other computers without the training data. It generates archived estimates with their original dates. Set `CROPTIPS_OBSERVATIONS_PATH` to use a different observation table. Crop ranking uses rules and goal weights; it is not a trained yield or profit model.
 
 ## Accuracy and demo limits
 

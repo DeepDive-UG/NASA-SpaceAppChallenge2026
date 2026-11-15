@@ -1,0 +1,14 @@
+{
+  "purpose": "Portable archived inputs for the California demo; not a current weather feed or training dataset",
+  "sources": [
+    "NASA MERRA-2",
+    "NASA GPM IMERG",
+    "NASA SMAP L4"
+  ],
+  "first_date": "2026-09-02",
+  "last_date": "2026-10-01",
+  "locations": 48,
+  "rows": 1440,
+  "source_table_sha256": "0b4167f6a8f4d6ef184363e2ca79871223ca7ad50666784150903c019c8d7f8d",
+  "sample_sha256": "13c281f82e5bd369bd336ed3f05a3a03a838655c42188217985b29460af8f679"
+}

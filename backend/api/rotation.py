@@ -33,7 +33,7 @@ def observation_table(path, modified):
 def outlook_for(field):
     if field.get("latitude") is None or field.get("longitude") is None:
         return {"available": False, "reason": "Add your field location in My field to obtain regional conditions."}
-    path = Path(os.environ.get("CROPTIPS_OBSERVATIONS_PATH", str(Path.home() / "CropTips-data/california/ml100-work/daily.csv.gz")))
+    path = Path(os.environ.get("CROPTIPS_OBSERVATIONS_PATH", str(Path(__file__).resolve().parents[1] / "analytics/demo/observations.csv.gz")))
     if not path.exists():
         return {"available": False, "reason": "Recent environmental observations are not available yet. No weather values have been assumed."}
     try:

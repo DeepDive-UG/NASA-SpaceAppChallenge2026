@@ -38,3 +38,16 @@ class RotationLogicTests(SimpleTestCase):
         self.assertFalse(result['current'])
         self.assertEqual(result['conditions']['soil_temperature']['mean_estimate'], 20)
         self.assertEqual(result['start_date'], '2026-10-02')
+
+    def test_bundled_observations_generate_all_seven_conditions(self):
+        import os
+        from unittest.mock import patch
+        from .rotation import outlook_for
+        with patch.dict(os.environ):
+            os.environ.pop('CROPTIPS_OBSERVATIONS_PATH', None)
+            result = outlook_for(self.field)
+        prediction = result.get('prediction') or result.get('last_model_run', {}).get('prediction')
+        self.assertIsNotNone(prediction, result)
+        self.assertEqual(len(prediction['whole_period']['conditions']), 7)
+        self.assertIn('soil_temperature', prediction['periods'][0]['conditions'])
+        self.assertEqual(len(prediction['periods']), 10)

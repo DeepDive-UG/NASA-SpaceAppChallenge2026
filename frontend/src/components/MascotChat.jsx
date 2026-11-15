@@ -4,7 +4,7 @@ import './MascotChat.css'
 export default function MascotChat({ src = '/Scene1.gif' }) {
   const [open, setOpen] = useState(false)
   const [answer, setAnswer] = useState(null)
-  const [hidden, setHidden] = useState(false)
+  const [hidden, setHidden] = useState(true)
 
   function close() {
     setOpen(false)
@@ -18,7 +18,7 @@ export default function MascotChat({ src = '/Scene1.gif' }) {
 
   return (
     <div
-      className="mascot-widget"
+      className={`mascot-widget${hidden ? ' is-hidden' : ''}`}
       onKeyDown={event => { if (event.key === 'Escape') close() }}
     >
       {open && !answer && <ChatBubble onClose={close} onAnswer={setAnswer} />}

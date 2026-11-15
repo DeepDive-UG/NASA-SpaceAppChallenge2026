@@ -51,3 +51,23 @@ Green result cards now mean **good soil and rotation fit only**: known class I/I
 ## Market priority
 
 Farm goals include `yield`, `soilHealth`, `water` and `profit`, totaling 100. Old profiles default `profit` to zero. `profit` is displayed as “Earn more”. The ranking adds up to ten price-preference points scaled by this weight, comparing USD per metric tonne within each field-fit colour. Prices come from `frontend/public/data/crop-market-values.json`; its illustrative status, original units, region and dates remain visible. Crop-specific bushel weights follow USDA AMS Grain Inspection Handbook Book II. Prices are not live quotes or harvest-time forecasts. Missing market coverage stays unknown. No revenue, yield, production costs or net profit are predicted.
+
+## Crop analysis coverage
+
+Candidates now expose `goal_effects`, with a saved priority weight, a check status and a plain-language explanation. These are screening reasons, not predicted changes in soil quality, water consumption, yield or profit.
+
+| Input | Current use | Limit |
+|---|---|---|
+| Soil class, texture and pH | Crop compatibility checks; unsuitable records can mark a mismatch | Does not measure drainage, salinity or fertility |
+| Latest recorded crop families | Rotation diversification heuristic, weighted by the soil goal | Does not establish crop-specific disease break lengths |
+| Fertiliser history | Recorded-use context and known applied nitrogen amounts | Not nutrients remaining in soil or a fertiliser prescription |
+| Air outlook | Environmental temperature descriptors, only with current inputs | No seedling frost guarantee |
+| Soil outlook | First 10-day context plus 100-day summary and charts, independently of air temperature | SMAP top-layer research estimate, not a sowing-depth probe; no crop-specific germination clearance |
+| Surface/root-zone moisture | Separate 0–5 cm and 0–100 cm regional estimates | No automatic irrigation quantity or crop water-saving score |
+| Equipment | Harvest readiness, weighted by the harvest goal | No yield increase prediction |
+| Water source/station | Supply checks and dated station readings | Nearby river flow does not measure a well or prove entitlement |
+| Market prices | Small price preference weighted by Earn more | Illustrative price per mass, not costs, revenue or net profit |
+| Crop growth-day descriptors | Warning when a crop can outlast the 100-day outlook | Variety and local planting calendar still require checking |
+| Current crop | Warning when a sector is recorded as occupied | User must confirm when it will be available |
+
+`soil_conditions.current` is false for archived outlooks. Archived soil values are shown with their original dates and do not enter planting-today temperature screening. The current suggestion list remains a heuristic shortlist; it is not a globally optimized multi-year rotation. Pests, disease pressure, salinity, measured soil nutrients, cultivar-specific requirements, confirmed irrigation supply and validated future weather are not fully assessed.

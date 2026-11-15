@@ -19,6 +19,14 @@ def sample_history(days=160):
 
 
 class FeatureTests(unittest.TestCase):
+    def test_soil_temperature_target_converts_kelvin_without_changing_inputs(self):
+        values = pd.Series([273.15, 283.15, 293.15, 303.15])
+        result = future_target(values, 1, 2, "mean", offset=-273.15)
+        self.assertAlmostEqual(result.iloc[0], 15.0)
+        self.assertAlmostEqual(result.iloc[1], 25.0)
+        self.assertTrue(np.isnan(result.iloc[2]))
+        self.assertAlmostEqual(values.iloc[0], 273.15)
+
     def test_future_observations_do_not_change_past_features(self):
         history = sample_history()
         expected = feature_table(history).iloc[50]

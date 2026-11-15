@@ -1,6 +1,6 @@
 """Feature, target, and horizon definitions."""
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
 LOOKBACK_DAYS = 30
 WINDOWS = [(start, start + 9) for start in range(1, 101, 10)] + [(1, 100)]
 OBSERVATIONS = [
@@ -12,6 +12,8 @@ TARGETS = {
     "temperature_mean": {"column": "temperature_mean_c", "aggregation": "mean", "units": "degC"},
     "temperature_min": {"column": "temperature_min_c", "aggregation": "min", "units": "degC"},
     "temperature_max": {"column": "temperature_max_c", "aggregation": "max", "units": "degC"},
+    "soil_temperature": {"column": "soil_temperature_k", "aggregation": "mean", "offset": -273.15, "units": "degC", "source_variable": "SMAP soil_temp_layer1", "layer_thickness_m": 0.0988, "sampling": "One 13:30 UTC sample per day; not a daily mean or daily extreme"},
+    "surface_soil_moisture": {"column": "surface_moisture", "aggregation": "mean", "units": "m3 m-3", "depth_cm": [0, 5]},
     "precipitation": {"column": "precipitation_mm", "aggregation": "sum", "units": "mm"},
     "soil_moisture": {"column": "rootzone_moisture", "aggregation": "mean", "units": "m3 m-3"},
 }

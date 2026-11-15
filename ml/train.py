@@ -40,7 +40,7 @@ def build_samples(daily: pd.DataFrame):
         for start, end in WINDOWS:
             frame = add_window(features, start, end)
             for target, specification in TARGETS.items():
-                frame[f"target_{target}"] = future_target(source[specification["column"]], start, end, specification["aggregation"])
+                frame[f"target_{target}"] = future_target(source[specification["column"]], start, end, specification["aggregation"], specification.get("offset", 0))
             frame = frame.loc[eligible].dropna()
             frame["issue_date"] = frame.index
             frame["label_end"] = frame.index + pd.Timedelta(days=100)
@@ -70,7 +70,7 @@ def metric_set(y, result, reference):
     return {"count": len(y), "mae": float(np.mean(np.abs(y - mean))), "rmse": float(np.sqrt(np.mean((y - mean) ** 2))), "bias": float(np.mean(mean - y)), "baseline_mae": float(np.mean(np.abs(y - reference[:, 0]))), "interval_80_coverage": float(np.mean((y >= quantiles[:, 0]) & (y <= quantiles[:, 2]))), "interval_80_mean_width": float(np.mean(quantiles[:, 2] - quantiles[:, 0])), "pinball_loss": {str(q): float(mean_pinball_loss(y, quantiles[:, i], alpha=q)) for i, q in enumerate((0.1, 0.5, 0.9))}}
 
 
-def main(work: Path, artifacts: Path, report_directory: Path):
+def main(work: Path, artifacts: Path, report_directory: Path, targets=None, examples=None):
     artifacts.mkdir(parents=True, exist_ok=True)
     report_directory.mkdir(parents=True, exist_ok=True)
     daily = pd.read_csv(work / "daily.csv.gz", parse_dates=["date"])
@@ -81,10 +81,31 @@ def main(work: Path, artifacts: Path, report_directory: Path):
     test = data[data.split.eq("test")]
     xtrain, xvalidation, xtest = (frame[FEATURES] for frame in (train, validation, test))
     mtrain, mvalidation, mtest = (reference_metadata(frame.issue_date, frame[FEATURES]) for frame in (train, validation, test))
+    targets = set(TARGETS) if targets is None else set(targets)
+    if not targets or not targets <= set(TARGETS):
+        raise ValueError("Choose supported training targets")
+    previous_manifest = json.loads((artifacts / "manifest.json").read_text()) if targets != set(TARGETS) else None
+    if previous_manifest and (previous_manifest["features"] != FEATURES or previous_manifest["source_manifest_sha256"] != hashlib.sha256((work / "data_manifest.json").read_bytes()).hexdigest()):
+        raise RuntimeError("Reused artifacts must have identical features and source data")
+    previous_comparison = json.loads((report_directory / "validation_selection.json").read_text()) if previous_manifest else {}
+    arguments = dict(max_iter=120, max_leaf_nodes=15, min_samples_leaf=40, learning_rate=0.05, l2_regularization=1, early_stopping=False, random_state=42)
     predictions = {}
     candidate_report = {}
     all_bundles = {}
     for target in TARGETS:
+        if target not in targets:
+            if previous_manifest["targets"][target] != TARGETS[target]:
+                raise RuntimeError(f"Reused target definition changed: {target}")
+            artifact = previous_manifest["artifacts"][target]
+            path = artifacts / artifact["file"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != artifact["sha256"]:
+                raise RuntimeError(f"Reused model checksum mismatch: {target}")
+            restored = joblib.load(path)
+            predictions[target] = predict_target(restored, xtest, mtest)
+            candidate_report[target] = previous_comparison[target]
+            all_bundles[target] = restored
+            print(f"Reused verified artifact: {target}", flush=True)
+            continue
         ytrain = train[f"target_{target}"].to_numpy()
         yvalidation = validation[f"target_{target}"].to_numpy()
         baseline = SeasonalBaseline().fit(mtrain, ytrain)
@@ -136,15 +157,16 @@ def main(work: Path, artifacts: Path, report_directory: Path):
             target_metrics["cold_subset"] = {"definition": "Observed minimum hourly mean regional 2 m air temperature <= 0 degC; not field frost", "count": int(cold.sum()), "mae": float(np.mean(np.abs(y[cold] - result["mean"][cold]))) if cold.any() else None}
         metrics[target] = target_metrics
     versions = {name: importlib.metadata.version(name) for name in ("numpy", "pandas", "scikit-learn", "scipy", "joblib", "threadpoolctl")}
-    metadata = {"schema_version": SCHEMA_VERSION, "model_version": "california-100d-v1", "python_version": platform.python_version(), "dependencies": versions, "features": FEATURES, "windows": WINDOWS, "targets": TARGETS, "data_start": manifest["first_date"], "data_end": manifest["last_date"], "source_versions": manifest["source_versions"], "publication_latency_reconstructed": False, "forecast_inputs_used": False, "landfire_used": False, "source_manifest_sha256": hashlib.sha256((work / "data_manifest.json").read_bytes()).hexdigest(), "artifacts": {target: {"file": f"{target}.joblib", "sha256": hashlib.sha256((artifacts / f"{target}.joblib").read_bytes()).hexdigest()} for target in TARGETS}}
+    metadata = {"schema_version": SCHEMA_VERSION, "model_version": "california-100d-v2", "python_version": platform.python_version(), "dependencies": versions, "features": FEATURES, "windows": WINDOWS, "targets": TARGETS, "data_start": manifest["first_date"], "data_end": manifest["last_date"], "source_versions": manifest["source_versions"], "publication_latency_reconstructed": False, "forecast_inputs_used": False, "landfire_used": False, "source_manifest_sha256": hashlib.sha256((work / "data_manifest.json").read_bytes()).hexdigest(), "artifacts": {target: {"file": f"{target}.joblib", "sha256": hashlib.sha256((artifacts / f"{target}.joblib").read_bytes()).hexdigest()} for target in TARGETS}}
+    metadata["target_training"] = {target: {"trained_in_this_run": target in targets, "artifact_model_version": "california-100d-v2" if target in targets else previous_manifest.get("target_training", {}).get(target, {}).get("artifact_model_version", previous_manifest["model_version"])} for target in TARGETS}
     write_json(artifacts / "manifest.json", metadata)
     write_json(report_directory / "metrics.json", metrics)
     write_json(report_directory / "validation_selection.json", candidate_report)
     write_json(report_directory / "splits.json", {split: {"rows": len(frame), "issue_start": str(frame.issue_date.min().date()), "issue_end": str(frame.issue_date.max().date()), "last_label_date": str(frame.label_end.max().date()), "locations": int(frame.cell.nunique())} for split, frame in (("train", train), ("validation", validation), ("test", test))})
     write_json(report_directory / "data_provenance.json", manifest)
     write_json(report_directory / "training_config.json", {"seed": 42, "issue_sampling": "One UTC issue date per seven days", "horizon_days": 100, "history_days": 30, "model_parameters": arguments, "selection": "Validation MAE per target and forecast window; no test-driven selection", "intervals": "Quantiles 0.1, 0.5, 0.9 with nonnegative validation residual expansion; correlated windows and distribution shift preclude a finite-sample coverage guarantee", "spatial_holdout": "25% of sampled MERRA-2 cells never enter training or validation", "temperature_postprocessing": "Minimum <= mean <= maximum, applied to point estimates and corresponding quantiles", "inputs": "Observed daily environmental conditions and calendar only; no future weather forecasts or LANDFIRE layers"})
-    example_directory = work / "validation"
-    example_directory.mkdir(exist_ok=True)
+    example_directory = examples or work / "validation"
+    example_directory.mkdir(parents=True, exist_ok=True)
     example_cell = int(test[test.spatial_split.eq("known")].cell.iloc[0])
     issue_date = test[(test.cell == example_cell)].issue_date.iloc[0]
     example = daily[(daily.cell == example_cell) & (daily.date <= issue_date)].sort_values("date").tail(30)
@@ -158,6 +180,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--artifacts", type=Path, default=Path(__file__).resolve().parents[1] / "backend/analytics/artifacts")
+    parser.add_argument("--targets", nargs="+", choices=list(TARGETS))
+    parser.add_argument("--examples", type=Path)
     parser.add_argument("--reports", type=Path, default=Path(__file__).resolve().parent / "reports")
     args = parser.parse_args()
-    main(args.work, args.artifacts, args.reports)
+    main(args.work, args.artifacts, args.reports, args.targets, args.examples)

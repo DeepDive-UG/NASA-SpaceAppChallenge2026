@@ -26,10 +26,12 @@ def main(artifacts: Path, examples: Path):
         for target, prediction in conditions.items():
             lo, hi = prediction["interval_80"]
             assert lo <= prediction["median_estimate"] <= hi
-            if target in ("precipitation", "soil_moisture"):
+            if target in ("precipitation", "soil_moisture", "surface_soil_moisture"):
                 assert lo >= 0
-            if target == "soil_moisture":
+            if target in {"soil_moisture", "surface_soil_moisture"}:
                 assert hi <= 1
+        assert conditions["soil_temperature"]["units"] == "degC"
+        assert -123.15 < conditions["soil_temperature"]["mean_estimate"] < 106.85
     try:
         predictor.predict(history, str((pd.Timestamp(expected["planting_date"]) + pd.Timedelta(days=1)).date()))
     except ValueError:

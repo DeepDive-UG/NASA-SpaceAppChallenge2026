@@ -7,14 +7,56 @@ import "./myArea.css";
 // gradients were hardcoded in LEGENDS.js and needed to be updated manually, the pulled legend seems more readable
 
 const MASKS = [
-    { id: 1, title: "Total Precipitation", variable: "ppt"},
-    { id: 2, title: "Temperature Max", variable: "tmax"},
-    { id: 3, title: "Temperature Minimum", variable: "tmin"},
+    {
+        id: 1,
+        title: "Total Precipitation",
+        variable: "ppt",
+        description:
+            "Total rain and snowfall across California. Shows which regions get the most water.",
+    },
+    {
+        id: 2,
+        title: "Temperature Max",
+        variable: "tmax",
+        description:
+            "Highest daily temperatures across California. Hot areas face more crop heat stress.",
+    },
+    {
+        id: 3,
+        title: "Temperature Minimum",
+        variable: "tmin",
+        description:
+            "Lowest daily temperatures across California. Helps spot frost risk.",
+    },
     // tmean, tdmean, vpdmax, vpdmin: bez wpisu w LEGENDS.js legenda jest wycinana z mapy PRISM (/api/state-legend/)
-    { id: 4, title: "Temperature Mean", variable: "tmean"},
-    { id: 5, title: "Dew Point Mean", variable: "tdmean"},
-    { id: 6, title: "Vapor Pressure Deficit Max", variable: "vpdmax"},
-    { id: 7, title: "Vapor Pressure Deficit Min", variable: "vpdmin"},
+    {
+        id: 4,
+        title: "Temperature Mean",
+        variable: "tmean",
+        description:
+            "Average daily temperature across California. Shows the general growing climate.",
+    },
+    {
+        id: 5,
+        title: "Dew Point Mean",
+        variable: "tdmean",
+        description:
+            "Average air moisture across California. Higher values mean more humid air.",
+    },
+    {
+        id: 6,
+        title: "Vapor Pressure Deficit Max",
+        variable: "vpdmax",
+        description:
+            "Peak dryness of the air, usually in the afternoon. High values mean higher drought stress for crops.",
+    },
+    {
+        id: 7,
+        title: "Vapor Pressure Deficit Min",
+        variable: "vpdmin",
+        description:
+            "Lowest dryness of the air, usually at night. Shows when crops can recover.",
+    },
 ];
 
 const DEFAULT_STATE = "CA"; // pokazywany, gdy pole nie ma jeszcze współrzędnych
@@ -102,22 +144,31 @@ const MyArea = () => {
                     <h1 className="ma-title">My area</h1>
 
                     <section className="ma-viewer" aria-label="Map gallery">
-                        <div className="ma-image-frame">
-                            <div className="ma-image-date">
-                                {map.date}
-                            </div>
-                            <div className="ma-image-copyright">
-                                Copyright &copy; 2026 PRISM/NACSE, Oregon State University
-                            </div>
-                            {map.src && (
-                                <img
-                                    src={map.src}
-                                    alt={`${activeMask.title} map`}
-                                    className="ma-image ma-base-layer"
-                                />
+                        <div className="ma-map-column">
+                            {activeMask && (
+                                <div className="ma-overlay-description" aria-live="polite">
+                                    <h2 className="ma-overlay-title">{activeMask.title}</h2>
+                                    <p className="ma-overlay-text">{activeMask.description}</p>
+                                </div>
                             )}
-                            {!map.src && !map.error && <p role="status">Loading map…</p>}
-                            {map.error && <p role="alert">The map is unavailable right now. Please try again later.</p>}
+
+                            <div className="ma-image-frame">
+                                <div className="ma-image-date">
+                                    {map.date}
+                                </div>
+                                <div className="ma-image-copyright">
+                                    Copyright &copy; 2026 PRISM/NACSE, Oregon State University
+                                </div>
+                                {map.src && (
+                                    <img
+                                        src={map.src}
+                                        alt={`${activeMask.title} map`}
+                                        className="ma-image ma-base-layer"
+                                    />
+                                )}
+                                {!map.src && !map.error && <p role="status">Loading map…</p>}
+                                {map.error && <p role="alert">The map is unavailable right now. Please try again later.</p>}
+                            </div>
                         </div>
 
                         <aside className="ma-controls" aria-label="Map overlays">

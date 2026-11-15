@@ -192,3 +192,26 @@ button.cr-small-tag { cursor: pointer; font: inherit; }
 .cr-forecast-caption span { background: var(--color-water-soft); color: var(--color-water); }
 .cr-chart-line { stroke: var(--color-water); }
 .cr-chart-reference { stroke: var(--color-harvest); }
+
+.cr-forecast .cr-weather-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.cr-forecast .cr-weather-grid > div { padding: 20px 16px; text-align: center; min-width: 0; align-content: start; gap: 14px; }
+.cr-forecast .cr-weather-grid > div:nth-child(even) { padding-left: 16px; }
+.cr-forecast .cr-weather-grid > div:nth-last-child(-n+2) { border-bottom: 1px solid var(--color-border); }
+.cr-forecast .cr-weather-grid > div:last-child:nth-child(odd) { grid-column: 1 / -1; border-bottom: 0; }
+.cr-forecast .cr-weather-grid strong { line-height: 1.3; }
+.cr-forecast .cr-weather-grid small { font-size: .875rem; white-space: nowrap; }
+.cr-forecast .cr-weather-grid .cr-forecast-anomaly { line-height: 1.6; overflow-wrap: anywhere; }
+
+.cr-data-explainer { padding: 18px; margin: 18px 0; background: var(--color-water-soft); border-radius: 10px; }
+.cr-data-explainer h3 { color: var(--color-water); font-size: 1rem; font-weight: 500; margin: 0 0 10px; }
+.cr-data-explainer p { font-size: .9375rem; line-height: 1.65; margin: 10px 0 0; }
+
+.cr-market-price { padding: 16px; margin: 18px 0; background: var(--color-harvest-soft); border-radius: 10px; }
+.cr-market-price > span { color: var(--color-harvest); font-size: .8125rem; }
+.cr-market-price strong small { font: 400 .875rem 'DM Sans',sans-serif; }
+.cr-market-price p, .cr-market-price small { font-size: .8125rem; line-height: 1.6; color: var(--color-text); }
+.cr-market-price summary { margin-top: 12px; }
+.cr-no-price, .cr-market-note { color: var(--color-muted); font-size: .8125rem; line-height: 1.65; margin: 14px 0; }
+.cr-goal-summary { display: grid; gap: 12px; margin: 18px 0; }
+.cr-goal-summary > div { display: flex; justify-content: space-between; gap: 16px; font-size: .9375rem; }
+.cr-goal-summary strong { font-weight: 500; color: var(--color-primary); }

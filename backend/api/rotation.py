@@ -10,6 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from analytics.crops import FOOD_CROPS, catalogue, screen_temperature
 from .field import profile_for
+from .market import financial_rank, market_context, price_catalogue
 
 
 @require_GET
@@ -18,6 +19,8 @@ def crops(request):
     rows = [row for row in catalogue() if row["scientific_name"] in FOOD_CROPS]
     if query:
         rows = [row for row in rows if query in (row["name"] + " " + row["scientific_name"] + " " + row["common_names"] + " " + row["family"]).casefold()]
+    market_data, market_rows = price_catalogue()
+    rows = [{**row, "market": market_context(row, market_data, market_rows)} for row in rows]
     return JsonResponse({"crops": sorted(rows, key=lambda row: row["name"]), "source": "data/EcoCrop_DB.csv"})
 
 
@@ -210,6 +213,9 @@ def rotation(request):
             raise ValueError("Choose one sector or at least two sectors for a mix.")
         if scope == "whole":
             selected = [{"id": None, "name": stored.data["name"], "area_ha": stored.data["area_ha"], "soil_ph": None}]
+        planning_goal = "earn_more" if stored.data.get("farm_profile", {}).get("goals", {}).get("profit", 0) > 0 or stored.data["goal"] == "profit" else "field"
+        if planning_goal not in {"field", "earn_more"}:
+            raise ValueError("Choose a valid planning goal.")
         crop_id = payload.get("crop_id")
         choices = [row for row in catalogue() if row["scientific_name"] in FOOD_CROPS and (not crop_id or row["id"] == crop_id)]
         if not choices:
@@ -219,11 +225,22 @@ def rotation(request):
     climate = outlook_for(stored.data)
     from .rotation_resources import resource_context
     resources = resource_context(request, stored.data)
+    market_data, market_rows = price_catalogue()
     groups, used = [], set()
     for sector in selected:
         ranked = [candidate_result(crop, stored.data, sector, climate, resources) for crop in choices]
-        ranked.sort(key=lambda row: (row["status"] == "red", -row["ranking_score"] + (5 if scope == "mix" and row["crop"]["id"] in used else 0), row["crop"]["name"]))
+        for candidate in ranked:
+            candidate["market"] = market_context(candidate["crop"], market_data, market_rows)
+        if planning_goal == "earn_more":
+            weight = stored.data.get("farm_profile", {}).get("goals", {}).get("profit", 100) / 100
+            maximum_price = max((row["market"]["usd_per_tonne"] for row in ranked if row["market"]), default=1)
+            for candidate in ranked:
+                if candidate["market"]:
+                    candidate["ranking_score"] += 10 * weight * candidate["market"]["usd_per_tonne"] / maximum_price
+            ranked.sort(key=financial_rank)
+        else:
+            ranked.sort(key=lambda row: (row["status"] == "red", -row["ranking_score"] + (5 if scope == "mix" and row["crop"]["id"] in used else 0), row["crop"]["name"]))
         count = 1 if crop_id or scope == "mix" else 4
         groups.append({"sector": sector, "candidates": ranked[:count]})
         used.add(ranked[0]["crop"]["id"])
-    return JsonResponse({"resources": resources, "field_revision": stored.revision, "goal": stored.data["goal"], "goal_weights": stored.data.get("farm_profile", {}).get("goals"), "planting_date": date.today().isoformat(), "horizon_days": 100, "outlook": climate, "groups": groups, "basis": "Saved field records and EcoCrop descriptors. Family diversification is a screening heuristic, not a validated rotation or yield model.", "limitations": ["Estimates do not replace human expertise or local agronomic advice.", "No green planting clearance is issued without a validated current forecast and crop-specific frost and water thresholds.", "Prices and financial profitability are not assessed."]})
+    return JsonResponse({"planning_goal": planning_goal, "market_basis": {"is_example": market_data.get("isMockData", True), "as_of": market_data.get("updatedAt"), "note": "Example prices, not live quotes. Prices may change before harvest. The Earn more weight adds a small price-per-tonne preference within each field-fit colour. No yield, costs or future sale prices are predicted."}, "resources": resources, "field_revision": stored.revision, "goal": stored.data["goal"], "goal_weights": stored.data.get("farm_profile", {}).get("goals"), "planting_date": date.today().isoformat(), "horizon_days": 100, "outlook": climate, "groups": groups, "basis": "Saved field records and EcoCrop descriptors. Family diversification is a screening heuristic, not a validated rotation or yield model.", "limitations": ["Estimates do not replace human expertise or local agronomic advice.", "No green planting clearance is issued without a validated current forecast and crop-specific frost and water thresholds.", "Market figures are illustrative. Prices are not a prediction of profit or harvest-time selling prices."]})

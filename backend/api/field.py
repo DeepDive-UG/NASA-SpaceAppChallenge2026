@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from .models import FieldProfile
 
 TEXTURES = {"unknown", "sand", "sandy_loam", "loam", "silt_loam", "clay_loam", "clay"}
-GOALS = {"soil", "water", "harvest", "diversity"}
+GOALS = {"soil", "water", "harvest", "diversity", "profit"}
 
 
 def empty_field():

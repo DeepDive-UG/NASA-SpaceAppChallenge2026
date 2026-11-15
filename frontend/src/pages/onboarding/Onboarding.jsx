@@ -80,6 +80,7 @@ const createInitialState = () => ({
   goals: {
     yield: 34,
     soilHealth: 33,
+    profit: 0,
     water: 33,
   },
   waterSource: {
@@ -662,40 +663,26 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
 
   const updateGoal = (changedKey, rawValue) => {
     const value = Number(rawValue);
-    const keys = ['yield', 'soilHealth', 'water'];
-    const otherKeys = keys.filter((key) => key !== changedKey);
-    const remaining = 100 - value;
-    const otherTotal =
-      form.goals[otherKeys[0]] + form.goals[otherKeys[1]];
-
-    let firstValue;
-
-    if (otherTotal === 0) {
-      firstValue = Math.round(remaining / 2);
-    } else {
-      firstValue = Math.round(
-        remaining * (form.goals[otherKeys[0]] / otherTotal),
-      );
-    }
-
-    const secondValue = remaining - firstValue;
-
-    setForm((current) => ({
-      ...current,
-      goals: {
-        ...current.goals,
-        [changedKey]: value,
-        [otherKeys[0]]: firstValue,
-        [otherKeys[1]]: secondValue,
-      },
-    }));
+    setForm((current) => {
+      const others = ['yield', 'soilHealth', 'water', 'profit'].filter(key => key !== changedKey);
+      const remaining = 100 - value;
+      const total = others.reduce((sum, key) => sum + (current.goals[key] || 0), 0);
+      let allocated = 0;
+      const goals = { ...current.goals, [changedKey]: value };
+      others.forEach((key, index) => {
+        const share = index === others.length - 1 ? remaining - allocated : Math.min(remaining - allocated, Math.round(total ? remaining * (current.goals[key] || 0) / total : remaining / others.length));
+        goals[key] = share;
+        allocated += share;
+      });
+      return { ...current, goals };
+    });
   };
 
   const applyGoalPreset = (preset) => {
     const presets = {
-      Balanced: { yield: 34, soilHealth: 33, water: 33 },
-      'Yield first': { yield: 60, soilHealth: 25, water: 15 },
-      'Sustainability first': { yield: 20, soilHealth: 45, water: 35 },
+      Balanced: { yield: 25, soilHealth: 25, water: 25, profit: 25 },
+      'Harvest first': { yield: 60, soilHealth: 20, water: 10, profit: 10 },
+      'Soil & water first': { yield: 15, soilHealth: 45, water: 35, profit: 5 },
     };
 
     setForm((current) => ({
@@ -783,7 +770,7 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
 
     if (index === 5) {
       const total =
-        form.goals.yield + form.goals.soilHealth + form.goals.water;
+        form.goals.yield + form.goals.soilHealth + form.goals.water + (form.goals.profit || 0);
       if (total !== 100) return 'Farm goals must total 100%.';
     }
 
@@ -1435,19 +1422,20 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
 
     if (step === 5) {
       const goalLabels = {
-        yield: 'Maximize yield',
-        soilHealth: 'Improve soil health',
-        water: 'Minimize water usage',
+        yield: 'A good harvest',
+        soilHealth: 'Healthy soil',
+        water: 'Using less water',
+        profit: 'Earn more',
       };
 
       return (
         <>
           <StepHeader title="Set your farming goals">
-            Adjusting one priority automatically rebalances the other two so the total always remains 100%.
+            Move a slider to show what matters most. The others adjust to keep the total at 100%.
           </StepHeader>
 
           <div className="goal-presets">
-            {['Balanced', 'Yield first', 'Sustainability first'].map(
+            {['Balanced', 'Harvest first', 'Soil & water first'].map(
               (preset) => (
                 <button
                   className="preset-button"
@@ -1462,7 +1450,7 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
           </div>
 
           <div className="goals-list">
-            {Object.entries(form.goals).map(([key, value]) => (
+            {['yield', 'soilHealth', 'water', 'profit'].map(key => [key, form.goals[key] || 0]).map(([key, value]) => (
               <div className="goal-row" key={key}>
                 <label className="goal-label" htmlFor={`goal-${key}`}>
                   <span>{goalLabels[key]}</span>
@@ -1500,7 +1488,9 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
             >
               {form.goals.water}%
             </span>
+            <span className="goal-profit" style={{ width: `${form.goals.profit || 0}%` }}>{form.goals.profit || 0}%</span>
           </div>
+          <p className="onboarding-profit-note">Earn more compares example prices. It does not predict profit or prices at harvest.</p>
         </>
       );
     }
@@ -1695,7 +1685,7 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
             </div>
             <p>Maximize yield: {form.goals.yield}%</p>
             <p>Improve soil health: {form.goals.soilHealth}%</p>
-            <p>Minimize water usage: {form.goals.water}%</p>
+            <p>Using less water: {form.goals.water}%</p><p>Earn more: {form.goals.profit || 0}%</p>
           </section>
 
           <section className="summary-section full-width">
@@ -1719,7 +1709,7 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
         <DecisionDisclaimer
           variant="compact"
           className="onboarding-summary-disclaimer"
-          context="Your farm profile is used to generate decision-support recommendations. Automated outputs do not replace laboratory soil testing, certified agronomists, or local agricultural specialists."
+          context="We use these details to suggest crops. Check your soil and speak with a local farming adviser before planting."
         />
       </>
     );
@@ -1799,7 +1789,7 @@ function FarmSetup({ embedded = false, initialStep = 0, onSaved }) {
           <DecisionDisclaimer
             variant="compact"
             className="onboarding-footer-disclaimer"
-            context="This setup feeds a decision-support tool and does not replace human agronomic or soil-science expertise."
+            context="Your details help us guide you. They do not replace a soil test or local farming advice."
           />
         )}
       </div>

@@ -12,3 +12,51 @@
 .alert-text { white-space: pre-line; }
 .alerts-disclaimer { margin: 12px 0 14px; }
 @media (max-width: 720px) { .home-environment { padding: 16px; } }
+
+.environment-dialog { margin: auto; box-sizing: border-box; width: min(760px,calc(100% - 32px)); padding: 28px; }
+.alerts-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.alerts-header h2 { font: 400 1.5rem Manrope,sans-serif; }
+.alerts-header p { color: var(--color-text); font-size: .9375rem; margin-top: 8px; }
+.alerts-header .close-alerts { float: none; margin: 0; flex-shrink: 0; min-height: 44px; color: var(--color-on-primary); }
+.alerts-scope { margin: 20px 0; padding: 14px 16px; background: var(--color-surface-beige); border-radius: 10px; font-size: .875rem; line-height: 1.6; }
+.alerts-group { border-top: 1px solid var(--color-border); padding: 22px 0; }
+.alerts-group > h3 { font-size: 1.125rem; font-weight: 500; }
+.alerts-group > h3 > span { display: inline-block; padding: 2px 9px; margin-left: 6px; border-radius: 14px; background: var(--color-surface-beige); font-size: .8125rem; }
+.alerts-group--water > h3 { color: var(--color-water); }
+.alerts-group > p { color: var(--color-text); font-size: .875rem; line-height: 1.6; margin: 10px 0 0; }
+.environment-dialog .alert-card { border-left: 3px solid var(--color-warning); margin: 16px 0 0; }
+.environment-dialog .alert-card--water { border-left-color: var(--color-water); }
+.alert-card-top { display: flex; justify-content: space-between; color: var(--color-muted); font-size: .75rem; margin-bottom: 12px; }
+.alert-card h3 { font-size: 1.0625rem; font-weight: 500; }
+.alert-card p { margin-top: 10px; line-height: 1.6; font-size: .875rem; }
+.alert-area { color: var(--color-text); }
+.alert-expiry { color: var(--color-muted); font-size: .8125rem; }
+.environment-dialog summary { cursor: pointer; color: var(--color-primary); padding: 12px 0; font-size: .875rem; }
+.environment-dialog .alert-read { margin-top: 12px; background: transparent; color: var(--color-primary); padding: 8px 0; text-decoration: underline; min-height: 44px; }
+.alert-instruction { white-space: pre-line; padding: 12px; background: var(--color-surface-beige); border-radius: 8px; }
+.alerts-sources { margin-bottom: 20px; font-size: .875rem; line-height: 1.6; }
+.alerts-empty { color: var(--color-muted); }
+@media(max-width:600px) { .environment-dialog { padding: 20px; }.alerts-header h2 { font-size: 1.25rem; } }
+.alerts-group > h3 { font-weight: 700; }
+.alerts-group--fire > h3 { color: var(--color-error); }
+.alerts-group--fire > h3 > span { background: color-mix(in srgb,var(--color-error) 12%,var(--color-card)); }
+.alerts-group--fire .alert-card h3 { color: var(--color-error); }
+.environment-dialog .alerts-more { margin-top: 16px; min-height: 44px; color: var(--color-on-primary); }
+
+.environment-dialog { width: min(660px,calc(100% - 32px)); padding: 22px; }
+.alerts-header { margin-bottom: 18px; }
+.alerts-header h2 { font-size: 1.25rem; }
+.alerts-header p { font-size: .8125rem; margin-top: 6px; }
+.alerts-group { padding: 16px 0; }
+.alerts-group > h3 { font-size: 1rem; }
+.alerts-group > p { margin-top: 6px; font-size: .8125rem; }
+.environment-dialog .alert-card { margin: 10px 0 0; padding: 12px 14px; border-radius: 8px; }
+.alert-card-top { margin-bottom: 6px; font-size: .6875rem; }
+.alert-card h3 { font-size: .9375rem; }
+.alert-card p { margin-top: 6px; font-size: .8125rem; }
+.environment-dialog .alert-card summary { padding: 8px 0 2px; font-size: .8125rem; }
+.environment-dialog .alert-read { padding: 4px 0; margin-top: 4px; font-size: .75rem; min-height: 36px; }
+.alerts-group .alerts-empty { margin: 8px 0 0; }
+.alerts-sources { margin-bottom: 12px; }
+.environment-dialog button.term-help-trigger { display: inline-grid; place-items: center; width: 28px; height: 28px; min-height: 28px; padding: 0; margin: 0 0 0 5px; border: 1px solid var(--color-border); border-radius: 50%; background: var(--color-card); color: var(--color-primary); font: 600 14px Georgia,serif; }
+.alerts-group--fire > h3 > span.term-help { background: transparent; padding: 0; margin: 0; }

@@ -826,4 +826,5 @@ button:disabled {
   .soil-class-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
+}.goal-profit { background: var(--color-harvest); color: var(--color-card); }
+.onboarding-profit-note { font-size: .875rem; color: var(--color-text); line-height: 1.6; margin-top: 16px; }

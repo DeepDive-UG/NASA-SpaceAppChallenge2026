@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import './MascotChat.css'
 
-// Samodzielny komponent: wystarczy wstawić <MascotChat /> na dowolnej stronie.
-// Opcjonalnie: <MascotChat src="/inny.gif" />
 export default function MascotChat({ src = '/Scene1.gif' }) {
   const [open, setOpen] = useState(false)
-  const [answer, setAnswer] = useState(null) // prawidłowa odpowiedź z API
+  const [answer, setAnswer] = useState(null)
 
   function close() {
     setOpen(false)
@@ -19,7 +17,7 @@ export default function MascotChat({ src = '/Scene1.gif' }) {
     >
       {open && !answer && <ChatBubble onClose={close} onAnswer={setAnswer} />}
       {open && answer && (
-        <AnswerBubble result={answer} onClose={close} onAskAgain={() => setAnswer(null)} />
+        <AnswerBubble key={answer.answer} result={answer} onClose={close} onAskAgain={() => setAnswer(null)} />
       )}
       <button
         type="button"
@@ -35,14 +33,14 @@ export default function MascotChat({ src = '/Scene1.gif' }) {
   )
 }
 
-// Okno z pytaniem. Po prawidłowej odpowiedzi znika (przekazuje wynik do rodzica).
+// Pass successful responses to the answer panel.
 function ChatBubble({ onClose, onAnswer }) {
   const controller = useRef(null)
   const [question, setQuestion] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
-  // Zamknięcie dymka przerywa trwające żądanie.
+  // Abort the active request when the dialog unmounts.
   useEffect(() => () => controller.current?.abort(), [])
 
   async function send(event) {
@@ -70,7 +68,7 @@ function ChatBubble({ onClose, onAnswer }) {
       if (typeof answer.answer !== 'string' || !answer.answer.trim()) {
         throw new Error('The assistant returned an empty answer. Please try again.')
       }
-      onAnswer(answer) // prawidłowa odpowiedź -> okno z pytaniem się zamyka
+      onAnswer(answer)
     } catch (failure) {
       if (ctrl.signal.aborted) setError('Request cancelled or timed out. Try a shorter question.')
       else setError(failure.message)
@@ -84,34 +82,29 @@ function ChatBubble({ onClose, onAnswer }) {
           <h2 id="mascot-chat-title">Chat with Tip</h2>
           <button type="button" className="mascot-close" onClick={onClose} aria-label="Close chat">×</button>
         </header>
-        <p>Ask a question about crops, growing conditions or rotation. Each question is answered independently.</p>
+        <p>Got a crop question? Ask away.</p>
         <form onSubmit={send}>
-          <label htmlFor="mascot-question">Your question</label>
-          <textarea id="mascot-question" autoFocus value={question} onChange={event => setQuestion(event.target.value)} maxLength={2000} rows={2} required disabled={busy} placeholder="What temperatures does okra prefer?" />
+          <label className="mascot-sr-only" htmlFor="mascot-question">Your question</label>
+          <textarea id="mascot-question" autoFocus value={question} onChange={event => setQuestion(event.target.value)} maxLength={2000} rows={2} required disabled={busy} placeholder="Ask about crops, soil or water…" />
           <button type="submit" disabled={busy || !question.trim()}>{busy ? 'Preparing answer…' : 'Ask'}</button>
           {busy && <button type="button" onClick={() => controller.current?.abort()}>Cancel request</button>}
         </form>
-        {busy && <p role="status">Searching sources and preparing an answer locally…</p>}
         {error && <p className="mascot-error" role="alert">{error}</p>}
       </div>
     </div>
   )
 }
 
-// Owalny dymek z odpowiedzią i animacją pisania.
+// Reveal the answer progressively unless reduced motion is enabled.
 function AnswerBubble({ result, onClose, onAskAgain }) {
   const full = result.answer
-  const [shown, setShown] = useState(0)
+  const [shown, setShown] = useState(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? full.length : 0)
   const timer = useRef(null)
   const done = shown >= full.length
 
   useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      setShown(full.length)
-      return
-    }
-    setShown(0)
-    const step = Math.max(1, Math.ceil(full.length / 350)) // długie odpowiedzi nie piszą się w nieskończoność
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const step = Math.max(1, Math.ceil(full.length / 350))
     let count = 0
     timer.current = setInterval(() => {
       count = Math.min(count + step, full.length)
@@ -121,7 +114,7 @@ function AnswerBubble({ result, onClose, onAskAgain }) {
     return () => clearInterval(timer.current)
   }, [full])
 
-  // Kliknięcie w tekst pomija animację.
+  // Reveal the complete answer on click.
   function skip() {
     clearInterval(timer.current)
     setShown(full.length)
@@ -135,7 +128,7 @@ function AnswerBubble({ result, onClose, onAskAgain }) {
           <button type="button" className="mascot-close" onClick={onClose} aria-label="Close chat">×</button>
         </header>
 
-        {/* Czytniki ekranu dostają pełny tekst od razu, bez efektu pisania. */}
+        {/* Screen readers receive the complete answer immediately. */}
         <span className="mascot-sr-only" role="status">{full}</span>
         <p className="mascot-answer mascot-typing" aria-hidden="true" onClick={skip}>
           <span>{full.slice(0, shown)}</span>
@@ -147,7 +140,7 @@ function AnswerBubble({ result, onClose, onAskAgain }) {
           {result.insufficient_evidence && <p>The available sources do not fully answer this question.</p>}
           {result.sources?.length > 0 && <details><summary>Sources ({result.sources.length})</summary>
             {result.sources.map(source => <div className="mascot-source" key={source.reference}>
-              <strong>[{source.reference}] {source.title}</strong><p>{source.file}{source.line ? ` · CSV line ${source.line}` : ''}</p>
+              <strong>[{source.reference}] {source.title}</strong>
               {source.url && <a href={source.url} target="_blank" rel="noreferrer">Original source</a>}
               <details><summary>Retrieved excerpt</summary><p className="mascot-answer">{source.text}</p></details>
             </div>)}
@@ -157,4 +150,4 @@ function AnswerBubble({ result, onClose, onAskAgain }) {
       </div>
     </div>
   )
-} 
+}

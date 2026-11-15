@@ -18,7 +18,7 @@ def normalize_profile(raw, existing):
     unit = choice(original.get('unit'), {'acres', 'hectares', 'm²'}, 'Area unit')
     amount = numeric(original.get('value'), 'Field size', 0.001, 1e10)
     area = amount * {'acres': 0.4046856422, 'hectares': 1, 'm²': 0.0001}[unit]
-    goals = {key: numeric(raw.get('goals', {}).get(key), 'Goal weight', 0, 100) for key in ('yield', 'soilHealth', 'water')}
+    goals = {key: numeric(raw.get('goals', {}).get(key, 0) if key == 'profit' else raw.get('goals', {}).get(key), 'Goal weight', 0, 100) for key in ('yield', 'soilHealth', 'water', 'profit')}
     if abs(sum(goals.values()) - 100) > 0.001:
         raise ValueError('Farm goals must total 100%.')
     sectors = raw.get('sectors', [])
@@ -61,7 +61,7 @@ def normalize_profile(raw, existing):
         raise ValueError('Provide water-source coordinates or an address.')
     profile = {'consent': True, 'farmLocation': {'lat': latitude, 'lon': longitude}, 'defaultSoilClass': soil, 'totalAreaHa': area, 'originalArea': {'value': amount, 'unit': unit}, 'sectorTemplate': text(raw.get('sectorTemplate', ''), 'Sector template', False, 80), 'sectors': normalized_sectors, 'cropHistory': {'unknown': unknown, 'sameForAllSectors': shared, 'shared': shared_rows, 'bySector': by_sector}, 'goals': goals, 'waterSource': water, 'onboardingCompleted': True}
     old_sectors = {sector['id']: sector for sector in existing.get('sectors', [])}
-    field = {**existing, 'name': existing.get('name') or 'My field', 'area_ha': area, 'latitude': latitude, 'longitude': longitude, 'soil_class': soil, 'goal': {'soilHealth': 'soil', 'water': 'water', 'yield': 'harvest'}[max(goals, key=goals.get)], 'sectors': [{**old_sectors.get(sector['id'], {}), 'id': sector['id'], 'name': sector['name'], 'area_ha': sector['areaHa'], 'soil_class': sector['soilClass'], 'direction': sector['direction'], 'current_crop': sector['currentCrop'], 'notes': sector['notes']} for sector in normalized_sectors], 'crop_history': rows}
+    field = {**existing, 'name': existing.get('name') or 'My field', 'area_ha': area, 'latitude': latitude, 'longitude': longitude, 'soil_class': soil, 'goal': {'soilHealth': 'soil', 'water': 'water', 'yield': 'harvest', 'profit': 'profit'}[max(goals, key=goals.get)], 'sectors': [{**old_sectors.get(sector['id'], {}), 'id': sector['id'], 'name': sector['name'], 'area_ha': sector['areaHa'], 'soil_class': sector['soilClass'], 'direction': sector['direction'], 'current_crop': sector['currentCrop'], 'notes': sector['notes']} for sector in normalized_sectors], 'crop_history': rows}
     soil_test = raw.get('soilTest')
     if soil_test is not None:
         field['soil_ph'] = numeric(soil_test.get('ph'), 'Soil pH', 0, 14, True)

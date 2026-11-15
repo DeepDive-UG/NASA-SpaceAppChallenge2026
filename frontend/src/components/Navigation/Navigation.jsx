@@ -93,6 +93,18 @@ export const NAV_ITEMS = [
         ),
     },
     {
+        id: "faq",
+        path: "/faq",
+        label: "FAQ",
+        icon: (
+            <Icon>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 1.5-2.5 1.5-2.5 3.5" />
+                <path d="M12 16h.01" />
+            </Icon>
+        ),
+    },
+    {
         id: "settings",
         path: "/settings",
         label: "Settings",

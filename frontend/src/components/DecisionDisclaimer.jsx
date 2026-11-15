@@ -1,9 +1,9 @@
 import './DecisionDisclaimer.css';
 
-const DEFAULT_TITLE = 'Remember: this is a decision-support tool, it does not replace human expertise.';
+const DEFAULT_TITLE = 'A guide, not a guarantee.';
 
 // variant: 'card' | 'compact' | 'footer' | 'mini'
-// title: domyślnie standardowy nagłówek; przekaż null/false, żeby go ukryć.
+// Pass a falsy title to hide the heading.
 export default function DecisionDisclaimer({
   variant = 'card',
   context,
@@ -23,7 +23,7 @@ export default function DecisionDisclaimer({
         {title && <strong>{title}</strong>}
         <p>
           {context ||
-            'Insights, estimates, and suggestions are meant to support farm planning. Always verify conditions on-site and consult a qualified agronomist, soil specialist, or local extension advisor before making operational decisions.'}
+            'Use these suggestions to plan. Check your field and ask a local farming adviser before making big decisions.'}
         </p>
       </div>
     </aside>

@@ -1,5 +1,6 @@
 import './App.css'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import FAQ from './pages/FAQ/FAQ'
 import Home from './pages/Home/Home'
 import MyField from './pages/myField/myField'
 import MyGear from './pages/myGear/myGear'
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/myGear" element={<MyGear />} />
         <Route path="/myArea" element={<MyArea />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="/knowledge" element={<TipKnowledge />} />
         <Route path="/login" element={<Login />} />
         <Route path="/crop-rotation" element={<CropRotation />} />

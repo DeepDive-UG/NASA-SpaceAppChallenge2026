@@ -6,7 +6,7 @@ The reusable `MascotChat` dialog calls `POST /api/chat/`. Each question is indep
 
 - Answer model: Ollama `ministral-3:3b`.
 - Embeddings: Ollama `embeddinggemma`, using distinct query/document prefixes.
-- Retrieval: normalized vector similarity plus SQLite FTS5 BM25 with reciprocal-rank fusion. Exact common/scientific crop aliases receive priority. Results are limited to six excerpts with at most two per source/title.
+- Retrieval: normalized vector similarity plus SQLite FTS5 BM25 with reciprocal-rank fusion. Exact common/scientific crop aliases receive priority. Chat requests retrieve up to three excerpts with at most two per source/title. Generation omits long alias lists, caps each excerpt at 1,800 characters and limits output to 320 tokens. Ollama keeps the answer model loaded for 15 minutes; CPU response time still depends on hardware.
 - Generated index: `backend/.rag/index.sqlite3` (ignored by Git). Override with `RAG_INDEX_PATH`.
 - Local runtime and downloaded weights on this machine: `/home/martinez/CropTips-data/runtime/` (outside Git).
 
@@ -81,22 +81,21 @@ These tests cover encoding, row attribution, exact crop retrieval, stale-source 
 
 ## Mascot integration
 
-`frontend/src/components/MascotChat.jsx` is ready to mount from the mascot owner. It does not add a page, navigation entry or mascot image. Example in the mascot component:
+`frontend/src/components/MascotChat.jsx` owns the mascot button and existing chat panel. Mount `<MascotChat />` once per page. Clicking the mascot opens the panel; Close or Escape unmounts it and aborts the browser request. Each submission sends only `{"message": "..."}` to `/api/chat/`. No conversation is persisted or sent as history. Source links and retrieved excerpts are available below each answer.
 
-```jsx
-import { useState } from 'react'
-import MascotChat from './MascotChat'
+## Additional California references
 
-function MascotAssistant() {
-  const [open, setOpen] = useState(false)
-  return <>
-    <button onClick={() => setOpen(true)} aria-label="Ask CropTips">
-      {/* Render the mascot artwork here. */}
-      Ask CropTips
-    </button>
-    <MascotChat open={open} onClose={() => setOpen(false)} />
-  </>
-}
+The reviewed summaries `california_cover_crops.json` and `california_planting_scope.json` retain source URLs and review dates. They cover UC ANR Agronomy Fact Sheet 22 (2024) and the UC Master Gardener regional planting guide. The planting guide is gardening guidance for broad regions, not a farm-specific commercial schedule. Original publications remain available through the URLs in these files. The index reuses unchanged document vectors when rebuilt with the same embedding model.
+
+## Portable setup
+
+On any machine with Ollama installed, run `ollama serve`, then in another terminal:
+
+```bash
+ollama pull ministral-3:3b
+ollama pull embeddinggemma
+python backend/manage.py build_rag_index
+python backend/manage.py runserver
 ```
 
-Clicking the mascot opens the native dialog. Escape or Close dismisses it. Closing aborts the browser request and unmounts its state. Only the current question and answer are displayed; subsequent requests never include previous answers. A server-side generation may finish after the browser cancels; no result is persisted. Each question should name the crop/location explicitly, because follow-ups such as "what about it?" have no conversation context.
+Use the project's Python virtual environment with `backend/requirements.txt` installed. Optional environment variables are `OLLAMA_BASE_URL` (local server only), `RAG_CHAT_MODEL`, `RAG_EMBED_MODEL`, and `RAG_INDEX_PATH`. The repository contains code and reviewed knowledge; model weights and the generated index stay outside Git. Every deployment builds its own index from the repository's data directory.

@@ -163,3 +163,5 @@
 .field-priority-list [data-goal="water"] meter::-webkit-meter-optimum-value { background: var(--color-water); }
 .field-priority-list [data-goal="yield"] meter::-moz-meter-bar { background: var(--color-harvest); }
 .field-priority-list [data-goal="water"] meter::-moz-meter-bar { background: var(--color-water); }
+.field-priority-list [data-goal="profit"] meter::-webkit-meter-optimum-value { background: var(--color-harvest); }
+.field-priority-list [data-goal="profit"] meter::-moz-meter-bar { background: var(--color-harvest); }

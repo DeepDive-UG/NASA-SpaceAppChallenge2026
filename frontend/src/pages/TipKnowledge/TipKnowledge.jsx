@@ -145,7 +145,7 @@ export default function TipKnowledge() {
                 <DecisionDisclaimer
                     variant="footer"
                     className="tk-disclaimer"
-                    context="Articles in TipKnowledge offer general educational guidance to support farm decisions and do not replace site-specific advice from a certified agronomist or extension specialist."
+                    context="These tips are general. What works on one farm may not work on yours. Ask a local farming adviser when unsure."
                 />
             </main>
             <MascotChat />

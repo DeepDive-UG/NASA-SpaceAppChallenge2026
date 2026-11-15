@@ -101,9 +101,17 @@ class OnboardingIntegrationTests(TestCase):
         self.assertEqual(field['farm_profile']['cropHistory']['shared'][0]['yield'], '180 bu/ac')
         self.assertEqual(field['farm_profile']['cropHistory']['shared'][0]['fertilizers'], ['NPK'])
         self.assertEqual(field['goal'], 'soil')
-        self.assertEqual(field['farm_profile']['goals'], self.profile['goals'])
+        self.assertEqual(field['farm_profile']['goals'], {**self.profile['goals'], 'profit': 0})
         self.assertTrue(field['crop_history'][0]['crop_id'])
         self.assertEqual(field['fertilisers'], [])
+
+    def test_profit_goal_is_saved_with_other_priorities(self):
+        self.profile['goals'] = {'yield': 10, 'soilHealth': 20, 'water': 10, 'profit': 60}
+        response = self.put()
+        self.assertEqual(response.status_code, 200, response.content)
+        field = response.json()['field']
+        self.assertEqual(field['goal'], 'profit')
+        self.assertEqual(field['farm_profile']['goals']['profit'], 60)
 
     def test_edit_updates_rotation_source_and_keeps_soil_test(self):
         saved = self.put().json()

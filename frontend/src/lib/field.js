@@ -11,4 +11,4 @@ export async function fieldApi(path, { method = 'GET', body, signal } = {}) {
   return result
 }
 export const SOILS = [['unknown', 'Not known yet'], ['sand', 'Sand'], ['sandy_loam', 'Sandy loam'], ['loam', 'Loam'], ['silt_loam', 'Silt loam'], ['clay_loam', 'Clay loam'], ['clay', 'Clay']]
-export const GOALS = [['soil', 'Improve soil health', 'Rotate crop families.'], ['water', 'Use water carefully', 'Review water needs.'], ['harvest', 'Focus on harvest', 'Check growing conditions.'], ['diversity', 'Diversify the rotation', 'Vary crops across the field.']]
+export const GOALS = [['profit', 'Earn more', 'Compare market prices.'], ['soil', 'Improve soil health', 'Rotate crop families.'], ['water', 'Use water carefully', 'Review water needs.'], ['harvest', 'Focus on harvest', 'Check growing conditions.'], ['diversity', 'Diversify the rotation', 'Vary crops across the field.']]

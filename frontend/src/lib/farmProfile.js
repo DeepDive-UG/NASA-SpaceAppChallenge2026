@@ -7,6 +7,7 @@ export function profileForm(field) {
   const season = row => ({ ...row, year: row.year ?? '', amountKgHa: row.amountKgHa ?? '', yield: row.yield ?? '' })
   return {
     ...profile,
+    goals: { profit: 0, ...profile.goals },
     soilTest: { ph: field.soil_ph ?? '', texture: field.soil_texture, irrigation: field.irrigation },
     totalArea: profile.originalArea.value,
     areaUnit: profile.originalArea.unit,

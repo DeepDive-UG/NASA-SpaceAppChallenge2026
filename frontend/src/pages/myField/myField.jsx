@@ -5,6 +5,7 @@ import WaterStation from '../../components/WaterStation'
 import WaterStationPicker from '../../components/WaterStationPicker'
 import { GOALS, SOILS, fieldApi, useField } from '../../lib/field'
 import './myField.css'
+import MascotChat from '../../components/MascotChat'
 
 const TODAY = new Date().toLocaleDateString('en-CA')
 const YEAR = new Date().getFullYear()
@@ -92,5 +93,7 @@ export default function MyField() {
       variant="footer"
       context="Field records, soil classifications, and water station data power automated decision-support tools and do not replace accredited soil testing, irrigation engineering, or human agronomic expertise."
     />
-  </main></div>
+  </main>
+    <MascotChat />
+  </div>
 }

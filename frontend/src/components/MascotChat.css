@@ -1,15 +1,162 @@
-.mascot-chat { box-sizing: border-box; width: min(560px, calc(100% - 32px)); max-height: 85vh; overflow: auto; padding: 24px; background: var(--color-bg); color: var(--color-heading); border: 1px solid var(--color-border); border-radius: 16px; font-family: 'DM Sans', sans-serif; }
-.mascot-chat::backdrop { background: rgb(36 40 36 / 40%); }
-.mascot-chat header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.mascot-chat h2 { margin: 0; font-family: Manrope, sans-serif; font-weight: 400; }
-.mascot-chat p { line-height: 1.6; }
-.mascot-disclaimer { margin: 12px 0; }
-.mascot-chat textarea { display: block; width: 100%; box-sizing: border-box; resize: vertical; padding: 12px; margin: 8px 0 16px; background: var(--color-card); color: var(--color-heading); border: 1px solid var(--color-border); border-radius: 8px; font: inherit; }
-.mascot-chat button { background: var(--color-primary); color: var(--color-card); border: 0; border-radius: 8px; padding: 10px 16px; margin-right: 8px; cursor: pointer; font: inherit; }
-.mascot-chat button:disabled { opacity: .5; cursor: default; }
-.mascot-chat .mascot-error { color: var(--color-error); }
-.mascot-answer { white-space: pre-wrap; overflow-wrap: anywhere; }
-.mascot-source { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border); font-size: 0.875rem; }
-.mascot-chat summary { cursor: pointer; margin: 12px 0; }
-.mascot-chat a { color: var(--color-primary); }
-.mascot-chat :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+/* Pływająca maskotka w samym prawym dolnym rogu */
+.mascot-widget {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.mascot-widget .mascot-toggle {
+    display: block;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.mascot-widget .mascot-toggle .mascot {
+    display: block;
+    width: 260px;
+    height: 260px;
+    object-fit: contain;
+    background: transparent;
+    transform: scaleX(-1)
+}
+
+.mascot-widget .mascot-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+    border-radius: 12px;
+}
+
+/* Owalny dymek nad maskotką */
+.mascot-bubble {
+    position: absolute;
+    right: 16px;
+    bottom: calc(100% - 40px);
+    box-sizing: border-box;
+    width: min(460px, calc(100vw - 32px));
+    background: var(--color-bg);
+    color: var(--color-heading);
+    border: 1px solid var(--color-border);
+    border-radius: 120px / 90px;
+    box-shadow: 0 8px 28px rgb(0 0 0 / 18%);
+    font-size: 0.875rem;
+    z-index: 100;
+}
+
+/* Przewijana treść, z zapasem na zaokrąglone rogi */
+.mascot-bubble-inner {
+    box-sizing: border-box;
+    max-height: calc(100vh - 250px);
+    overflow: auto;
+    padding: 34px 46px;
+}
+
+.mascot-bubble header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.mascot-bubble h2 {
+    margin: 0;
+    font-family: Manrope, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+}
+
+.mascot-bubble p {
+    line-height: 1.6;
+}
+
+.mascot-disclaimer {
+    margin: 12px 0;
+}
+
+.mascot-bubble textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    padding: 12px;
+    margin: 8px 0 16px;
+    background: var(--color-card);
+    color: var(--color-heading);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font: inherit;
+}
+
+.mascot-bubble button {
+    background: var(--color-primary);
+    color: var(--color-card);
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-right: 8px;
+    cursor: pointer;
+    font: inherit;
+}
+
+.mascot-bubble .mascot-close {
+    margin: 0;
+    padding: 2px 10px;
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.mascot-bubble button:disabled {
+    opacity: .5;
+    cursor: default;
+}
+
+.mascot-bubble .mascot-error {
+    color: var(--color-error);
+}
+
+.mascot-answer {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.mascot-source {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8rem;
+}
+
+.mascot-bubble summary {
+    cursor: pointer;
+    margin: 12px 0;
+}
+
+.mascot-bubble a {
+    color: var(--color-primary);
+}
+
+.mascot-bubble :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+    .mascot-widget .mascot-toggle .mascot {
+        width: 170px;
+        height: 170px;
+    }
+
+    .mascot-bubble {
+        bottom: calc(100% - 28px);
+    }
+
+    .mascot-bubble-inner {
+        padding: 28px 30px;
+        max-height: calc(100vh - 190px);
+    }
+}

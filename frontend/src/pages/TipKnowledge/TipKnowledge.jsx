@@ -10,6 +10,7 @@ import DeepRootingArticle from "./articles/deep-rooting/DeepRootingArticle";
 import DroughtTolerantArticle from "./articles/drought-tolerant/DroughtTolerantArticle";
 import TipQuiz from "./TipQuiz";
 import "./TipKnowledge.css";
+import MascotChat from "../../components/MascotChat";
 
 const BUILT_IN_ARTICLES = [
     {
@@ -152,6 +153,7 @@ export default function TipKnowledge() {
                     context="Articles in TipKnowledge offer general educational guidance to support farm decisions and do not replace site-specific advice from a certified agronomist or extension specialist."
                 />
             </main>
+            <MascotChat />
         </div>
     );
 }

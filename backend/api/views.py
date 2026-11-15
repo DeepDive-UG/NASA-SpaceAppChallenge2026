@@ -1,10 +1,14 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest  
 from django.views.decorators.http import require_GET
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
 from datetime import datetime, timezone, timedelta
 import math
 import re
+
+import hashlib
+from datetime import datetime, timezone
+from .prism_state import get_state_map, get_legend
 
 from .environment import active_alerts, usgs_features, current_fires
 
@@ -67,3 +71,71 @@ def environmental_response(key, retrieve):
             return JsonResponse({"status": "unavailable", "error": "Environmental source is unavailable"}, status=503)
         cache.set(key, payload, timeout=300)
     return JsonResponse({"status": "ok", "cache_seconds": 300, **payload})
+
+
+ALLOWED_VARIABLES = {"tmax", "tmin", "tmean", "tdmean", "ppt", "vpdmax", "vpdmin"}
+ 
+ 
+@require_GET
+def state_map(request):
+    """GET /api/state-map/?variable=tmax&lat=30.27&lon=-97.74&label=Austin -> image/png (stan wykrywany ze współrzędnych)
+    GET /api/state-map/?state=TX&variable=tmax -> image/png (bez znacznika)"""
+    variable = request.GET.get("variable", "tmax")
+    state = request.GET.get("state") or None
+    if not state and not (request.GET.get("lat") and request.GET.get("lon")):
+        return HttpResponseBadRequest("Podaj state albo lat i lon")
+    if variable not in ALLOWED_VARIABLES:  # wartość trafia do adresu URL, więc tylko z listy
+        return HttpResponseBadRequest("Nieobsługiwana zmienna")
+ 
+    marker = None
+    lat, lon = request.GET.get("lat"), request.GET.get("lon")
+    if lat and lon:
+        try:
+            marker = {"lat": float(lat), "lon": float(lon)}
+        except ValueError:
+            return HttpResponseBadRequest("lat/lon muszą być liczbami")
+        if request.GET.get("label"):
+            marker["label"] = request.GET["label"][:40]
+ 
+    raw_key = repr((variable, (state or "").lower(), marker, datetime.now(timezone.utc).strftime("%Y%m%d%H")))
+    key = "prism:" + hashlib.md5(raw_key.encode()).hexdigest()  # krótki klucz bezpieczny dla memcached
+    cached = cache.get(key)
+    if cached is None:
+        try:
+            cached = get_state_map(variable, state, marker=marker, return_date=True)
+        except ValueError as e:          # zły stan / współrzędne
+            return HttpResponseBadRequest(str(e))
+        except FileNotFoundError as e:   # brak mapy w ostatnich dniach
+            return HttpResponse(str(e), status=404)
+        cache.set(key, cached, 3600)
+ 
+    png, map_date = cached
+    resp = HttpResponse(png, content_type="image/png")
+    if map_date:
+        resp["X-Prism-Date"] = map_date  # data mapy, odczytywana przez frontend
+    resp["Cache-Control"] = "public, max-age=3600"
+    return resp
+ 
+ 
+@require_GET
+def state_legend(request):
+    """GET /api/state-legend/?variable=tmean -> image/png (legenda wycięta z mapy PRISM danej zmiennej)"""
+    variable = request.GET.get("variable", "tmax")
+    if variable not in ALLOWED_VARIABLES:
+        return HttpResponseBadRequest("Nieobsługiwana zmienna")
+ 
+    key = "prism-legend:" + hashlib.md5(
+        repr((variable, datetime.now(timezone.utc).strftime("%Y%m%d%H"))).encode()).hexdigest()
+    png = cache.get(key)
+    if png is None:
+        try:
+            png, _ = get_legend(variable)
+        except FileNotFoundError as e:
+            return HttpResponse(str(e), status=404)
+        except ValueError as e:
+            return HttpResponseBadRequest(str(e))
+        cache.set(key, png, 3600)
+ 
+    resp = HttpResponse(png, content_type="image/png")
+    resp["Cache-Control"] = "public, max-age=3600"
+    return resp

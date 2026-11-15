@@ -4,8 +4,6 @@ import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 import { useField } from "../../lib/field";
 import "./myArea.css";
 import MascotChat from "../../components/MascotChat";
-// import { LEGENDS } from "./LEGENDS"; -- API pulls the legend from images
-// gradients were hardcoded in LEGENDS.js and needed to be updated manually, the pulled legend seems more readable
 
 const MASKS = [
     {
@@ -29,7 +27,7 @@ const MASKS = [
         description:
             "Lowest daily temperatures across California. Helps spot frost risk.",
     },
-    // tmean, tdmean, vpdmax, vpdmin: bez wpisu w LEGENDS.js legenda jest wycinana z mapy PRISM (/api/state-legend/)
+   
     {
         id: 4,
         title: "Temperature Mean",
@@ -60,9 +58,8 @@ const MASKS = [
     },
 ];
 
-const DEFAULT_STATE = "CA"; // pokazywany, gdy pole nie ma jeszcze współrzędnych
-
-// Mapa PRISM wycięta do stanu; ze współrzędnych backend sam wykrywa stan i stawia znacznik pola
+const DEFAULT_STATE = "CA"; 
+z
 const mapUrl = (variable, field) => {
     const params = new URLSearchParams({ variable });
     const lat = parseFloat(field?.latitude);
@@ -76,31 +73,6 @@ const mapUrl = (variable, field) => {
     }
     return `/api/state-map/?${params}`;
 };
-
-/* const Legend = ({ legend }) => {
-    const { colors, edges, unit } = legend;
-    const n = colors.length;
-    const stops = colors.join(", ");
-    const step = Math.ceil(edges.length / 6); // label roughly every 6th edge
-    return (
-        <div className="ma-legend">
-            <div className="ma-legend-unit">{unit}</div>
-            <div
-                className="ma-legend-bar"
-                style={{ background: `linear-gradient(to right, ${stops})` }}
-            />
-            <div className="ma-legend-ticks">
-                {edges.map((edge, i) =>
-                    i % step === 0 ? (
-                        <span key={edge} style={{ left: `${((i + 1) / n) * 100}%` }}>
-                            {edge}
-                        </span>
-                    ) : null
-                )}
-            </div>
-        </div>
-    );
-}; -- reduntant, see line 6 */
 
 const MyArea = () => {
     const [enabledMasks, setEnabledMasks] = useState([MASKS[0].id]);

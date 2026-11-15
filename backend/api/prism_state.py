@@ -1,12 +1,4 @@
-"""Pobiera dzisiejszą mapę PRISM (np. tmax) i wycina z niej jeden stan USA (PNG z przezroczystym tłem).
 
-    from prism_state import get_state_map
-    png = get_state_map("tmax", "Texas")                                   # bytes (PNG)
-    png = get_state_map("tmax", "TX", marker={"lat": 30.27, "lon": -97.74, "label": "Austin"})
-
-Wymaga: Pillow (pip install pillow). Zalecane: pip install truststore (certyfikaty systemu, ważne na Windows).
-Pobieranie przez standardową bibliotekę (urllib).
-"""
 import io
 import json
 import math
@@ -23,10 +15,8 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont
 BASE = "https://data.prism.oregonstate.edu/map_graphics/us/an/png/800m"
 _DATA = json.loads((Path(__file__).parent / "states.json").read_text(encoding="utf-8"))
 WIDTH, HEIGHT = _DATA["width"], _DATA["height"]
-SS = 4  # supersampling dla gładkich krawędzi maski i znacznika
+SS = 4  
 
-# Rzut mapy PRISM: Albers equal-area (równoleżniki 29.5/45.5, środek 23N 96W),
-# dopasowany do obrazka 836x646.
 _S, _TX, _TY = 1122.52694008, 429.5721394, 633.97253626
 _PHI1, _PHI2, _PHI0, _LAM0 = (math.radians(v) for v in (29.5, 45.5, 23, -96))
 _N = (math.sin(_PHI1) + math.sin(_PHI2)) / 2
@@ -34,8 +24,7 @@ _C = math.cos(_PHI1) ** 2 + 2 * _N * math.sin(_PHI1)
 _RHO0 = math.sqrt(_C - 2 * _N * math.sin(_PHI0)) / _N
 
 
-def lonlat_to_pixel(lon, lat):
-    """Współrzędne geograficzne (stopnie) -> piksel (x, y) na mapie PRISM."""
+def lonlat_to_pixel(lon, lat): 
     rho = math.sqrt(_C - 2 * _N * math.sin(math.radians(lat))) / _N
     th = _N * (math.radians(lon) - _LAM0)
     x, y = rho * math.sin(th), _RHO0 - rho * math.cos(th)
@@ -44,7 +33,6 @@ def lonlat_to_pixel(lon, lat):
 
 @lru_cache(maxsize=None)
 def _rings(code):
-    """Kontury stanu jako listy punktów (x, y) w pikselach mapy."""
     path = _DATA["states"][code]["path"]
     out = []
     for ring in re.findall(r"M([^Z]+)Z", path):
@@ -53,7 +41,6 @@ def _rings(code):
 
 
 def _inside(x, y, rings):
-    """Reguła even-odd (jak w SVG): punkt wewnątrz, gdy przecina nieparzysta liczba krawędzi."""
     hit = False
     for ring in rings:
         j = len(ring) - 1
@@ -67,7 +54,6 @@ def _inside(x, y, rings):
 
 
 def state_at(lon, lat):
-    """Kod stanu (np. "TX"), w którym leży punkt; ValueError, gdy punkt nie leży w żadnym stanie."""
     x, y = lonlat_to_pixel(lon, lat)
     for code in _DATA["states"]:
         if _inside(x, y, _rings(code)):
@@ -76,7 +62,6 @@ def state_at(lon, lat):
 
 
 def find_state(query):
-    """Znajdź stan po kodzie (TX) lub nazwie (Texas), bez względu na wielkość liter."""
     q = str(query).strip().lower()
     for code, s in _DATA["states"].items():
         if code.lower() == q or s["name"].lower() == q:
@@ -90,8 +75,6 @@ def prism_url(variable, day):
 
 
 def _ssl_context():
-    """Kontekst SSL: najpierw magazyn certyfikatów systemu (działa za antywirusem/proxy na Windows),
-    potem certifi, na końcu domyślny. Weryfikacja certyfikatu jest zawsze włączona."""
     try:
         import truststore  # pip install truststore
         return truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -120,7 +103,6 @@ def _fetch_latest(variable, max_days_back):
 
 @lru_cache(maxsize=64)
 def _state_mask(code):
-    """Maska stanu (tryb L, rozmiar mapy), reguła even-odd jak w SVG."""
     path = _DATA["states"][code]["path"]
     big = Image.new("L", (WIDTH * SS, HEIGHT * SS), 0)
     for ring in re.findall(r"M([^Z]+)Z", path):
@@ -155,14 +137,6 @@ def _marker_layer(size, x, y, color, radius, label):
 
 
 def get_state_map(variable, state, marker=None, image_bytes=None, max_days_back=7, out_file=None, return_date=False):
-    """
-    variable   zmienna PRISM, np. "tmax", "tmin", "ppt"
-    state      kod lub nazwa stanu, np. "TX" / "Texas"; None = wykryj stan ze współrzędnych markera
-    marker     opcjonalnie {"lat":..., "lon":..., "label":"...", "color":"#e00000", "radius":5}
-    image_bytes  użyj tego obrazka zamiast pobierać (np. do testów)
-    return_date  zwróć krotkę (png, "RRRR-MM-DD"); data jest None, gdy podano image_bytes
-    Zwraca bajty PNG z wyciętym stanem.
-    """
     if state is None:
         if not marker:
             raise ValueError("Podaj stan albo współrzędne (marker)")
@@ -210,9 +184,6 @@ def get_state_map(variable, state, marker=None, image_bytes=None, max_days_back=
 
 
 def _legend_box(img):
-    """Prostokąt legendy PRISM w lewym dolnym rogu: (lewo, góra, prawo, dół).
-    Legenda ma jasnoszarą ramkę: szukamy od dołu poziomej linii ramki, potem idziemy w górę po jej lewym brzegu.
-    Działa dla różnych rozmiarów legendy i obrazka."""
     w, h = img.size
     px = img.convert("RGB").load()
 
@@ -220,7 +191,7 @@ def _legend_box(img):
         r, g, b = px[x, y]
         return r == g == b and 185 <= r <= 235
 
-    for y in range(h - 1, h // 2, -1):          # dolna krawędź: długi poziomy odcinek szarości
+    for y in range(h - 1, h // 2, -1):          
         x = 0
         while x < w:
             if gray(x, y):
@@ -230,18 +201,16 @@ def _legend_box(img):
                 if x - start >= 100 and start < w // 3:
                     left, right, bottom = start, x - 1, y
                     top = bottom
-                    col = left + 1 if gray(left + 1, bottom - 5) else left   # kolumna lewej ramki
+                    col = left + 1 if gray(left + 1, bottom - 5) else left   
                     while top > h // 3 and gray(col, top - 1):
                         top -= 1
                     if bottom - top >= 40:
                         return max(0, left - 1), max(0, top - 1), min(w, right + 2), min(h, bottom + 2)
             else:
                 x += 1
-    return 4, 497, 271, 642                     # awaryjnie: położenie z mapy tmax
-
+    return 4, 497, 271, 642                     
 
 def get_legend(variable, image_bytes=None, max_days_back=7):
-    """Wycina legendę z oryginalnego obrazka PRISM danej zmiennej. Zwraca (png_bytes, data)."""
     raw, map_date = (image_bytes, None) if image_bytes is not None else _fetch_latest(variable, max_days_back)
     img = Image.open(io.BytesIO(raw)).convert("RGB")
     buf = io.BytesIO()

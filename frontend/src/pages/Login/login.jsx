@@ -66,7 +66,6 @@ export default function Login({
   const capsLockId = `${id}-caps-lock`;
   const rememberId = `${id}-remember`;
 
-  // ---------- Field handlers ----------
 
   const handleEmailChange = (event) => {
     const { value } = event.target;
@@ -103,7 +102,6 @@ export default function Login({
     passwordRef.current?.focus();
   };
 
-  // ---------- Submit ----------
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -178,7 +176,6 @@ export default function Login({
     onDemoLogin?.();
   };
 
-  // ---------- Render ----------
 
   const passwordDescribedBy =
     [errors.password && passwordErrorId, capsLockOn && capsLockId]
@@ -286,7 +283,7 @@ export default function Login({
               )}
             </div>
 
-            {/* Remember me */}
+            {}
             <label
               htmlFor={rememberId}
               className={`checkbox-field${isLoading ? ' checkbox-field--disabled' : ''}`}
@@ -303,7 +300,7 @@ export default function Login({
               <span>Remember me</span>
             </label>
 
-            {/* Primary submit */}
+            {}
             <button type="submit" className="btn btn--primary" disabled={isLoading}>
               {isLoading && <span className="btn__spinner" aria-hidden="true" />}
               <span>{isLoading ? 'Signing in...' : 'Sign in'}</span>
@@ -313,7 +310,7 @@ export default function Login({
               or
             </div>
 
-            {/* Secondary demo */}
+            {}
             <button
               type="button"
               className="btn btn--secondary"

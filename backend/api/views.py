@@ -1,10 +1,11 @@
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest  
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
 from datetime import datetime, timezone, timedelta
 import math
 import re
+import json
 
 import hashlib
 from datetime import datetime, timezone
@@ -139,3 +140,78 @@ def state_legend(request):
     resp = HttpResponse(png, content_type="image/png")
     resp["Cache-Control"] = "public, max-age=3600"
     return resp
+
+from .models import Gear
+ 
+# Te same typy co GEAR_TYPES we froncie (MyGear.jsx)
+GEAR_TYPES = {
+    "Tractor", "Combine harvester", "Plough", "Seed drill", "Sprayer",
+    "Fertilizer spreader", "Cultivator", "Harrow", "Mower", "Baler", "Trailer",
+}
+STATUSES = {"available", "unavailable"}
+MAX_GEAR = 200  # limit na użytkownika/sesję
+ 
+ 
+def _scope(request):
+    """Czyj sprzęt: zalogowanego użytkownika albo bieżącej sesji gościa."""
+    if request.user.is_authenticated:
+        return {"owner": request.user}
+    if not request.session.session_key:
+        request.session.create()
+    return {"owner": None, "session_key": request.session.session_key}
+ 
+ 
+def _dump(g):
+    return {"id": g.id, "name": g.name, "status": g.status}
+ 
+ 
+def _error(message, status):
+    # fieldApi we froncie oczekuje JSON-a, także przy błędach: {"error": "..."}
+    return JsonResponse({"error": message}, status=status)
+ 
+ 
+def _body(request):
+    try:
+        data = json.loads(request.body or b"{}")
+    except ValueError:
+        return None
+    return data if isinstance(data, dict) else None
+ 
+ 
+@require_http_methods(["GET", "POST"])
+def gear_list(request):
+    """GET /api/gear/ -> {"gear": [...]}   POST /api/gear/ {"name": "Tractor"} -> 201 {"gear": {...}}"""
+    scope = _scope(request)
+    if request.method == "GET":
+        return JsonResponse({"gear": [_dump(g) for g in Gear.objects.filter(**scope)]})
+ 
+    data = _body(request)
+    if data is None:
+        return _error("Invalid request.", 400)
+    name = data.get("name")
+    if name not in GEAR_TYPES:
+        return _error("Unknown gear type.", 400)
+    if Gear.objects.filter(**scope).count() >= MAX_GEAR:
+        return _error("Gear limit reached.", 400)
+    gear = Gear.objects.create(name=name, **scope)
+    return JsonResponse({"gear": _dump(gear)}, status=201)
+ 
+ 
+@require_http_methods(["PATCH", "DELETE"])
+def gear_item(request, pk):
+    """PATCH /api/gear/<id>/ {"status": "unavailable"}   DELETE /api/gear/<id>/ -> {"ok": true}"""
+    gear = Gear.objects.filter(pk=pk, **_scope(request)).first()
+    if gear is None:
+        return _error("Gear not found.", 404)
+ 
+    if request.method == "DELETE":
+        gear.delete()
+        return JsonResponse({"ok": True})  # JSON, nie 204: fieldApi wymaga odpowiedzi JSON
+ 
+    data = _body(request)
+    status = data.get("status") if data else None
+    if status not in STATUSES:
+        return _error("Invalid status.", 400)
+    gear.status = status
+    gear.save(update_fields=["status"])
+    return JsonResponse({"gear": _dump(gear)})

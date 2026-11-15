@@ -1,32 +1,332 @@
-.mascot { height: 300px; width: 180px; }
-.home-environment { justify-content: flex-start; padding: clamp(28px,5vw,72px); background: var(--color-bg); color: var(--color-heading); font-family: 'DM Sans',sans-serif; }
-.home-environment .home-welcome { margin: clamp(24px,7vh,80px) 0 38px; max-width: 850px; }
-.home-welcome h1 { font: 300 clamp(2rem,4vw,3.5rem)/1.2 Manrope,sans-serif; letter-spacing: -.03em; }
-.home-welcome p { margin: 18px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--color-text); }
-.home-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; max-width: 1120px; }
-.home-environment .home-card { display: flex; flex-direction: column; align-items: flex-start; min-height: 230px; box-sizing: border-box; padding: 28px; background: var(--color-card); border: 1px solid var(--color-border); border-radius: 16px; color: var(--color-heading); text-decoration: none; transition: border-color .15s,box-shadow .15s; }
-.home-card:hover { border-color: var(--color-secondary); box-shadow: 0 6px 20px #2428240a; }
-.home-card-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; margin-bottom: 26px; background: var(--color-green-light); color: var(--color-primary); }
-.home-card-icon .sb-icon { width: 24px; height: 24px; }
-.home-card h2 { font: 400 1.25rem/1.4 Manrope,sans-serif; margin: 0 0 10px; }
-.home-card p { color: var(--color-text); font-size: .9375rem; line-height: 1.65; margin: 0 0 28px; }
-.home-card-action { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; color: var(--color-primary); font-size: .875rem; font-weight: 500; }
-.home-card-action > span { font-size: 1.25rem; }
-.home-environment .home-card--crop-rotation { background: var(--color-primary); color: var(--color-on-primary); border-color: var(--color-primary); }
-.home-card--crop-rotation .home-card-icon { background: color-mix(in srgb,var(--color-on-primary) 14%,transparent); color: inherit; }
-.home-card--crop-rotation p, .home-card--crop-rotation .home-card-action { color: inherit; }
-.home-card--knowledge .home-card-icon { background: var(--color-harvest-soft); color: var(--color-harvest); }
-.home-environment .home-actions { max-width: 1120px; margin: 26px 0 80px; }
-.home-environment .home-alert-banner { box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 26px; margin: 0; min-height: 96px; background: var(--color-water-soft); border: 1px solid color-mix(in srgb,var(--color-water) 30%,var(--color-border)); border-left: 4px solid var(--color-water); border-radius: 12px; color: var(--color-heading); font: inherit; text-align: left; cursor: pointer; }
-.home-alert-copy { display: flex; flex-direction: column; gap: 7px; }
-.home-alert-copy > strong { font-size: 1.125rem; font-weight: 500; }
-.home-alert-copy > strong > span:first-child { color: var(--color-water); }
-.home-alert-copy > strong > span:last-child { color: var(--color-error); }
-.home-alert-copy > span { color: var(--color-text); font-size: .875rem; }
-.home-alert-action { flex-shrink: 0; background: var(--color-primary); color: var(--color-on-primary); border-radius: 8px; padding: 12px 18px; font-size: .9375rem; font-weight: 500; }
-.home-alert-banner:hover .home-alert-action { text-decoration: underline; text-underline-offset: 4px; }
-.home-environment :focus-visible { outline: 3px solid var(--color-primary); outline-offset: 4px; }
-@media(max-width:1100px) { .home-cards { gap: 12px; }.home-environment .home-card { padding: 20px; }.home-card h2 { font-size: 1.125rem; } }
-@media(max-width:800px) { .home-cards { grid-template-columns: 1fr; }.home-environment .home-card { min-height: auto; }.home-card-icon { margin-bottom: 16px; }.home-card p { margin-bottom: 20px; }.home-environment { padding: 24px; }.home-environment .home-welcome { margin-top: 24px; }.home-environment .home-alert-banner { flex-wrap: wrap; padding: 20px; gap: 16px; } }
-@media(prefers-reduced-motion:reduce) { .home-card { transition: none; } }
-.home-card--crop-rotation .home-card-icon .sb-icon { color: var(--color-on-primary); opacity: 1; }
+.mascot {
+    height: 300px;
+    width: 180px;
+}
+
+/* ===== Strona ===== */
+.home-environment {
+    justify-content: flex-start;
+    padding: clamp(28px, 5vw, 72px);
+    /* delikatna zielona poświata w prawym górnym rogu wypełnia pustą przestrzeń */
+    background:
+        radial-gradient(900px 420px at 90% -8%, color-mix(in srgb, var(--color-primary) 16%, transparent), transparent 70%),
+        var(--color-bg);
+    color: var(--color-heading);
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* ===== Nagłówek ===== */
+.home-environment .home-welcome {
+    margin: clamp(24px, 7vh, 80px) 0 40px;
+    max-width: 850px;
+}
+
+.home-welcome h1 {
+    font: 500 clamp(2.2rem, 4vw, 3.5rem)/1.15 Manrope, sans-serif;
+    letter-spacing: -.03em;
+}
+
+.home-accent {
+    color: var(--color-primary);
+}
+
+.home-welcome p {
+    margin: 18px 0 0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+/* ===== Kafelki ===== */
+.home-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    max-width: 1120px;
+}
+
+.home-environment .home-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 240px;
+    box-sizing: border-box;
+    padding: 28px;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    color: var(--color-heading);
+    text-decoration: none;
+    transition: border-color .15s, box-shadow .2s, transform .2s;
+}
+
+.home-card:hover,
+.home-card:focus-visible {
+    border-color: var(--color-secondary);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 28%);
+    transform: translateY(-3px);
+}
+
+.home-card-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    margin-bottom: 26px;
+    background: var(--color-green-light);
+    color: var(--color-primary);
+}
+
+.home-card-icon .sb-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.home-card h2 {
+    font: 500 1.25rem/1.4 Manrope, sans-serif;
+    margin: 0 0 10px;
+}
+
+.home-card p {
+    color: var(--color-text);
+    font-size: .9375rem;
+    line-height: 1.65;
+    margin: 0 0 28px;
+}
+
+.home-card-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: auto;
+    /* jaśniejszy akcent = lepszy kontrast na ciemnym kafelku */
+    color: color-mix(in srgb, var(--color-primary) 80%, white);
+    font-size: .9375rem;
+    font-weight: 600;
+}
+
+.home-arrow {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    transition: transform .2s;
+}
+
+.home-card:hover .home-arrow,
+.home-card:focus-visible .home-arrow,
+.home-alert-banner:hover .home-arrow,
+.home-alert-banner:focus-visible .home-arrow {
+    transform: translateX(5px);
+}
+
+/* Główny kafelek */
+.home-environment .home-card--crop-rotation {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+}
+
+.home-card--crop-rotation .home-card-icon {
+    background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+    color: inherit;
+}
+
+.home-card--crop-rotation p,
+.home-card--crop-rotation .home-card-action {
+    color: inherit;
+}
+
+.home-card--crop-rotation .home-card-icon .sb-icon {
+    color: var(--color-on-primary);
+    opacity: 1;
+}
+
+/* Każdy kafelek ma własny odcień ikony */
+.home-card--my-field .home-card-icon {
+    background: var(--color-water-soft);
+    color: var(--color-water);
+}
+
+.home-card--knowledge .home-card-icon {
+    background: var(--color-harvest-soft);
+    color: var(--color-harvest);
+}
+
+/* ===== Baner alertów ===== */
+/* Zostawiamy miejsce na dole, żeby maskotka nie zasłaniała banera */
+.home-environment .home-actions {
+    max-width: 1120px;
+    margin: 28px 0 170px;
+}
+
+.home-environment .home-alert-banner {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 26px;
+    margin: 0;
+    min-height: 96px;
+    /* tło z tej samej rodziny co kafelki, niebieski tylko jako delikatny akcent */
+    background: color-mix(in srgb, var(--color-water) 8%, var(--color-card));
+    border: 1px solid color-mix(in srgb, var(--color-water) 30%, var(--color-border));
+    border-left: 4px solid var(--color-water);
+    border-radius: 16px;
+    color: var(--color-heading);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+
+.home-environment .home-alert-banner:hover {
+    background: color-mix(in srgb, var(--color-water) 13%, var(--color-card));
+}
+
+.home-alert-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.home-alert-copy>strong {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.home-alert-water,
+.home-alert-fire {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.home-alert-water {
+    color: var(--color-water);
+}
+
+.home-alert-fire {
+    color: var(--color-error);
+}
+
+.home-alert-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.home-alert-copy>span {
+    color: var(--color-text);
+    font-size: .875rem;
+}
+
+/* Przycisk z konturem, żeby nie konkurował z głównym kafelkiem */
+.home-alert-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: .9375rem;
+    font-weight: 500;
+    transition: background .2s, color .2s;
+}
+
+.home-alert-fire svg {
+    width: 25px;
+    height: 25px;
+    margin-right: -5px;
+    margin-top: 3px;
+}
+
+.home-alert-banner:hover .home-alert-action {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+.home-environment :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+/* ===== Responsywność ===== */
+@media (max-width: 1100px) {
+    .home-cards {
+        gap: 12px;
+    }
+
+    .home-environment .home-card {
+        padding: 20px;
+    }
+
+    .home-card h2 {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 800px) {
+    .home-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .home-environment .home-card {
+        min-height: auto;
+    }
+
+    .home-card-icon {
+        margin-bottom: 16px;
+    }
+
+    .home-card p {
+        margin-bottom: 20px;
+    }
+
+    .home-environment {
+        padding: 24px;
+    }
+
+    .home-environment .home-welcome {
+        margin-top: 24px;
+    }
+
+    .home-environment .home-actions {
+        margin-bottom: 130px;
+    }
+
+    .home-environment .home-alert-banner {
+        flex-wrap: wrap;
+        padding: 20px;
+        gap: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .home-card,
+    .home-arrow,
+    .home-alert-banner,
+    .home-alert-action {
+        transition: none;
+    }
+
+    .home-card:hover,
+    .home-card:focus-visible,
+    .home-card:hover .home-arrow,
+    .home-card:focus-visible .home-arrow,
+    .home-alert-banner:hover .home-arrow,
+    .home-alert-banner:focus-visible .home-arrow {
+        transform: none;
+    }
+}

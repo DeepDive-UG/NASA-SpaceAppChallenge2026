@@ -3,17 +3,18 @@ import Navigation from "../../components/Navigation/Navigation";
 import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 import { useField } from "../../lib/field";
 import "./myArea.css";
-import { LEGENDS } from "./LEGENDS";
+// import { LEGENDS } from "./LEGENDS"; -- API pulls the legend from images
+// gradients were hardcoded in LEGENDS.js and needed to be updated manually, the pulled legend seems more readable
 
 const MASKS = [
-    { id: 1, title: "Total Precipitation", variable: "ppt", legend: LEGENDS.ppt },
-    { id: 2, title: "Temperature Max", variable: "tmax", legend: LEGENDS.tmax },
-    { id: 3, title: "Temperature Minimum", variable: "tmin", legend: LEGENDS.tmin },
+    { id: 1, title: "Total Precipitation", variable: "ppt"},
+    { id: 2, title: "Temperature Max", variable: "tmax"},
+    { id: 3, title: "Temperature Minimum", variable: "tmin"},
     // tmean, tdmean, vpdmax, vpdmin: bez wpisu w LEGENDS.js legenda jest wycinana z mapy PRISM (/api/state-legend/)
-    { id: 4, title: "Temperature Mean", variable: "tmean", legend: LEGENDS.tmean },
-    { id: 5, title: "Dew Point Mean", variable: "tdmean", legend: LEGENDS.tdmean },
-    { id: 6, title: "Vapor Pressure Deficit Max", variable: "vpdmax", legend: LEGENDS.vpdmax },
-    { id: 7, title: "Vapor Pressure Deficit Min", variable: "vpdmin", legend: LEGENDS.vpdmin },
+    { id: 4, title: "Temperature Mean", variable: "tmean"},
+    { id: 5, title: "Dew Point Mean", variable: "tdmean"},
+    { id: 6, title: "Vapor Pressure Deficit Max", variable: "vpdmax"},
+    { id: 7, title: "Vapor Pressure Deficit Min", variable: "vpdmin"},
 ];
 
 const DEFAULT_STATE = "CA"; // pokazywany, gdy pole nie ma jeszcze współrzędnych
@@ -33,7 +34,7 @@ const mapUrl = (variable, field) => {
     return `/api/state-map/?${params}`;
 };
 
-const Legend = ({ legend }) => {
+/* const Legend = ({ legend }) => {
     const { colors, edges, unit } = legend;
     const n = colors.length;
     const stops = colors.join(", ");
@@ -56,7 +57,7 @@ const Legend = ({ legend }) => {
             </div>
         </div>
     );
-};
+}; -- reduntant, see line 6 */
 
 const MyArea = () => {
     const [enabledMasks, setEnabledMasks] = useState([MASKS[0].id]);
@@ -93,8 +94,6 @@ const MyArea = () => {
         };
     }, [url]);
 
-    /*TODO for ma-image-legend: add a legend that updates to show the relevant overlays, show said legends as gradients for readability
-    PLAN: also show information in numbers when hovering over with mouse?*/
     return (
         <div className="ma-layout">
             <Navigation />

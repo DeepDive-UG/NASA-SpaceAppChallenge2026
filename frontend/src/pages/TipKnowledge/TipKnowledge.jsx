@@ -135,12 +135,7 @@ export default function TipKnowledge() {
                                 <span className="tk-book-icon" aria-hidden="true">
                                     ✳
                                 </span>
-                                <p className="tk-section-label">A LITTLE KNOW-HOW GOES A LONG WAY</p>
-                                <h2>Your growing notes, all in one place.</h2>
-                                <p>
-                                    Choose an article from the map to read, or take a quick quiz
-                                    to check what you have learned.
-                                </p>
+                                <h2>Choose an article from the map to read, or <a href="#quiz">take a quick quiz</a> to check what you have learned.</h2>
                             </div>
                         )}
                     </section>

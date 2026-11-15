@@ -10,7 +10,9 @@ const Home = () => {
         <div className="home-environment-layout">
             <Navigation />
             <main className="home-environment">
-                <img src="/Scene1.gif" className="mascot" alt="CropTips mascot" />
+                {/* <img src="/Scene1.gif" className="mascot" alt="CropTips mascot" />
+                 */}
+                <img src="/api/state-map/?state=TX&lat=30.27&lon=-97.74&label=Austin" />
                 <div className="home-actions">
                     <button onClick={() => setAlertsOpen(true)}>Water & fire alerts</button>
                 </div>

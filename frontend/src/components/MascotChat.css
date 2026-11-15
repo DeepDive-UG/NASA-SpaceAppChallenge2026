@@ -230,3 +230,62 @@
         animation: none;
     }
 }
+
+/* ===== Chowanie maskotki pod stroną ===== */
+.mascot-figure {
+    --mascot-peek: 105px;
+    /* ile głowy ma wystawać, gdy maskotka jest schowana */
+    position: relative;
+    transition: transform 0.6s ease-in-out;
+}
+
+.mascot-figure.is-hidden {
+    transform: translateY(calc(100% - var(--mascot-peek)));
+}
+
+/* Przycisk w prawym górnym rogu gifa */
+.mascot-widget .mascot-hide {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    margin: 0;
+    background: var(--color-primary);
+    color: var(--color-card);
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 25%);
+    cursor: pointer;
+}
+
+.mascot-widget .mascot-hide svg {
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Strzałka obraca się, gdy maskotka jest schowana (wskazuje "wyciągnij") */
+.mascot-figure.is-hidden .mascot-hide svg {
+    transform: rotate(180deg);
+}
+
+.mascot-widget .mascot-hide:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+    .mascot-figure {
+        --mascot-peek: 90px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .mascot-figure,
+    .mascot-widget .mascot-hide svg {
+        transition: none;
+    }
+}

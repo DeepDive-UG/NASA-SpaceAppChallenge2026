@@ -3,6 +3,7 @@
 **Hey pal, what’s growing? 🌱**
 
 <img src="frontend/public/mascot.png" alt="Tip, the CropTips farming companion" width="180" />
+Our project's mascot -- Tip was drawn and animated by our team member Adrian Woźny during the Hackaton event.
 
 Choosing your next crop takes more than checking the weather. CropTips brings your soil, past crops, water and equipment together to help you decide what could grow next. Choose what matters to you: a good harvest, healthier soil, less water or earning more.
 
@@ -18,7 +19,7 @@ Meet **Tip**, your friendly farming companion. Click the mascot to ask about cro
 - **Look ahead before sowing.** Compare estimated air and soil temperatures, rain and soil moisture for the first 10 days or the full 100 days. Open the extra details for charts, data sources and average test errors.
 - **Check harvest equipment.** Record what you own in My Gear so crop checks can flag whether you may need different equipment or outside help at harvest.
 - **Keep an eye on water and fire.** View readings from your chosen water station and official warnings and fire reports. These help you notice conditions worth checking locally; a river reading does not measure your well or confirm water available to your field.
-- **Ask Tip.** Click the mascot when you have a question about crops, soil or planting. Tip uses the project’s farming references and includes sources so you can read more. Each question starts fresh, without saved conversation history.
+- **Ask Tip.** Click the mascot when you have a question about crops, soil or planting. Tip uses the project’s farming references and includes sources so you can read more. Each question starts fresh, without saved conversation history. 
 - **Make the app easier to read.** Choose light or dark mode and adjust text size, including extra large text for people with reduced vision. Plain language, written status labels alongside colours and a short FAQ help explain the app.
 
 **Browser and mobile:** CropTips has a browser app built with React and Vite and a separate Android/iOS app built with Expo and React Native in `mobile/`.

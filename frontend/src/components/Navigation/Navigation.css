@@ -26,6 +26,20 @@
     align-items: center;
     gap: 10px;
     padding: 4px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.sb-brand:hover {
+    background: var(--color-surface-beige);
+}
+
+.sb-brand:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .sb-logo-img {

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useState } from 'react';
 import "./Navigation.css";
 
@@ -139,10 +139,10 @@ export default function Navigation({ items = NAV_ITEMS }) {
     }
     return (
         <aside className="sb" aria-label="Main navigation">
-            <div className="sb-brand">
-                <img className="sb-logo-img" src="/logo.png" alt="LogoMascot" />
+            <Link to="/" className="sb-brand" aria-label="CropTips — Go to Home">
+                <img className="sb-logo-img" src="/logo.png" alt="" />
                 <span className="sb-brand-name">CropTips</span>
-            </div>
+            </Link>
 
             <nav>
                 <ul className="sb-list">

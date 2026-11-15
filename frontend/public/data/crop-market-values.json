@@ -1,0 +1,80 @@
+{
+  "name": "US crop market values",
+  "isMockData": true,
+  "updatedAt": "2026-11-13",
+  "disclaimer": "Illustrative mock values for frontend development only. These are not verified or live market prices.",
+  "records": [
+    {
+      "crop": "Corn",
+      "commodityCode": "CORN",
+      "price": 4.45,
+      "unit": "USD/bushel",
+      "changePercent": 1.4,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Soybeans",
+      "commodityCode": "SOYBEANS",
+      "price": 11.28,
+      "unit": "USD/bushel",
+      "changePercent": -0.6,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Wheat",
+      "commodityCode": "WHEAT",
+      "price": 5.72,
+      "unit": "USD/bushel",
+      "changePercent": 0.8,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Rice",
+      "commodityCode": "RICE",
+      "price": 15.6,
+      "unit": "USD/hundredweight",
+      "changePercent": 0.3,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Cotton",
+      "commodityCode": "COTTON",
+      "price": 0.69,
+      "unit": "USD/pound",
+      "changePercent": -1.1,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Sorghum",
+      "commodityCode": "SORGHUM",
+      "price": 4.18,
+      "unit": "USD/bushel",
+      "changePercent": 0.5,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Oats",
+      "commodityCode": "OATS",
+      "price": 3.62,
+      "unit": "USD/bushel",
+      "changePercent": 0.2,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    },
+    {
+      "crop": "Barley",
+      "commodityCode": "BARLEY",
+      "price": 5.15,
+      "unit": "USD/bushel",
+      "changePercent": -0.4,
+      "asOf": "2026-11-13",
+      "region": "United States"
+    }
+  ]
+}

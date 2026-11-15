@@ -1,18 +1,18 @@
 @import 'leaflet/dist/leaflet.css';
 
 :root {
-  --bg-app: #fafaf7;
-  --bg-section: #f2efe7;
-  --bg-card: #ffffff;
-  --primary: #254d32;
-  --secondary-accent: #a8bba0;
-  --highlight-green: #dce8d8;
-  --text-heading: #242824;
-  --text-body: #555b55;
-  --text-muted: #777d75;
-  --border: #e6e8e1;
-  --warning: #c58b42;
-  --error: #b85c50;
+  --bg-app: var(--color-bg, #fafaf7);
+  --bg-section: var(--color-surface-beige, #f2efe7);
+  --bg-card: var(--color-card, #ffffff);
+  --primary: var(--color-primary, #254d32);
+  --secondary-accent: var(--color-secondary, #a8bba0);
+  --highlight-green: var(--color-green-light, #dce8d8);
+  --text-heading: var(--color-heading, #242824);
+  --text-body: var(--color-text, #555b55);
+  --text-muted: var(--color-muted, #777d75);
+  --border: var(--color-border, #e6e8e1);
+  --warning: var(--color-warning, #c58b42);
+  --error: var(--color-error, #b85c50);
 }
 
 * {
@@ -280,7 +280,7 @@
 
 .primary-button {
   border: 1px solid var(--primary);
-  color: #fff;
+  color: var(--color-on-primary, #fff);
   background: var(--primary);
 }
 

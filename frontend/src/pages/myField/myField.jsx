@@ -5,6 +5,8 @@ import WaterStation from '../../components/WaterStation'
 import WaterStationPicker from '../../components/WaterStationPicker'
 import { SOILS, useField } from '../../lib/field'
 import './myField.css'
+import MascotChat from '../../components/MascotChat'
+import DecisionDisclaimer from '../../components/DecisionDisclaimer'
 
 const number = value => Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 })
 const directions = { N: 'North', NE: 'Northeast', E: 'East', SE: 'Southeast', S: 'South', SW: 'Southwest', W: 'West', NW: 'Northwest', Center: 'Centre', Other: '' }
@@ -73,5 +75,11 @@ export default function MyField() {
       {record.revision > 0 && <details className="field-paper"><summary>Soil test & watering method</summary><form onSubmit={saveSoil} className="field-form-grid field-supplement"><label className="field-input">Soil pH<input type="number" min="0" max="14" step="0.1" value={soil?.soil_ph ?? field.soil_ph ?? ''} onChange={event => setSoil({ ...soil, soil_ph: event.target.value })} /></label><label className="field-input">Soil texture<select value={soil?.soil_texture ?? field.soil_texture} onChange={event => setSoil({ ...soil, soil_texture: event.target.value })}>{SOILS.map(([id, title]) => <option key={id} value={id}>{title}</option>)}</select></label><label className="field-input">Watering method<select value={soil?.irrigation ?? field.irrigation} onChange={event => setSoil({ ...soil, irrigation: event.target.value })}>{['unknown','rainfed','drip','sprinkler','furrow','other'].map(value => <option key={value} value={value}>{value === 'unknown' ? 'Not known' : value}</option>)}</select></label><button className="field-primary" disabled={saving}>Save</button><p role="status">{notice}</p></form></details>}
     </>}
     {section !== null && <FieldEditor section={section} onClose={() => setSection(null)} />}
-  </main></div>
+    <DecisionDisclaimer
+      variant="footer"
+      context="Field records, soil classifications, and water station data power automated decision-support tools and do not replace accredited soil testing, irrigation engineering, or human agronomic expertise."
+    />
+  </main>
+    <MascotChat />
+  </div>
 }

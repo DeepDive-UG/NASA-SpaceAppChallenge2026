@@ -1,8 +1,13 @@
 import './DecisionDisclaimer.css';
 
+const DEFAULT_TITLE = 'Remember: this is a decision-support tool, it does not replace human expertise.';
+
+// variant: 'card' | 'compact' | 'footer' | 'mini'
+// title: domyślnie standardowy nagłówek; przekaż null/false, żeby go ukryć.
 export default function DecisionDisclaimer({
   variant = 'card',
   context,
+  title = DEFAULT_TITLE,
   className = '',
 }) {
   return (
@@ -15,7 +20,7 @@ export default function DecisionDisclaimer({
         i
       </span>
       <div className="decision-disclaimer__body">
-        <strong>Remember: this is a decision-support tool, it does not replace human expertise.</strong>
+        {title && <strong>{title}</strong>}
         <p>
           {context ||
             'Insights, estimates, and suggestions are meant to support farm planning. Always verify conditions on-site and consult a qualified agronomist, soil specialist, or local extension advisor before making operational decisions.'}

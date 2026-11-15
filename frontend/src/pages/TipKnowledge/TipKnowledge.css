@@ -193,6 +193,10 @@
     letter-spacing: -0.03em;
     line-height: 1.2;
 }
+.tk-empty-state a {
+    color: var(--color-primary);
+    text-decoration-style: dashed;
+}
 
 .tk-article-copy {
     color: var(--color-text);

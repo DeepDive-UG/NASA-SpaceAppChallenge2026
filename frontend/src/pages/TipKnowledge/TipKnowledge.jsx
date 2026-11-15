@@ -10,6 +10,7 @@ import DeepRootingArticle from "./articles/deep-rooting/DeepRootingArticle";
 import DroughtTolerantArticle from "./articles/drought-tolerant/DroughtTolerantArticle";
 import TipQuiz from "./TipQuiz";
 import "./TipKnowledge.css";
+import MascotChat from "../../components/MascotChat";
 
 const BUILT_IN_ARTICLES = [
     {
@@ -135,12 +136,7 @@ export default function TipKnowledge() {
                                 <span className="tk-book-icon" aria-hidden="true">
                                     ✳
                                 </span>
-                                <p className="tk-section-label">A LITTLE KNOW-HOW GOES A LONG WAY</p>
-                                <h2>Your growing notes, all in one place.</h2>
-                                <p>
-                                    Choose an article from the map to read, or take a quick quiz
-                                    to check what you have learned.
-                                </p>
+                                <h2>Choose an article from the map to read, or <a href="#quiz">take a quick quiz</a> to check what you have learned.</h2>
                             </div>
                         )}
                     </section>
@@ -152,6 +148,7 @@ export default function TipKnowledge() {
                     context="Articles in TipKnowledge offer general educational guidance to support farm decisions and do not replace site-specific advice from a certified agronomist or extension specialist."
                 />
             </main>
+            <MascotChat />
         </div>
     );
 }

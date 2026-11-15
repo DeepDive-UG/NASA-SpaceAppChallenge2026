@@ -6,6 +6,7 @@ import { GOALS, fieldApi, useField } from '../../lib/field'
 import './CropRotation.css'
 import AdvancedForecast from './AdvancedForecast'
 import Resources from './Resources'
+import MascotChat from '../../components/MascotChat'
 
 function CropCard({ candidate, sector, photo }) {
   const { crop, status, reasons, checks_needed: checks, practical } = candidate
@@ -38,7 +39,7 @@ function Outlook({ outlook, loading, error }) {
 export default function CropRotation() {
   const { record, loading, error: fieldError } = useField()
   const [editSection, setEditSection] = useState(null)
-  return <div className="cr-layout"><Navigation /><main className="cr-main"><header className="cr-page-header"><div><h1>Crop rotation</h1><p>Choose an area. Find a crop or check your own.</p></div><button type="button" className="cr-small-tag" onClick={() => setEditSection(7)}>Edit field</button></header>{loading ? <p role="status">Loading your field…</p> : fieldError ? <p role="alert">{fieldError}</p> : record ? <>{!record.revision && <section className="cr-panel cr-setup-note"><h2>Add your field first</h2><p>Save your field details to check crops.</p><button type="button" className="cr-edit-button" onClick={() => setEditSection(0)}>Add field details →</button></section>}<Planner key={record.revision} record={record} onEdit={setEditSection} /></> : null}<DecisionDisclaimer variant="footer" context="Crop rotation checks, soil compatibility flags, and experimental weather outlooks are estimates designed to support your decisions — they do not replace human expertise. Always verify variety suitability, local pest pressure, and soil lab results with a certified agronomist before planting." />{editSection !== null && <FieldEditor section={editSection} onClose={() => setEditSection(null)} />}</main></div>
+  return <div className="cr-layout"><Navigation /><main className="cr-main"><header className="cr-page-header"><div><h1>Crop rotation</h1><p>Choose an area. Find a crop or check your own.</p></div><button type="button" className="cr-small-tag" onClick={() => setEditSection(7)}>Edit field</button></header>{loading ? <p role="status">Loading your field…</p> : fieldError ? <p role="alert">{fieldError}</p> : record ? <>{!record.revision && <section className="cr-panel cr-setup-note"><h2>Add your field first</h2><p>Save your field details to check crops.</p><button type="button" className="cr-edit-button" onClick={() => setEditSection(0)}>Add field details →</button></section>}<Planner key={record.revision} record={record} onEdit={setEditSection} /></> : null}<DecisionDisclaimer variant="footer" context="Crop rotation checks, soil compatibility flags, and experimental weather outlooks are estimates designed to support your decisions — they do not replace human expertise. Always verify variety suitability, local pest pressure, and soil lab results with a certified agronomist before planting." />{editSection !== null && <FieldEditor section={editSection} onClose={() => setEditSection(null)} />}</main><MascotChat /></div>
 }
 function Planner({ record, onEdit }) {
   const field = record.field

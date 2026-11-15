@@ -3,23 +3,63 @@ import Navigation from "../../components/Navigation/Navigation";
 import DecisionDisclaimer from "../../components/DecisionDisclaimer";
 import { useField } from "../../lib/field";
 import "./myArea.css";
-// import { LEGENDS } from "./LEGENDS"; -- API pulls the legend from images
-// gradients were hardcoded in LEGENDS.js and needed to be updated manually, the pulled legend seems more readable
+import MascotChat from "../../components/MascotChat";
 
 const MASKS = [
-    { id: 1, title: "Total Precipitation", variable: "ppt"},
-    { id: 2, title: "Temperature Max", variable: "tmax"},
-    { id: 3, title: "Temperature Minimum", variable: "tmin"},
-    // tmean, tdmean, vpdmax, vpdmin: bez wpisu w LEGENDS.js legenda jest wycinana z mapy PRISM (/api/state-legend/)
-    { id: 4, title: "Temperature Mean", variable: "tmean"},
-    { id: 5, title: "Dew Point Mean", variable: "tdmean"},
-    { id: 6, title: "Vapor Pressure Deficit Max", variable: "vpdmax"},
-    { id: 7, title: "Vapor Pressure Deficit Min", variable: "vpdmin"},
+    {
+        id: 1,
+        title: "Total Precipitation",
+        variable: "ppt",
+        description:
+            "Total rain and snowfall across California. Shows which regions get the most water.",
+    },
+    {
+        id: 2,
+        title: "Temperature Max",
+        variable: "tmax",
+        description:
+            "Highest daily temperatures across California. Hot areas face more crop heat stress.",
+    },
+    {
+        id: 3,
+        title: "Temperature Minimum",
+        variable: "tmin",
+        description:
+            "Lowest daily temperatures across California. Helps spot frost risk.",
+    },
+   
+    {
+        id: 4,
+        title: "Temperature Mean",
+        variable: "tmean",
+        description:
+            "Average daily temperature across California. Shows the general growing climate.",
+    },
+    {
+        id: 5,
+        title: "Dew Point Mean",
+        variable: "tdmean",
+        description:
+            "Average air moisture across California. Higher values mean more humid air.",
+    },
+    {
+        id: 6,
+        title: "Vapor Pressure Deficit Max",
+        variable: "vpdmax",
+        description:
+            "Peak dryness of the air, usually in the afternoon. High values mean higher drought stress for crops.",
+    },
+    {
+        id: 7,
+        title: "Vapor Pressure Deficit Min",
+        variable: "vpdmin",
+        description:
+            "Lowest dryness of the air, usually at night. Shows when crops can recover.",
+    },
 ];
 
-const DEFAULT_STATE = "CA"; // pokazywany, gdy pole nie ma jeszcze współrzędnych
-
-// Mapa PRISM wycięta do stanu; ze współrzędnych backend sam wykrywa stan i stawia znacznik pola
+const DEFAULT_STATE = "CA"; 
+z
 const mapUrl = (variable, field) => {
     const params = new URLSearchParams({ variable });
     const lat = parseFloat(field?.latitude);
@@ -33,31 +73,6 @@ const mapUrl = (variable, field) => {
     }
     return `/api/state-map/?${params}`;
 };
-
-/* const Legend = ({ legend }) => {
-    const { colors, edges, unit } = legend;
-    const n = colors.length;
-    const stops = colors.join(", ");
-    const step = Math.ceil(edges.length / 6); // label roughly every 6th edge
-    return (
-        <div className="ma-legend">
-            <div className="ma-legend-unit">{unit}</div>
-            <div
-                className="ma-legend-bar"
-                style={{ background: `linear-gradient(to right, ${stops})` }}
-            />
-            <div className="ma-legend-ticks">
-                {edges.map((edge, i) =>
-                    i % step === 0 ? (
-                        <span key={edge} style={{ left: `${((i + 1) / n) * 100}%` }}>
-                            {edge}
-                        </span>
-                    ) : null
-                )}
-            </div>
-        </div>
-    );
-}; -- reduntant, see line 6 */
 
 const MyArea = () => {
     const [enabledMasks, setEnabledMasks] = useState([MASKS[0].id]);
@@ -102,22 +117,31 @@ const MyArea = () => {
                     <h1 className="ma-title">My area</h1>
 
                     <section className="ma-viewer" aria-label="Map gallery">
-                        <div className="ma-image-frame">
-                            <div className="ma-image-date">
-                                {map.date}
-                            </div>
-                            <div className="ma-image-copyright">
-                                Copyright &copy; 2026 PRISM/NACSE, Oregon State University
-                            </div>
-                            {map.src && (
-                                <img
-                                    src={map.src}
-                                    alt={`${activeMask.title} map`}
-                                    className="ma-image ma-base-layer"
-                                />
+                        <div className="ma-map-column">
+                            {activeMask && (
+                                <div className="ma-overlay-description" aria-live="polite">
+                                    <h2 className="ma-overlay-title">{activeMask.title}</h2>
+                                    <p className="ma-overlay-text">{activeMask.description}</p>
+                                </div>
                             )}
-                            {!map.src && !map.error && <p role="status">Loading map…</p>}
-                            {map.error && <p role="alert">The map is unavailable right now. Please try again later.</p>}
+
+                            <div className="ma-image-frame">
+                                <div className="ma-image-date">
+                                    {map.date}
+                                </div>
+                                <div className="ma-image-copyright">
+                                    Copyright &copy; 2026 PRISM/NACSE, Oregon State University
+                                </div>
+                                {map.src && (
+                                    <img
+                                        src={map.src}
+                                        alt={`${activeMask.title} map`}
+                                        className="ma-image ma-base-layer"
+                                    />
+                                )}
+                                {!map.src && !map.error && <p role="status">Loading map…</p>}
+                                {map.error && <p role="alert">The map is unavailable right now. Please try again later.</p>}
+                            </div>
                         </div>
 
                         <aside className="ma-controls" aria-label="Map overlays">
@@ -160,6 +184,8 @@ const MyArea = () => {
                     />
                 </div>
             </main>
+            <MascotChat />
+
         </div>
     );
 }
